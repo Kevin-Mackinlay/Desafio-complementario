@@ -1,136 +1,110 @@
-import fs from "fs";
+import utils from "./utils.js";
+import crypto from "crypto";
 
-class ProductManager {
-  #filePath;
-  #lastId = 0;
+// class ProductManager {
+//   #filePath;
+//   #lastId = 0;
 
-  constructor(filePath = "./products.json") {
-    this.#filePath = filePath;
-    this.#setLastId();
+export class ProductManager {
+  constructor(path) {
+    this.path = path;
+    this.products = [];
   }
 
   async addProduct(title, description, price, thumbnail, code, stock) {
-    //En funciones asincronas usar Try-Catch
+    //id: this.products.length +1,
 
+    if (title == undefined || description == undefined || price == undefined || thumbnail == undefined || code == undefined || stock == undefined) {
+      throw new Error("Todos los campos son obligatorios");
+    }
     try {
-      if (!title || !description) {
-        throw new Error("Not the correct data");
-      }
+      let data = await utils.readFile(this.path);
+      console.log(data);
+      this.products = data?.length > 0 ? data : [];
+    } catch (error) {
+      console.log(error);
+    }
 
-      const products = await this.getProducts();
+    let codeExists = this.products.some((dato) => dato.code == code);
 
-      if (products.find((product) => product.title === title)) {
-        throw new Error("Product already exists");
-      }
-
+    if (codeExists) {
+      throw new Error("El codigo ya existe por favor verifique");
+    } else {
       const newProduct = {
+        id: crypto.randomUUID(),
         title,
         description,
         price,
         thumbnail,
         code,
         stock,
-        id: ++this.#lastId,
       };
-
-      products.push(newProduct);
-
-      await this.#saveProducts(products);
-    } catch (error) {
-      console.log(error);
+      this.products.push(newProduct);
+      console.log(this.products.length);
+      try {
+        await utils.writeFile(this.path, this.products);
+      } catch (error) {
+        console.log(error);
+      }
     }
+
   }
 
   async getProducts() {
     try {
-      if (fs.existsSync(this.#filePath)) {
-        const products = JSON.parse(await fs.promises.readFile(this.#filePath, "utf-8"));
-        return products;
+      let data = await utils.readFile(this.path);
+      this.products = data;
+      return data?.length > 0 ? this.products : "aun no hay registros";
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateProductById(id, data) {
+    try {
+      let products = await utils.readFile(this.path);
+      this.products = products?.length > 0 ? products : [];
+
+      let productIndex = this.products.findIndex((dato) => dato.id === id);
+      if (productIndex !== -1) {
+        this.products[productIndex] = {
+          ...this.products[productIndex],
+          ...data,
+        };
+        await utils.writeFile(this.path, products);
+        return {
+          mensaje: "producto actualizado",
+          producto: this.products[productIndex],
+        };
+      } else {
+        return { mensaje: "no existe el producto solicitado" };
       }
-      return [];
     } catch (error) {
       console.log(error);
     }
   }
 
-  async getProductsById(id) {
+  async deleteProductById(id) {
     try {
-      const products = await this.getProducts();
-
-      const product = products.find((product) => product.id === id);
-
-      return product;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async deleteProductsById(id) {
-    try {
-      let products = await this.getProducts();
-      products = products.filter((product) => product.id !== id);
-
-      this.#saveProducts(products);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async updateProduct(id, fieldToUpdate, newValue) {
-    try {
-      const products = await this.getProducts();
-
-      const productIndex = products.findIndex((product) => product.id === id);
-
-      if (productIndex < 0) {
-        throw new Error(`Product with ID ${id} does not exist`);
+      let products = await utils.readFile(this.path);
+      this.products = products?.length > 0 ? products : [];
+      let productIndex = this.products.findIndex((dato) => dato.id === id);
+      if (productIndex !== -1) {
+        let product = this.products[productIndex];
+        this.products.splice(productIndex, 1);
+        await utils.writeFile(this.path, products);
+        return { mensaje: "producto eliminado", producto: product };
+      } else {
+        return { mensaje: "no existe el producto solicitado" };
       }
-      products[productIndex][fieldToUpdate] = newValue;
-
-      await this.#saveProducts(products);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async #setLastId() {
-    try {
-      const products = await this.getProducts();
-      if (products.length < 1) {
-        this.#lastId = 0;
-        return;
-      }
-      this.#lastId = products[products.length - 1].id;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async #saveProducts(products) {
-    try {
-      await fs.promises.writeFile(this.#filePath, JSON.stringify(products));
     } catch (error) {
       console.log(error);
     }
   }
 }
 
-const productManager = new ProductManager("./products.json");
+export default {
+    ProductManager,
+};
 
-// console.log(await productManager.getProducts());
-
-// await productManager.addProduct("zapatillas", "las zapatillas modelo SPRINT son excelentes para correr", 20000, "", "", 10);
-
-// await productManager.addProduct("short", "short para jugar al futbol")
-
-// console.log( await productManager.getProductsById(2));
-
-// await productManager.addProduct("short", "short para jugar al futbol", 12000);
-
-// await productManager.deleteProductsById(2)
-
-// console.log(await productManager.getProducts());
-// await productManager.updateProduct(1, "price", 35000);
-// console.log(await productManager.getProducts());
-await productManager.addProduct("sandals", "las sandals modelo BEACH son excelentes para la arena", 20000, "", "", 10);
-console.log(await productManager.getProducts());
+  
