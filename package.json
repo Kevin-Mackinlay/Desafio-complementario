@@ -1,14 +1,12 @@
 {
   "name": "desafio3",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000D\u0000e\u0000s\u0000a\u0000f\u0000i\u0000o\u0000C\u0000o\u0000d\u0000e\u0000r\u00003\u0000\r\u0000 \u0000",
+  "description": "",
   "main": "index.js",
-   "type":"module",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":" nodemon src/app.js"
-   
-
+    "start": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",

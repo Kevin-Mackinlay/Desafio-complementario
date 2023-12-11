@@ -1,4 +1,4 @@
-import utils from "./utils.js";
+import utils from "../utils.js";
 import crypto from "crypto";
 
 // class ProductManager {
@@ -47,7 +47,6 @@ export class ProductManager {
         console.log(error);
       }
     }
-
   }
 
   async getProducts() {
@@ -104,7 +103,5 @@ export class ProductManager {
 }
 
 export default {
-    ProductManager,
+  ProductManager,
 };
-
-  
