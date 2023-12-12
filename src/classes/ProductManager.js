@@ -1,16 +1,12 @@
 import utils from "../utils.js";
 import crypto from "crypto";
 
-// class ProductManager {
-//   #filePath;
-//   #lastId = 0;
-
 export class ProductManager {
   constructor(path) {
     this.path = path;
     this.products = [];
   }
-
+  //static correlativoId = 0;
   async addProduct(title, description, price, thumbnail, code, stock) {
     //id: this.products.length +1,
 
@@ -19,7 +15,6 @@ export class ProductManager {
     }
     try {
       let data = await utils.readFile(this.path);
-      console.log(data);
       this.products = data?.length > 0 ? data : [];
     } catch (error) {
       console.log(error);
@@ -40,7 +35,6 @@ export class ProductManager {
         stock,
       };
       this.products.push(newProduct);
-      console.log(this.products.length);
       try {
         await utils.writeFile(this.path, this.products);
       } catch (error) {
@@ -48,12 +42,26 @@ export class ProductManager {
       }
     }
   }
-
   async getProducts() {
     try {
       let data = await utils.readFile(this.path);
       this.products = data;
       return data?.length > 0 ? this.products : "aun no hay registros";
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async getProductById(id) {
+    try {
+      let data = await utils.readFile(this.path);
+      this.products = data?.length > 0 ? data : [];
+      let product = this.products.find((dato) => dato.id === id);
+
+      if (product !== undefined) {
+        return product;
+      } else {
+        return "no existe el producto solicitado";
+      }
     } catch (error) {
       console.log(error);
     }

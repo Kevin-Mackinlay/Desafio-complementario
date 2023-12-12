@@ -4,9 +4,8 @@ import { ProductManager } from "../classes/ProductManager.js";
 const router = Router();
 const productManager = new ProductManager("./products.json");
 
-
 router.get("/", async (req, res) => {
- const { limit } = req.query;
+  const { limit } = req.query;
   try {
     let response = await productManager.getProducts();
 
@@ -43,9 +42,23 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
-
-router.post("/", (req, res) => {  
-  res.send("hola mundo desde router de user");
+router.post("/", async (req, res) => {
+  const { title, description, price, thumbnail, code, stock } = req.body;
+  try{
+  
+ const result = await productManager.addProduct(
+    title,
+    description,
+    price,
+    thumbnail,
+    code,
+    stock
+  );
+ res.json({ message: "success", data:result });
+  }catch(err){
+    console.log(err);
+    res.status(500).json({ message: "error", data: err });
+  }
 });
 
 router.put("/", (req, res) => {

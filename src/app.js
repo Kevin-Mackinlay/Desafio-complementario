@@ -7,6 +7,9 @@ const PORT = 8080;
 let products = [];
 //const productManager = new ProductManager("./products.json");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => {
   res.send("hola mundo");
 });
