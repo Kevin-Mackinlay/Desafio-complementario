@@ -14,5 +14,38 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/:cid", async (req, res) => {
+    const {cid} = req.params;
+    try{
+        let response = await cartManager.getCartById(cid);
+        res.json({data: response});
+    }catch(err){
+    
+        console.log(err)
+    }
+});
+
+router.post("/", async (req, res) => {
+    try{
+        let response = await cartManager.addCart();
+        res.json({message:"success", data: response});
+    }catch(err){
+    
+        console.log(err)
+        res.status(500).json({message:"error", data: err});
+    }
+});
+
+router.post("/:cid/products/:pid", async (req, res) => {
+    const {cid, pid} = req.params;
+    try{
+        let response = await cartManager.addProductToCart(cid, pid);
+        res.json({message:"success", data: response});
+    }catch(err){
+    
+        console.log(err)
+        res.status(500).json({message:"error", data: err});
+    }
+});
 
 export default router;
