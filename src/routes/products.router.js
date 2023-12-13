@@ -66,8 +66,8 @@ router.put("/:pid", async (req, res) => {
         price: price || product.price,
         thumbnail: thumbnail || product.thumbnail,
         code: code || product.code,
-        stock: stock || product.stock,  
-      }
+        stock: stock || product.stock,
+      };
       const respuesta = await productManager.updateProductById(pid, newProduct);
       res.json({ message: "success", data: respuesta });
     } else {
@@ -82,8 +82,21 @@ router.put("/:pid", async (req, res) => {
   }
 });
 
-router.delete("/", (req, res) => {
-  res.send("hola mundo desde router de user");
+router.delete("/:pid", async (req, res) => {
+  const { pid } = req.params;
+ 
+  try {
+    let product = await productManager.getProductById(pid);
+    if (product) {
+      const respuesta = await productManager.deleteProductById(pid);
+      res.json({ message: "deleted successfuly", respuesta });
+    } else {
+      res.json({ message: "el producto que solicitas no existe" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "error", data: err });
+  }
 });
 
 export default router;
