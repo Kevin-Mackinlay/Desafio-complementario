@@ -1,6 +1,7 @@
 import express from "express";
 //import { ProductManager } from "./classes/ProductManager.js";
 import productRouter from "./routes/products.router.js";
+import cartRouter from "./routes/cart.router.js";
 
 const app = express();
 const PORT = 8080;
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
 
 
 

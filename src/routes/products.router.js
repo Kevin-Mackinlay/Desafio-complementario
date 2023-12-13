@@ -43,9 +43,9 @@ router.get("/:pid", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { title, description, price, thumbnail, code, stock } = req.body;
+  const { title, description, price, thumbnail, code, stock, category, status = true} = req.body;
   try {
-    const result = await productManager.addProduct(title, description, price, thumbnail, code, stock);
+    const result = await productManager.addProduct(title, description, price, thumbnail, code, stock, category, status);
     res.json({ message: "success", data: result });
   } catch (err) {
     console.log(err);

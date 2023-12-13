@@ -7,10 +7,10 @@ export class ProductManager {
     this.products = [];
   }
   //static correlativoId = 0;
-  async addProduct(title, description, price, thumbnail, code, stock) {
+  async addProduct(title, description, price, thumbnail, code, stock, category, status = true) {
     //id: this.products.length +1,
 
-    if (title == undefined || description == undefined || price == undefined || thumbnail == undefined || code == undefined || stock == undefined) {
+    if (title == undefined || description == undefined || price == undefined || thumbnail == undefined || code == undefined || stock == undefined || category == undefined) {
       throw new Error("Todos los campos son obligatorios");
     }
     try {
@@ -33,6 +33,8 @@ export class ProductManager {
         thumbnail,
         code,
         stock,
+        category,
+       
       };
       this.products.push(newProduct);
       try {
