@@ -8,14 +8,14 @@ import { Server } from "socket.io";
 import viewsRouter from "./routes/views.route.js";
 
 const app = express();
-const PORT = 4000;
+const PORT = 8080;
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 }); //levanto el servidor http con socket io  incorporado en el mismo servidor        
 
-const socketServer = new Server(httpServer); //creo el servidor de socket io  y le paso el servidor http  
-
+const socketServer = new Server(httpServer);  
+let products = [];
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(_dirname + "/public"));
@@ -25,11 +25,9 @@ app.set("views", _dirname + "/views");
 app.set("view engine", "handlebars");
 
 
-let products = [];
+
 //const productManager = new ProductManager("./products.json");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // app.get("/", (req, res) => {
 //   res.send("hola mundo");
@@ -42,6 +40,6 @@ app.use("/", viewsRouter);
 
 
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Servidor escuchando en http://localhost:${PORT}`);
+// });
