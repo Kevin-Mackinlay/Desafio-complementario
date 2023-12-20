@@ -1,0 +1,32 @@
+ .productCard {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+      transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .productCard:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .cardProduct__image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .cardProduct__info {
+      padding-top: 10px;
+    }
+
+    .cardProduct__info h3 {
+      font-size: 1.2em;
+      margin-bottom: 8px;
+    }
+
+    .cardProduct__info p {
+      margin-bottom: 5px;
+    }
+ 
