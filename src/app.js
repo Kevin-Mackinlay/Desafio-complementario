@@ -4,20 +4,20 @@ import productRouter from "./routes/products.router.js";
 import cartRouter from "./routes/cart.router.js";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routes/views.router.js";
-import { _dirname } from "./utils.js";
+import { __dirname } from "./utils.js";
 import { ProductManager } from "./classes/ProductManager.js";
 
 const app = express();
 const PORT = 8080;
-const productManager = new ProductManager("products.json");
+const productManager = new ProductManager("productos.json");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(_dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.engine("handlebars", handlebars.engine());
-app.set("views", _dirname + "/views");
+app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 app.use("/api/products", productRouter);
@@ -29,7 +29,6 @@ const server = app.listen(PORT, () => {
 });
 
 const socketServer = new Server(server);
-
 
 socketServer.on("connection", (socket) => {
   console.log("nuevo cliente conectado");
