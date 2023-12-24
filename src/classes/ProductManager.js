@@ -1,4 +1,3 @@
-
 import utils from "../utils.js";
 import crypto from "crypto";
 
@@ -11,14 +10,7 @@ export class ProductManager {
   async addProduct(title, description, price, thumbnail, code, stock) {
     //id: this.products.length +1,
 
-    if (
-      title == undefined ||
-      description == undefined ||
-      price == undefined ||
-      thumbnail == undefined ||
-      code == undefined ||
-      stock == undefined
-    ) {
+    if (title == undefined || description == undefined || price == undefined || thumbnail == undefined || code == undefined || stock == undefined) {
       throw new Error("Todos los campos son obligatorios");
     }
     try {
@@ -124,4 +116,4 @@ export class ProductManager {
 
 export default {
   ProductManager,
-}; 
+};

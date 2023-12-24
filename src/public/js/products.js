@@ -1,5 +1,4 @@
 const socket = io();
-console.log("hola mundo");
 
 const addProductBtn = document.getElementById("addProductBtn");
 const deleteProductBtn = document.getElementById("deleteProductBtn");
@@ -39,6 +38,5 @@ deleteProductBtn.addEventListener("click", () => {
 });
 
 socket.on("updateProducts", (products) => {
-  //recomendacion: usar innerHTML e insertarel nuevo productos que tien como parametro
   window.location.reload();
 });
