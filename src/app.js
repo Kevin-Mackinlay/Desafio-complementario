@@ -9,7 +9,7 @@ import { ProductManager } from "./classes/ProductManager.js";
 
 const app = express();
 const PORT = 8080;
-const productManager = new ProductManager("productos.json");
+const productManager = new ProductManager("products.json");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
