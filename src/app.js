@@ -14,7 +14,7 @@ const productManager = new ProductManager("productos.json");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static("src/public"));
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");

@@ -9,7 +9,7 @@ router.get("/products", async (req, res) => {
   res.render("products", {
     title: "Listado de productos",
     products: products,
-    style: "/css/products.cs",
+    style: "css/products.css",
   });
 });
 

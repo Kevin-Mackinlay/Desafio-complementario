@@ -3,7 +3,7 @@ import { Router } from "express";
 import { ProductManager } from "../classes/ProductManager.js";
 
 const router = Router();
-const productManager = new ProductManager("productos.json");
+const productManager = new ProductManager("products.json");
 
 router.get("/", async (req, res) => {
   const { limit } = req.query;
