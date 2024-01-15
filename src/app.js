@@ -1,4 +1,6 @@
 import express from "express";
+import mongoose, { Mongoose } from "mongoose";
+import dotenv from "dotenv";
 import { Server } from "socket.io";
 import productRouter from "./routes/products.router.js";
 import cartRouter from "./routes/cart.router.js";
@@ -7,8 +9,12 @@ import viewsRouter from "./routes/views.router.js";
 import { __dirname } from "./utils.js";
 import { ProductManager } from "./classes/ProductManager.js";
 
+dotenv.config();
+
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
+const DB_URL =process.env.DB_URL || "mongodb://localhost:27017/ecommerce";
+
 const productManager = new ProductManager("productos.json");
 
 app.use(express.json());
@@ -27,6 +33,14 @@ app.use("/", viewsRouter);
 const server = app.listen(PORT, () => {
   console.log("servidor esta running en el puerto" + PORT);
 });
+
+mongoose.connect(DB_URL)
+  .then(() => {
+    console.log("base de datos conectada" + DB_URL);
+  })
+  .catch((err) => {
+    console.log("error al conectar a la base de datos", err);
+  });
 
 const socketServer = new Server(server);
 
