@@ -15,13 +15,13 @@ export default class Cart {
     return cart;
   }
 
-  async saveCourse(cart) {
-    let newCart = new CourseModel(cart);
+  async saveCart(cart) {
+    let newCart = new CartModel(cart);
     let result = await newCart.save();
     return result;
   }
 
-  async updateCourse(id, cart) {
+  async updateCart(id, cart) {
     const result = await CartModel.updateOne({ _id: id }, cart);
     return result;
   }
@@ -32,3 +32,5 @@ export default class Cart {
     return result;
   }
 }
+
+// Path: src/dao/dbmanager/product.js (continuation)  
