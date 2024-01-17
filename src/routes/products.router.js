@@ -17,21 +17,28 @@ router.get("/", async (req, res) => {
   }
 });
 
+
 router.get("/:id", async (req, res) => {
-  const { pid } = await product.getById(req.params.id);
- res.json( pid );
+  const result = await product.getById(req.params.id);
+  res.json(result);
 });
 
 router.post("/", async (req, res) => {
   try {
-    const { title, description, price, thumbnail, code, stock } = req.body;
-    const result = await product.saveProduct(title, description, price, thumbnail, code, stock);  
+    const { title, description, price, thumbnail, code, stock, category } = req.body;
+
+    // Instead of passing individual parameters, pass an object
+    const productData = { title, description, price, thumbnail, code, stock, category };
+
+    const result = await product.saveProduct(productData);
+
     res.json({ message: "success", data: result });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "error", data: err });
   }
 });
+
 
 router.put("/:id", async (req, res) => {
   try{
