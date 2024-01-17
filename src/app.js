@@ -15,6 +15,12 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const DB_URL =process.env.DB_URL || "mongodb://localhost:27017/ecommerce";
 
+
+const Message = mongoose.model("Message", {
+  user: String,
+  message: String,
+});
+
 // const productManager = new ProductManager("productos.json");
 
 app.use(express.json());
@@ -41,6 +47,20 @@ mongoose.connect(DB_URL)
   .catch((err) => {
     console.log("error al conectar a la base de datos", err);
   });
+
+  
+app.post("/sendMessage", async (req, res) => {
+  const { user, message } = req.body;
+
+  try {
+    await Message.create({ user, message });
+    res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al enviar el mensaje");
+  }
+});
+
 
 // const socketServer = new Server(server);
 

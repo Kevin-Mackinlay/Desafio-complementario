@@ -35,7 +35,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/:cid/products/:pid", async (req, res) => {
+
+
+router.put("/:cid/products/:pid", async (req, res) => {
   const { cid, pid } = req.params;
   try {
     let response = await cart.addProductToCart(cid, pid);
@@ -45,6 +47,17 @@ router.post("/:cid/products/:pid", async (req, res) => {
     res.status(500).json({ message: "error", data: err });
   }
 });
+
+router.delete("/:cid/products/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+  try {
+    let response = await cart.deleteProductFromCart(cid, pid);
+    res.json({ message: "success", data: response });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "error", data: err });
+  }
+} );
 
 export default router;
 

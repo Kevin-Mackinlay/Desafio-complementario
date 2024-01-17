@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+</head>
+<body>
+  <h1>Chat</h1>
+  <ul id="message-list">
+    {{#each messages}}
+      <li>{{this.user}}: {{this.message}}</li>
+    {{/each}}
+  </ul>
+  <form id="message-form" action="/sendMessage" method="post">
+    <input type="text" name="user" placeholder="Tu correo">
+    <input type="text" name="message" placeholder="Tu mensaje">
+    <button type="submit">Enviar</button>
+  </form>
+</body>
+</html>

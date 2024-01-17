@@ -1,4 +1,3 @@
-
 import { Router } from "express";
 // import { ProductManager } from "../classes/ProductManager.js";
 import Product from "../dao/dbmanager/product.js";
@@ -6,7 +5,6 @@ import Product from "../dao/dbmanager/product.js";
 const router = Router();
 // const productManager = new ProductManager("products.json");
 const product = new Product();
-
 
 router.get("/", async (req, res) => {
   try {
@@ -16,7 +14,6 @@ router.get("/", async (req, res) => {
     console.log(err);
   }
 });
-
 
 router.get("/:id", async (req, res) => {
   const result = await product.getById(req.params.id);
@@ -39,47 +36,30 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 router.put("/:id", async (req, res) => {
-  try{
-    const { id } = req.params;
-    const { title, description, price, thumbnail, code, stock } = req.body;
-    const result = await product.updateProduct(id, title, description, price, thumbnail, code, stock);
+  const { id } = req.params;
+  const { title, description, price, thumbnail, code, stock, category } = req.body;
+  try {
+    const result = await product.updateProduct(id, title, description, price, thumbnail, code, stock, category);
     res.json({ message: "success", data: result });
-  } catch (err) { 
+  } catch (err) {
     console.log(err);
     res.status(500).json({ message: "error", data: err });
-  } 
+  }
 });
 
 router.delete("/:id", async (req, res) => {
-try{
-  const { id } = req.params;
-  const result = await product.deleteProduct(id);
-  res.json({ message: "success", data: result });
-} catch (err) {
-  console.log(err);
-  res.status(500).json({ message: "error", data: err });
-}
+  try {
+    const { id } = req.params;
+    const result = await product.deleteProduct(id);
+    res.json({ message: "success", data: result });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "error", data: err });
+  }
 });
 
 export default router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // router.get("/", async (req, res) => {
 //   const { limit } = req.query;
