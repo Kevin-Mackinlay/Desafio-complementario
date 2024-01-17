@@ -1,4 +1,4 @@
-import { CartModel}  from "../models/cart.js";
+import { cartModel}  from "../models/cart.js";
 
 export default class Cart {
   constructor() {
@@ -6,29 +6,29 @@ export default class Cart {
   }
 
   async getAll() {
-    let cart = await CartModel.find().lean();
+    let cart = await cartModel.find().lean();
     return cart;
   }
 
   async getById(id) {
-    let cart = await CartModel.findById(id).lean();
+    let cart = await cartModel.findById(id).lean();
     return cart;
   }
 
   async saveCart(cart) {
-    let newCart = new CartModel(cart);
+    let newCart = new cartModel(cart);
     let result = await newCart.save();
     return result;
   }
 
   async updateCart(id, cart) {
-    const result = await CartModel.updateOne({ _id: id }, cart);
+    const result = await cartModel.updateOne({ _id: id }, cart);
     return result;
   }
 
   async deleteCart(id) {
     //const result = await CourseModel.deleteOne({ _id: id });
-    const result = await CartModel.findByIdAndDelete(id);
+    const result = await cartModel.findByIdAndDelete(id);
     return result;
   }
 }
