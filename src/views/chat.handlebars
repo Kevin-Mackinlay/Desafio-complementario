@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Chat</title>
-</head>
-<body>
-  <h1>Chat</h1>
-  <ul id="message-list">
-    {{#each messages}}
-      <li>{{this.user}}: {{this.message}}</li>
-    {{/each}}
-  </ul>
-  <form id="message-form" action="/sendMessage" method="post">
-    <input type="text" name="user" placeholder="Tu correo">
-    <input type="text" name="message" placeholder="Tu mensaje">
-    <button type="submit">Enviar</button>
-  </form>
-</body>
-</html>
+<h1>Chat</h1>
+<div id="chat" class="chat-container">
+	<div id="messages-list" class="messages-list">
+		{{#each messages}}
+			<div class="message-box">
+				<small class="message-user">{{this.user}}</small>
+				<div class="message-text">{{this.message}}</div>
+				<small class="message-time">{{this.createdAt}}</small>
+			</div>
+		{{/each}}
+	</div>
+	<form id="message-form" class="message-form">
+		<input type="text" id="message-input" class="message-input" autocomplete="off" />
+		<button type="button" id="send-message-btn" class="send-message-btn">Send</button>
+	</form>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

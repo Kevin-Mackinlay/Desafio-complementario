@@ -2,10 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 // import { Server } from "socket.io";
-import productRouter from "./routes/products.router.js";
-import cartRouter from "./routes/cart.router.js";
+import productRouter from "./routes/products.routes.js";
+import cartRouter from "./routes/cart.routes.js";
 import handlebars from "express-handlebars";
-import viewsRouter from "./routes/views.router.js";
+import viewsRouter from "./routes/views.routes.js";
 import { __dirname } from "./utils.js";
 // import { ProductManager } from "./classes/ProductManager.js";
 
@@ -13,8 +13,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const DB_URL =process.env.DB_URL || "mongodb://localhost:27017/ecommerce";
-
+const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
 
 const Message = mongoose.model("Message", {
   user: String,
@@ -40,15 +39,28 @@ const server = app.listen(PORT, () => {
   console.log("servidor esta running en el puerto" + PORT);
 });
 
-mongoose.connect(DB_URL)
-  .then(() => {
-    console.log("base de datos conectada");
-  })
-  .catch((err) => {
-    console.log("error al conectar a la base de datos", err);
-  });
+// mongoose
+//   .connect(DB_URL)
+//   .then(() => {
+//     console.log("base de datos conectada");
+//   })
+//   .catch((err) => {
+//     console.log("error al conectar a la base de datos", err);
+//   });
 
-  
+
+
+startMongoConnection()
+.then(() => {
+  console.log("base de datos conectada");
+})
+.catch((err) => console.log(err));
+
+async function startMongoConnection() {
+  await mongoose.connect(DB_URL);
+}
+
+
 app.post("/sendMessage", async (req, res) => {
   const { user, message } = req.body;
 
@@ -60,7 +72,6 @@ app.post("/sendMessage", async (req, res) => {
     res.status(500).send("Error al enviar el mensaje");
   }
 });
-
 
 // const socketServer = new Server(server);
 
