@@ -9,4 +9,5 @@ const cartSchema = new mongoose.Schema({
     price: { type: Number, required: true },  
 });
 
-export const cartModel = mongoose.model(cartCollection, cartSchema);
+const CartModel = mongoose.model(cartCollection, cartSchema);
+export default CartModel;

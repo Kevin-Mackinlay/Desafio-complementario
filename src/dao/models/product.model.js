@@ -12,4 +12,5 @@ const productSchema = new mongoose.Schema({
   category: { type: String, required: true, max: 100 },
 });
 
-export const productModel = mongoose.model(productCollection, productSchema);
+const ProductModel = mongoose.model(productCollection, productSchema);
+export default ProductModel;

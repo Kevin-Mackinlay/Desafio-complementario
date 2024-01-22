@@ -31,7 +31,7 @@ sendMessageBtn.addEventListener("click", async () => {
   })
     .then((res) => res.json())
     .then((data) => {
-      if (data.sucess == false) {
+      if (data.success == false) {
         alert("No se pudo enviar el mensaje");
         return;
       }

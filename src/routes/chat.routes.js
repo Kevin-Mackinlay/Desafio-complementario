@@ -7,7 +7,7 @@ const chatService = new ChatService();
 ChatRouter.post("/", async (req, res) => {
   try {
     const { user, message } = req.body;
-    const newMessage = await ChatService.createMessage({ user, message });
+    const newMessage = await chatService.createMessage({ user, message });
     if (!newMessage) {
       return res.status(400).json({ success: false, error: "Message could not be created" });
     }
