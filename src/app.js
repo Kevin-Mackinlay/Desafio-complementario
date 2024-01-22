@@ -7,6 +7,7 @@ import cartsRoutes from "./routes/carts.routes.js";
 import handlebars from "express-handlebars";
 import viewsRoutes from "./routes/views.routes.js";
 import { __dirname } from "./utils.js";
+import IndexRouter from "./routes/index.routes.js";
 // import { ProductManager } from "./classes/ProductManager.js";
 
 dotenv.config();
@@ -25,6 +26,7 @@ const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("src/public"));
+
 // app.use(express.static(__dirname + "/public"));
 
 app.engine("handlebars", handlebars.engine());
