@@ -1,5 +1,5 @@
 import express from "express";
-import CartsManager from "../services/fs/Carts.service.fs.js";
+import CartsManager from "../services/fs/Carts.service.fs.js ";
 
 const cartsManager = new CartsManager();
 
@@ -72,4 +72,3 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
 });
 
 export default cartsRouter;
-

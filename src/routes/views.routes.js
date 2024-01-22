@@ -1,19 +1,21 @@
 import { Router } from "express";
-import { ProductManager } from "../classes/ProductManager.js";
+import ProductsManager from "../services/fs/Products.service.fs.js";
+import chatService from "../services/db/Chat.service.db.js";
 
-const router = Router();
-const productManager = new ProductManager("products.json");
+const viewsRouter = Router();
+const productManager = new ProductManager("src/products.json");
+const chatService = new ChatService();
 
-router.get("/products", async (req, res) => {
-    const products = await productManager.getProducts();
-    res.render("products", {
-        title: "Listado de productos",
-        products: products,
-        style: "css/products.css",
-    });
+viewsRouter.get("/products", async (req, res) => {
+  const products = await productManager.getProducts();
+  res.render("products", {
+    title: "Listado de productos",
+    products: products,
+    style: "css/products.css",
+  });
 });
 
-router.get("/realtime", async (req, res) => {
+viewsRouter.get("/realtimeproducts", async (req, res) => {
   const products = await productManager.getProducts();
   res.render("realtime", {
     title: "Productos en tiempo real",
@@ -22,4 +24,13 @@ router.get("/realtime", async (req, res) => {
   });
 });
 
-export default router;
+viewsRouter.get("/chat", async (req, res) => {
+  const messages = await chatService.findMessages();
+
+  res.render("chat", {
+    title: "Chat",
+    messages: messages,
+    style: "css/chat.css",
+  });
+});
+export default viewsRouter;
