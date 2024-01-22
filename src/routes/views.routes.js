@@ -1,9 +1,9 @@
 import { Router } from "express";
 import ProductsManager from "../services/fs/Products.service.fs.js";
-import chatService from "../services/db/Chat.service.db.js";
+import ChatService from "../services/db/Chat.service.db.js";
 
 const viewsRouter = Router();
-const productManager = new ProductManager("src/products.json");
+const productManager = new ProductsManager("src/products.json");
 const chatService = new ChatService();
 
 viewsRouter.get("/products", async (req, res) => {
