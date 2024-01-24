@@ -7,18 +7,19 @@ const productsRouter = express.Router();
 productsRouter.get("/", async (req, res) => {
   try {
     const { limit = 10, page = 1, sort, category } = req.query;
-    const queryFilter = {
+    const filter = {
+     query: {category},
+     options:{
       limit,
       page,
-     
-      filter:{category},
+     }	
     };
 
     if (sort) {
-      queryFilter.sort = sort;
+      filter.options.sort = {price: sort};
     }
-    
-    const products = await productManager.getProducts();
+
+    const products = await productManager.getProducts(filter);
 
     if (products.length < 1) {
       res.status(404).json({
@@ -30,7 +31,7 @@ productsRouter.get("/", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: limit ? products.slice(0, limit) : products,
+      data:  products,
     });
   } catch (error) {
     console.log(error);

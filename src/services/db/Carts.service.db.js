@@ -1,3 +1,6 @@
+import CartModel from "../../dao/models/cart.Model";
+
+
 export default class CartsManager {
   async createCart() {
     try {

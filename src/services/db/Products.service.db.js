@@ -1,4 +1,4 @@
-import ProductModel from "../../models/product.model.js";
+import ProductModel from "../../dao/models/product.model.js";
 
 export default class ProductsManager {
   async createProduct(product) {
@@ -10,7 +10,8 @@ export default class ProductsManager {
 
   async getProducts(filter) {
     try {
-      const products = await ProductModel.find(filter).lean(); // {limit: 10, page: 1, sort: { price:1;}, filter: { category: "category" }};
+      filter.options.lean = true
+      const products = await ProductModel.paginate(filter.query, filter.option); // {limit: 10, page: 1, sort: { price:1;}, filter: { category: "category" }};
     } catch (error) {
       throw error;
     }
