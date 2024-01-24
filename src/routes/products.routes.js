@@ -1,12 +1,23 @@
 import express from "express";
-import ProductManager from "../services/fs/Products.service.fs.js ";
+import ProductManager from "../services/db/Products.service.db.js";
 
 const productManager = new ProductManager();
 const productsRouter = express.Router();
 
 productsRouter.get("/", async (req, res) => {
   try {
-    const { limit } = req.query;
+    const { limit = 10, page = 1, sort, category } = req.query;
+    const queryFilter = {
+      limit,
+      page,
+     
+      filter:{category},
+    };
+
+    if (sort) {
+      queryFilter.sort = sort;
+    }
+    
     const products = await productManager.getProducts();
 
     if (products.length < 1) {
