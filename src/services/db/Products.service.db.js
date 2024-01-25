@@ -24,6 +24,7 @@ export default class ProductsManager {
     try {
       filter.options.lean = true;
       const products = await ProductModel.paginate(filter.query, filter.options);
+      // products.status = "success" para que el status de la respuesta sea success
       products.status = "success";
 
       return products;

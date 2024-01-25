@@ -8,17 +8,20 @@ productsRouter.get("/", async (req, res) => {
   try {
     const { limit = 10, page = 1, sort, category } = req.query;
     const filter = {
-     query: {category},
-     options:{
-      limit,
-      page,
-     }	
+      options: {
+        limit,
+        page,
+      },
     };
 
-    if (sort) {
-      filter.options.sort = {price: sort};
+    if (category) {
+      filter.query = { category: category };
     }
 
+    if (sort) {
+      filter.options.sort = { price: sort };
+    }
+    //console.log(filter);
     const products = await productService.getPaginatedProducts(filter);
 
     if (products.length < 1) {
@@ -31,7 +34,7 @@ productsRouter.get("/", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data:  products,
+      data: products,
     });
   } catch (error) {
     console.log(error);
@@ -71,7 +74,6 @@ productsRouter.get("/:pid", async (req, res) => {
 productsRouter.post("/", async (req, res) => {
   try {
     const { product } = req.body;
-    console.log(req);
     const newProduct = await productService.createProduct(product);
 
     if (!newProduct) {

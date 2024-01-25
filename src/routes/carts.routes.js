@@ -1,13 +1,13 @@
 import express from "express";
-import CartsManager from "../services/fs/Carts.service.fs.js ";
+import CartsService from "../services/db/Carts.service.db.js ";
 
-const cartsManager = new CartsManager();
+const cartsService = new CartsService();
 
 const cartsRouter = express.Router();
 
 cartsRouter.post("/", async (req, res) => {
   try {
-    await cartsManager.createCart();
+    await cartsService.createCart();
 
     res.status(200).json({
       success: true,
@@ -23,7 +23,7 @@ cartsRouter.post("/", async (req, res) => {
 cartsRouter.get("/:cid", async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await cartsManager.getCartById(cid);
+    const cart = await cartsService.getCartById(cid);
 
     if (!cart) {
       res.status(404).json({
@@ -50,7 +50,7 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
   try {
     const { cid, pid } = req.params;
 
-    const cart = await cartsManager.addProductToCart(cid, pid);
+    const cart = await cartsService.addProductToCart(cid, pid);
     if (!cart) {
       res.status(400).json({
         success: false,
