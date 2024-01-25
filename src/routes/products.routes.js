@@ -1,7 +1,7 @@
 import express from "express";
-import ProductManager from "../services/db/Products.service.db.js";
+import ProductService from "../services/db/Products.service.db.js";
 
-const productManager = new ProductManager();
+const productService = new ProductService();
 const productsRouter = express.Router();
 
 productsRouter.get("/", async (req, res) => {
@@ -19,7 +19,7 @@ productsRouter.get("/", async (req, res) => {
       filter.options.sort = {price: sort};
     }
 
-    const products = await productManager.getProducts(filter);
+    const products = await productService.getPaginatedProducts(filter);
 
     if (products.length < 1) {
       res.status(404).json({
@@ -45,7 +45,7 @@ productsRouter.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
 
-    const product = await productManager.getProductById(pid);
+    const product = await productService.getProductById(pid);
 
     if (!product) {
       res.status(404).json({
@@ -72,7 +72,7 @@ productsRouter.post("/", async (req, res) => {
   try {
     const { product } = req.body;
     console.log(req);
-    const newProduct = await productManager.createProduct(product);
+    const newProduct = await productService.createProduct(product);
 
     if (!newProduct) {
       res.status(400).json({
@@ -82,7 +82,7 @@ productsRouter.post("/", async (req, res) => {
       return;
     }
 
-    const products = await productManager.getProducts();
+    const products = await productService.getProducts();
     // Alternativa a HTTPs
     // req.io.emit("updateProducts", {
     // 	success: true,
@@ -108,7 +108,7 @@ productsRouter.put("/:pid", async (req, res) => {
     const { pid } = req.params;
     const { product } = req.body;
 
-    const updatedProduct = await productManager.updateProduct(pid, product);
+    const updatedProduct = await productService.updateProduct(pid, product);
 
     if (!updatedProduct) {
       res.status(400).json({
@@ -135,9 +135,9 @@ productsRouter.delete("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
 
-    await productManager.deleteProductById(pid);
+    await productService.deleteProductById(pid);
 
-    const products = await productManager.getProducts();
+    const products = await productService.getProducts();
 
     res.status(200).json({
       success: true,
