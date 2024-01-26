@@ -15,5 +15,12 @@
 
     </div>
   {{/each}}
+    {{#if hasPrevPage}}
+    <a href="/products?page={{prevPage}}"><button>Anterior</button></a>
+  {{/if}}
+
+  {{#if hasNextPage}}
+    <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
+  {{/if}}
 </div>
 <script src="/js/products.js"></script>

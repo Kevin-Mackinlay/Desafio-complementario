@@ -1,9 +1,11 @@
 import CartModel from "../../dao/models/Cart.model.js";
+
+
 export default class CartsManager {
   async createCart() {
     try {
-      const product = [];
-      const cart = await CartModel.create({ product });
+      const products = [];
+      const cart = await CartModel.create({ products });
 
       return cart;
     } catch (error) {
@@ -55,21 +57,6 @@ export default class CartsManager {
       if (!productExistsInCart) {
         return { message: "Product not found in cart" };
       }
-
-      /* 
-			// ALTERNATIVA ESTILO JS
-			const cart = await CartModel.findById(cid);
-
-			cart.products.forEach((obj) => {
-				if (obj.product.toString() === pid) {
-					obj.quantity = quantity;
-				}
-			});
-
-			await cart.save(); 
-			*/
-
-      // ALTERNATIVA ESTILO MONGO/MONGOOSE
       const cart = await CartModel.findOneAndUpdate({ _id: cid, "products.product": pid }, { $set: { "products.$.quantity": quantity } }, { new: true }).lean();
 
       return cart;

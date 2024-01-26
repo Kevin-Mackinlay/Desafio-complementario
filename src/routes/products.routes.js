@@ -44,6 +44,7 @@ productsRouter.get("/", async (req, res) => {
     });
   }
 });
+
 productsRouter.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
