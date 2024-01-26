@@ -36,9 +36,11 @@ export default class CartsManager {
       const productExistsInCart = await CartModel.exists({ _id: cid, "products.product": pid });
       let cart;
       if (!productExistsInCart) {
-        cart = await CartModel.findByIdAndUpdate(cid, { $push: { product: { product: pid, quantity: 1 } } }, { new: true }).lean();
+        cart = await CartModel.findByIdAndUpdate(cid, { $push: { products: { product: pid, quantity: 1 } } }, { new: true }).lean();
+        // console.log("1",cart);
       } else {
         cart = await CartModel.findOneAndUpdate({ _id: cid, "products.product": pid }, { $inc: { "products.$.quantity": 1 } }, { new: true }).lean();
+        // console.log("2",cart);
       }
 
       return cart;
@@ -84,7 +86,7 @@ export default class CartsManager {
         return { message: "Product not found in cart" };
       }
 
-      const cart = await CartModel.findByIdAndUpdate(cid, { $pull: { product: { product: pid } } }, { new: true }).lean();
+      const cart = await CartModel.findByIdAndUpdate(cid, { $pull: { products: { product: pid } } }, { new: true }).lean();
 
       return cart;
     } catch (error) {
@@ -94,7 +96,7 @@ export default class CartsManager {
 
   async emptyCart(cid) {
     try {
-      const cart = await CartModel.findByIdAndUpdate(cid, { $set: { product: [] } }, { new: true }).lean();
+      const cart = await CartModel.findByIdAndUpdate(cid, { $set: { products: [] } }, { new: true }).lean();
 
       return cart;
     } catch (error) {
