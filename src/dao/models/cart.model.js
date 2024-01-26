@@ -28,3 +28,6 @@ CartSchema.pre("find", function (next) {
 });
 
 export default mongoose.model("Carts", CartSchema);
+
+
+// localhost:8080/api/carts/65b2fefa1d61899a70192272/products/65b2d4132440be292ec978c6

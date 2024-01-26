@@ -1,5 +1,5 @@
 import express from "express";
-import CartsService from "../services/db/Carts.service.db.js ";
+import CartsService from "../services/db/Carts.service.db.js";
 
 const cartsService = new CartsService();
 
@@ -7,7 +7,7 @@ const cartsRouter = express.Router();
 
 cartsRouter.post("/", async (req, res) => {
   try {
-    await cartsService.createCart();
+    await cartsService.createCart({});
 
     res.status(200).json({
       success: true,
@@ -20,6 +20,16 @@ cartsRouter.post("/", async (req, res) => {
     });
   }
 });
+
+cartsRouter.get("/", async (req, res) => {
+  try {
+    const carts = await cartsService.getCarts();
+    res.status(200).json({ carts });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 cartsRouter.get("/:cid", async (req, res) => {
   try {
     const { cid } = req.params;
@@ -28,7 +38,7 @@ cartsRouter.get("/:cid", async (req, res) => {
     if (!cart) {
       res.status(404).json({
         success: false,
-        message: "Cart was not found",
+        message: "Cart not found",
       });
       return;
     }
@@ -52,9 +62,9 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
 
     const cart = await cartsService.addProductToCart(cid, pid);
     if (!cart) {
-      res.status(400).json({
+      res.status(404).json({
         success: false,
-        message: "Product ",
+        message: "Cart not found",
       });
       return;
     }
@@ -62,6 +72,75 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
       success: true,
       message: `Product ${pid} added to cart ${cid}`,
       cart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+cartsRouter.put("/:cid/product/:pid", async (req, res) => {
+  try {
+    const { quantity } = req.body;
+    const { cid, pid } = req.params;
+
+    const cart = await cartsService.updateProductQuantity(pid, cid, quantity);
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: `Product ${pid}'s quantity was modified ${cid}`,
+      cart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+cartsRouter.delete("/:cid/product/:pid", async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+
+    const cart = await cartsService.deleteProductFromCart(cid, pid);
+
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: `Product ${pid} deleted from cart ${cid}`,
+      cart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+cartsRouter.delete("/:cid", async (req, res) => {
+  const { cid } = req.params;
+
+  try {
+    await cartsService.emptyCart(cid);
+
+    res.status(200).json({
+      success: true,
+      message: `Cart ${cid} was emptied`,
     });
   } catch (error) {
     res.status(500).json({
