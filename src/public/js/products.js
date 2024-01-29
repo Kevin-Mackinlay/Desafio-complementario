@@ -13,6 +13,7 @@ addProductBtn.addEventListener("click", async () => {
 
   const product = {
     title: title.value,
+    title: title.value,
     description: description.value,
     price: price.value,
     thumbnail: thumbnail.value,

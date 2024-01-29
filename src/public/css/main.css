@@ -1,66 +1,56 @@
+/* Reset CSS */
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: "Didact Gothic", sans-serif;
-	font-size: 12px;
-	list-style: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 12px;
+  list-style: none;
 }
 
+/* Global Styles */
 html {
-	height: 100%;
-	width: 100%;
-
-	font-size: 62.5%;
-
-	scroll-behavior: smooth;
-}
-
-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	position: sticky;
-	top: 0;
-
-	height: 7rem;
-	width: 100%;
-	padding: 0 3rem;
-
-	background-color: #1a1a1a;
-}
-
-nav ul {
-	display: flex;
-	gap: 2rem;
-	font-weight: bold;
+  height: 100%;
+  width: 100%;
+  font-size: 62.5%;
+  scroll-behavior: smooth;
 }
 
 body {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-
-	width: 100%;
-	height: 100%;
-	min-height: 100vh;
-
-	background-color: rgb(156, 184, 240);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #f2f2f2; /* Light gray background */
 }
 
 a {
-	text-decoration: none;
-	color: white;
+  text-decoration: none;
+  color: #333; /* Dark gray text color */
 }
 
 a:hover {
-	color: #e9aa3e;
+  color: #e9aa3e; /* Gold hover color */
 }
 
-.logo-container {
-	height: 4rem;
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  height: 15rem; /* Adjusted height */
+  width: 100%;
+  padding: 0 3rem;
+  background-color: #1a1a1a; /* Dark background color */
 }
-.logo-container img {
-	height: 100%;
-    background-color: aliceblue;
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  font-weight: bold;
+  color: #fff; /* Set text color to white */
 }

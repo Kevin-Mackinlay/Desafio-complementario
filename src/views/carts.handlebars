@@ -1,12 +1,16 @@
-<div>
-  {{#each products}}
-    <p>{{this.first_name}}</p>
-  {{/each}}
-  {{#if hasPrevPage}}
-    <a href="/carts?page={{prevPage}}"><button>Anterior</button></a>
-  {{/if}}
+<div class="cartContainer">
+    <div class="cartHeader">
+        <h1>Carrito de compras</h1>
+    </div >
+    <div class="cartContent" >
+<div class="cartContentHeader">
+    <div class="cartContentHeader__item">
+        <h3>Producto</h3>
 
-  {{#if hasNextPage}}
-    <a href="/carts?page={{nextPage}}"><button>Siguiente</button></a>
-  {{/if}}
+    </div>
+    <div class="cartContentHeader__item">
+        <h3>Precio</h3>
+    </div>
+
+
 </div>
