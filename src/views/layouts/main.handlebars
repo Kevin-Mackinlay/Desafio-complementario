@@ -1,27 +1,29 @@
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{{title}}</title>
-		<link rel="stylesheet" href="/css/main.css" />
-		<link rel="stylesheet" href={{style}} />
-	</head>
-	<body>
-		<header>
-			<picture class="logo-container">
-				<img src="/assets/logo.svg" alt="" />
-			</picture>
-			<nav>
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/products">Products</a></li>
-					<li><a href="/realtimeproducts">Real Time Products</a></li>
-					<li><a href="/chat">Chat</a></li>
-				</ul>
-			</nav>
-		</header>
-		{{{body}}}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href={{style}} />
+    <script src="socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <header>
+      <picture class="logo-container">
+        <img src="/assets/logo.svg" alt="" />
+      </picture>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/products">Products</a></li>
+          <li><a href="/realtimeproducts">Real Time Products</a></li>
+          <li><a href="/chat">Chat</a></li>
+          <li><a href="/cart">Cart</a></li>
+        </ul>
+      </nav>
+    </header>
+    {{{body}}}
+    <script src="product.js"></script>
+  </body>
 
-	</body>
-	<script src="socket.io/socket.io.js"></script>
 </html>

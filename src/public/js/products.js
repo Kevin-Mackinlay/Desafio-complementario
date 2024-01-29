@@ -71,6 +71,54 @@ deleteProductBtn.addEventListener("click", async () => {
 // 	}
 // });
 
+document.addEventListener("DOMContentLoaded", function () {
+  // Find all "Agregar al carrito" buttons
+  const botonesAgregarAlCarrito = document.querySelectorAll(".agregar-al-carrito");
+
+  // Attach event listener to each button
+  botonesAgregarAlCarrito.forEach(function (boton) {
+    boton.addEventListener("click", function () {
+      // Get the product ID from the button's data-product-id attribute
+      const productoId = this.getAttribute("data-product-id");
+
+      // Data to send to the server
+      const datos = {
+        productoId: productoId,
+        cantidad: 1, // Quantity of the product to add to the cart
+      };
+
+      // POST request configuration
+      const opcionesFetch = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // You can add more headers if necessary
+        },
+        body: JSON.stringify(datos), // Convert data to JSON format
+      };
+
+      // URL of the endpoint to add products to the cart
+      const urlAgregarAlCarrito = "/carts/routes";
+
+      // Perform the POST request using fetch()
+      fetch(urlAgregarAlCarrito, opcionesFetch)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error al agregar el producto al carrito");
+          }
+          // Perform additional actions if the request is successful
+          console.log("Producto agregado al carrito exitosamente");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Handle the error according to your needs
+        });
+    });
+  });
+});
+
+
+
 function reloadList(products) {
   const productList = document.getElementById("productList");
   // Se vacía lista existente en front

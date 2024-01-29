@@ -32,7 +32,7 @@ a {
 }
 
 a:hover {
-  color: #e9aa3e; /* Gold hover color */
+  color: #ffa60b; /* Gold hover color */
 }
 
 /* Header Styles */
@@ -45,7 +45,7 @@ header {
   height: 15rem; /* Adjusted height */
   width: 100%;
   padding: 0 3rem;
-  background-color: #1a1a1a; /* Dark background color */
+  background-color:#b3b1b1; /* Dark background color */
 }
 
 nav ul {
