@@ -1,4 +1,5 @@
 import CartModel from "../../dao/models/Cart.model.js";
+import mongoose from "mongoose";
 
 
 export default class CartsManager {
@@ -35,14 +36,18 @@ export default class CartsManager {
 
   async addProductToCart(cid, pid) {
     try {
+      console.log(1, cid);
       const productExistsInCart = await CartModel.exists({ _id: cid, "products.product": pid });
       let cart;
+     
       if (!productExistsInCart) {
         cart = await CartModel.findByIdAndUpdate(cid, { $push: { products: { product: pid, quantity: 1 } } }, { new: true }).lean();
         // console.log("1",cart);
+        console.log(2);
       } else {
         cart = await CartModel.findOneAndUpdate({ _id: cid, "products.product": pid }, { $inc: { "products.$.quantity": 1 } }, { new: true }).lean();
         // console.log("2",cart);
+        console.log(3);
       }
 
       return cart;

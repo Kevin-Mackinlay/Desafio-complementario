@@ -19,8 +19,8 @@ const CartSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-CartSchema.pre("find", function (next) {
+//expresion regular cualquier cosa que comience con find
+CartSchema.pre(/^find/, function (next) {
   this.populate({
     path: "products.product",
   });

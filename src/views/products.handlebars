@@ -5,13 +5,13 @@
         <img src="{{this.thumbnail}}" alt="{{this.name}}" />
       </div>
       <div class="product-card__info">
-        <h4>{{this.title}}</h4>
+        <h4 id="title">{{this.title}}</h4>
         <p class="description">{{this.description}}</p>
         <p class="price">{}</p>
         <p class="stock">Available: {}</p>
         <p class="code">Product Code: {{this.code}}</p>
-        <p class="id">ID: {{this.id}}</p>
-        <button id="addProductBtn">Agregar al carrito</button>
+        <p class="id">ID: {{this._id}}</p>
+        <button class="addProductToCart" id="{{this._id}}">Agregar al carrito</button>
       
 
       </div>
