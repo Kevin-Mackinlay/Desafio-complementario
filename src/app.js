@@ -1,13 +1,38 @@
 import express from "express";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import  FileStore  from "session-file-store";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 
+const fileStorage = FileStore(session);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
+
+app.use(cookieParser());
+
+app.use(
+  session({
+    store: new fileStorage({
+      path: "./sessions",
+      ttl: 100,
+      retries: 0,
+    }),
+    secret: "codersecret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.get("/", (req, res) => {
+  res.render("Hello World");    
+});
+
+// app.listen("8080", () => console.log(object));
 
 
 app.use(express.json());
