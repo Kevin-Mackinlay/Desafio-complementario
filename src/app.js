@@ -29,7 +29,15 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("Hello World");    
+if (req.session.counter) {
+  req.session.counter++;
+  res.send(`Contador: ${req.session.counter}`);
+}else{
+  req.session.counter = 1;
+  res.send("Bienvenido");
+
+}
+// res.send("Hello World");
 });
 
 // app.listen("8080", () => console.log(object));
