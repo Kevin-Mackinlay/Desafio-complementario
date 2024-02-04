@@ -2,35 +2,83 @@ import express from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import FileStore from "session-file-store";
+// import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
+import {__dirname} from "../src/utils.js";
+import loginRouter from "./routes/login.routes.js";
+import signupRouter from "./routes/signup.routes.js";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 8080;
 const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
+const PORT = process.env.PORT || 8080;
+const COOCKIESECRET = process.env.CODERSECRET
 
-app.use(cookieParser());
+//middlewares para el manejo de datos
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// esto es para que se guarde la sesion en la base de datos session-file-store
-// const fileStorage = FileStore(session);
-// app.use(
-//   session({
-//     store: new fileStorage({
-//       path: "./sessions",
-//       ttl: 100,
-//       retries: 0,
-//     }),
-//     secret: "codersecret",
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
 
+app.use(cookieParser(COOCKIESECRET));
+app.use(express.static("src/public"));
+app.use("/", IndexRouter);
+
+app.engine("handlebars", handlebars.engine());
+app.set("views", "src/views");
+app.set("view engine", "handlebars");
+
+//routes
+app.use("/login", loginRouter);
+app.use("/signup", signupRouter);
+
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
+
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: DB_URL,
+      ttl: 15,
+      mongoOptions: {
+        useNewUrlParser: true,
+      },
+    }),
+    secret: "COOCKIESECRET",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+const environment = async () => {
+  try {
+    await mongoose.connect(DB_URL);
+    console.log("Conectado a la base de datos");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+environment();
+
+const server = app.listen(PORT, () => {
+ console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
+
+server.on("error", (error) => console.log(error));
+
+
+const io = new Server(server);
+
+io.on("connection", (socket) => {
+  console.log("Se conecto un nuevo ususario");
+});
 
 app.use(
   session({
@@ -57,36 +105,6 @@ app.get("/", (req, res) => {
   }
 });
 
-
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("src/public"));
-
-app.engine("handlebars", handlebars.engine());
-app.set("views", "src/views");
-app.set("view engine", "handlebars");
-
-app.use((req, res, next) => {
-  req.io = io;
-  next();
-});
-
-app.use("/", IndexRouter);
-
-const server = app.listen(PORT, (error) => {
-  if (error) {
-    console.log(error);
-  }
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
-
-const io = new Server(server);
-
-io.on("connection", (socket) => {
-  console.log("Se conecto un nuevo ususario");
-});
-
 startMongoConnection()
   .then(() => {
     console.log("Conectado a la base de datos");
@@ -96,5 +114,16 @@ startMongoConnection()
 async function startMongoConnection() {
   await mongoose.connect(DB_URL);
 }
+
+
+
+
+// const server = app.listen(PORT, (error) => {
+//   if (error) {
+//     console.log(error);
+//   }
+//   console.log(`Servidor corriendo en el puerto ${PORT}`);
+// });
+
 
 //
