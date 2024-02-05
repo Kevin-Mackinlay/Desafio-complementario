@@ -15,10 +15,9 @@ router.post("/login", async (req, res) => {
   } else {
     req.session.user = email;
     req.session.role = "admin";
-    res.status(200).json({
-      respuesta: "ok",
-    });
-  }
+   res.redirect("/products");   
+    }
+
 });
 router.post("/signup", async (req, res) => {
   

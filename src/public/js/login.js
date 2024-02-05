@@ -6,9 +6,9 @@ async function postLogin(email, password) {
     },
     body: JSON.stringify({ email, password }),
   });
-  const data = await response.json();
-  if (data.respuesta === "ok") {
-    window.location.href = "/privado";
+ 
+  if (response.redirected) {
+    window.location.href = response.url;
   } else {
     alert("Datos incorrectos");
   }
