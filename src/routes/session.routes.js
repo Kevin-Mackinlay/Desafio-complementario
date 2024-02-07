@@ -5,6 +5,7 @@ import { auth } from "../middlewares/index.js";
 const router = Router();
 
 router.post("/login", async (req, res) => {
+  try {
   const { email, password } = req.body;
   const result = await UserModel.findOne({ email, password });
 
@@ -17,10 +18,16 @@ router.post("/login", async (req, res) => {
     req.session.role = "admin";
    res.redirect("/products");   
     }
-
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
 });
+
+
 router.post("/signup", async (req, res) => {
-  
+  try {
   const { first_name, last_name, email, password, age } = req.body;
 
   const newUser = {
@@ -52,7 +59,11 @@ router.post("/signup", async (req, res) => {
       respuesta: "Usuario creado con éxito",
     });
   }
-});
+} catch (error) {
+  res.status(500).json({
+    error: error.message,
+  }); 
+}});
 
 router.get("/privado", auth, (req, res) => {
   res.render("topsecret", {

@@ -9,6 +9,7 @@ const chatService = new ChatService();
 const cartsManager = new CartsManager();
 
 viewsRouter.get("/cart/:cid", async (req, res) => {
+  try{
   const { cid } = req.params;
   const cart = await cartsManager.getCartById(cid);
   console.log(cart.products);
@@ -16,27 +17,36 @@ viewsRouter.get("/cart/:cid", async (req, res) => {
     products: cart.products,
     style: "/css/cart.css",
   }); 
-});
+} catch (error) {
+  res.status(500).json({ error: error.message });
+}});
 
 viewsRouter.get("/products", async (req, res) => {
+  try{
   const products = await productManager.getProducts();
   res.render("products", {
     title: "Listado de productos",
     products: products,
     style: "/css/products.css",
   });
-});
+} catch (error) { 
+  res.status(500).json({ error: error.message });
+}});
 
 viewsRouter.get("/realtimeproducts", async (req, res) => {
+  try{
   const products = await productManager.getProducts();
   res.render("realtime", {
     title: "Productos en tiempo real",
     products: products,
     style: "/css/products.css",
   });
-});
+} catch (error) {
+  res.status(500).json({ error: error.message });
+}});
 
 viewsRouter.get("/chat", async (req, res) => {
+  try{
   const messages = await chatService.findMessages();
 
   res.render("chat", {
@@ -44,5 +54,7 @@ viewsRouter.get("/chat", async (req, res) => {
     messages: messages,
     style: "/css/chat.css",
   });
-});
+} catch (error) {
+  res.status(500).json({ error: error.message });
+}});
 export default viewsRouter;

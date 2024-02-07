@@ -60,14 +60,14 @@ app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
 
 
-const environment = async () => {
-  try {
-    await mongoose.connect(DB_URL);
-    console.log("Conectado a la base de datos");
-  } catch (error) {
-    console.log(error);
-  }
-};
+// const environment = async () => {
+//   try {
+//     await mongoose.connect(DB_URL);
+//     console.log("Conectado a la base de datos");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 environment();
 
@@ -83,20 +83,6 @@ io.on("connection", (socket) => {
   console.log("Se conecto un nuevo ususario");
 });
 
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl: DB_URL,
-      ttl: 15,
-      mongoOptions: {
-        useNewUrlParser: true,
-      },
-    }),
-    secret: "codersecret",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 
 app.get("/", (req, res) => {
   if (req.session.counter) {
@@ -118,11 +104,3 @@ async function startMongoConnection() {
   await mongoose.connect(DB_URL);
 }
 
-// const server = app.listen(PORT, (error) => {
-//   if (error) {
-//     console.log(error);
-//   }
-//   console.log(`Servidor corriendo en el puerto ${PORT}`);
-// });
-
-//
