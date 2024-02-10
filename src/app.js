@@ -14,6 +14,7 @@ import { __dirname } from "../src/utils.js";
 import loginRouter from "./routes/login.routes.js";
 import signupRouter from "./routes/signup.routes.js";
 import sessionRouter from "./routes/session.routes.js";
+import viewsRouter from "./routes/views.routes.js";
 
 dotenv.config();
 const app = express();
@@ -62,6 +63,8 @@ app.use(
   })
 );
 app.use(passport.initialize());
+app.use("/", viewsRouter);
+app.use("/api/sessions", sessionRouter);
 app.use("/", sessionRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);

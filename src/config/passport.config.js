@@ -1,17 +1,18 @@
 import passport from "passport";
-import GithubStrategy from "passport-github2";
-import userservice from "../dao/models/user.model.js";
-import dotenv from "dotenv";
+import GitHubStrategy from "passport-github2";
+import userService from "../dao/models/user.model.js";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GITHUB_CALLBACK_URL = process.env.GITHUB_CALLBACK_URL;
 
+
 const initializePassport = () => {
   passport.use(
     "github",
-    new GithubStrategy(
+    new GitHubStrategy(
       {
         clientID: GITHUB_CLIENT_ID,
         clientSecret: GITHUB_CLIENT_SECRET,
@@ -19,32 +20,39 @@ const initializePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          let user = await userservice.findOne({ email: profile?.emails[0]?.value });
+          let user = await userService.findOne({
+            email: profile?.emails[0]?.value,
+          });
           if (!user) {
             const newUser = {
               first_name: profile.displayName.split(" ")[0],
               last_name: profile.displayName.split(" ")[1],
-              email: profile.emails[0].value,
-              age: 40,
-              password: crypto.randomBytes(20).toString("hex"),
+              email: profile?.emails[0]?.value,
+              age: 20,
+              password: Math.random().toString(36).substring(7),
             };
-            let result = await userservice.create(newUser);
-            return done(null, result);
+            let result = await userService.create(newUser);
+            done(null, result);
           } else {
-            return done(null, user);
+            done(null, user);
           }
-        } catch (error) {
-        return   done("error al onbtener el usuario");
+        } catch (err) {
+          done(err, null);
         }
       }
     )
   );
   passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user._id);
   });
-  passport.deserializeUser((id, done) => {
-    const user = userservice.findById(id);
-    done(null, user);
+
+  passport.deserializeUser(async (id, done) => {
+    try {
+      let user = await userService.findById(id);
+      done(null, user);
+    } catch (err) {
+      done(err, null);
+    }
   });
 };
 

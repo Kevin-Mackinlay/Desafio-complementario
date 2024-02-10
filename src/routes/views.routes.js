@@ -9,10 +9,10 @@ const productManager = new ProductsManager();
 const chatService = new ChatService();
 const cartsManager = new CartsManager();
 
-router.get("/", (req, res) => {
+viewsRouter.get("/", (req, res) => {
   res.render("home");
 });
-router.get("/login", (req, res) => {
+viewsRouter.get("/login", (req, res) => {
   res.render("login");
 });
 
