@@ -1,5 +1,7 @@
 import express from "express";
+import passport from "passport";
 import mongoose from "mongoose";
+import initializePassport from "./config/passport.config.js ";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 // import FileStore from "session-file-store";
@@ -33,6 +35,10 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");
 
+initializePassport();
+
+
+
 //routes
 
 
@@ -55,21 +61,11 @@ app.use(
     saveUninitialized: true,
   })
 );
+app.use(passport.initialize());
 app.use("/", sessionRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
 
-
-// const environment = async () => {
-//   try {
-//     await mongoose.connect(DB_URL);
-//     console.log("Conectado a la base de datos");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-environment();
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import ProductsManager from "../services/db/Products.service.db.js";
 import ChatService from "../services/db/Chat.service.db.js";
 import CartsManager from "../services/db/Carts.service.db.js";
@@ -7,6 +8,13 @@ const viewsRouter = Router();
 const productManager = new ProductsManager();
 const chatService = new ChatService();
 const cartsManager = new CartsManager();
+
+router.get("/", (req, res) => {
+  res.render("home");
+});
+router.get("/login", (req, res) => {
+  res.render("login");
+});
 
 viewsRouter.get("/cart/:cid", async (req, res) => {
   try{
