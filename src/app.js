@@ -11,9 +11,7 @@ import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils.js";
-import loginRouter from "./routes/login.routes.js";
-import signupRouter from "./routes/signup.routes.js";
-import sessionRouter from "./routes/session.routes.js";
+
 import viewsRouter from "./routes/views.routes.js";
 
 dotenv.config();
@@ -64,10 +62,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use("/", viewsRouter);
-app.use("/api/sessions", sessionRouter);
-app.use("/", sessionRouter);
-app.use("/login", loginRouter);
-app.use("/signup", signupRouter);
+// app.use("/api/sessions", sessionRouter);
+// app.use("/", sessionRouter);
+// app.use("/login", loginRouter);
+// app.use("/signup", signupRouter);
 
 
 const server = app.listen(PORT, () => {

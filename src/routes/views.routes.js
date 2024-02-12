@@ -15,6 +15,9 @@ viewsRouter.get("/", (req, res) => {
 viewsRouter.get("/login", (req, res) => {
   res.render("login");
 });
+viewsRouter.get("/signup", (req, res) => {
+  res.render("signup");
+});
 
 viewsRouter.get("/cart/:cid", async (req, res) => {
   try{

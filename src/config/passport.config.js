@@ -20,14 +20,15 @@ const initializePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
+            console.log(profile);
           let user = await userService.findOne({
             email: profile?.emails[0]?.value,
           });
           if (!user) {
             const newUser = {
-              first_name: profile.displayName.split(" ")[0],
-              last_name: profile.displayName.split(" ")[1],
-              email: profile?.emails[0]?.value,
+              first_name: names[0],
+              last_name: names[1],
+              email: profile.emails? profile.email[0]?.value: `${names[0]}${names[1]}@generic.com`,
               age: 20,
               password: Math.random().toString(36).substring(7),
             };
