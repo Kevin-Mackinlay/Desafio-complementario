@@ -11,7 +11,7 @@ import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils.js";
-
+import sessionRouter from "./routes/session.routes.js";
 import viewsRouter from "./routes/views.routes.js";
 
 dotenv.config();
@@ -28,8 +28,6 @@ app.use(cookieParser(COOCKIESECRET));
 
 app.use(express.static("src/public"));
 
-app.use("/", IndexRouter);
-
 app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");
@@ -40,6 +38,9 @@ initializePassport();
 
 //routes
 
+app.use("/", IndexRouter);
+app.use("/", viewsRouter);
+app.use("/", sessionRouter);
 
 app.use((req, res, next) => {
   req.io = io;
