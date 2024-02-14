@@ -38,10 +38,6 @@ initializePassport();
 
 //routes
 
-app.use("/", IndexRouter);
-app.use("/", viewsRouter);
-app.use("/", sessionRouter);
-
 app.use((req, res, next) => {
   req.io = io;
   next();
@@ -61,7 +57,12 @@ app.use(
     saveUninitialized: true,
   })
 );
+
 app.use(passport.initialize());
+app.use("/", IndexRouter);
+app.use("/", viewsRouter);
+app.use("/", sessionRouter);
+
 app.use("/", viewsRouter);
 // app.use("/api/sessions", sessionRouter);
 // app.use("/", sessionRouter);

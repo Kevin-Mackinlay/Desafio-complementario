@@ -47,7 +47,7 @@ router.post("/signup", async (req, res) => {
       last_name,
       age,
       email,
-      password: await bcrypt.hash(user.password, 10),
+      password: await bcrypt.hash(password, 10),
     });
 
     if (result === null) {
@@ -55,13 +55,16 @@ router.post("/signup", async (req, res) => {
         error: "Error al crear el usuario",
       });
     } else {
+      console.log(req.session);
       req.session.user = email;
+      console.log(2);
       req.session.role = "admin";
       res.status(201).json({
         respuesta: "Usuario creado con éxito",
       });
     }
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({
       error: error.message,
     });
