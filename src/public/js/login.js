@@ -1,24 +1,32 @@
 async function postLogin(email, password) {
-  const response = await fetch("/login", {
+
+  const data = {
+    email,
+    password,
+  };
+
+  const response = await fetch("/api/sessions/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify(data),
   });
- 
-  if (response.redirected) {
-    window.location.href = response.url;
-  } else {
-    alert("Datos incorrectos");
-  }
+ const result = await response.json();
+  return result;
 }
 
 const loginForm = document.getElementById("login-form");
 
-loginForm.addEventListener("submit", (e) => {
+loginForm.addEventListener("submit", async (event) => {
   e.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  postLogin(email, password);
+
+  const response = await postLogin(email, password);
+  if (response.success == true) {
+    window.location.href = response.redirectUrl;
+  } else{
+    alert("Datos incorrectos");
+  }
 });
