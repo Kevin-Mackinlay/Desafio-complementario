@@ -44,6 +44,13 @@ viewsRouter.get("/products", async (req, res) => {
   res.status(500).json({ error: error.message });
 }});
 
+viewsRouter.get("/logout", async (req, res) => {
+  
+  res.redirect("/logout", {
+    title: "Logout",
+    });
+});
+
 viewsRouter.get("/realtimeproducts", async (req, res) => {
   try{
   const products = await productManager.getProducts();

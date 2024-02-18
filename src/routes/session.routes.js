@@ -22,19 +22,22 @@ router.post("/login", async (req, res) => {
     const user = await UserService.getUserByEmail(email);
 
     if (!user) {
-      res.status(400).json({
+      res.status(404).json({
         success: false,
         message: "user not found",
       });
     }
     const passwordsMatches = await bcrypt.compare(password, user.password);
     if (!passwordsMatches) {
-      res.status(400).json({
+      res.status(401).json({
         success: false,
         message: "password incorrect",
       });
     }
+    
     delete user.password;
+    
+
     req.session.user = user;
     res.status(200).json({
       success: true,
@@ -103,6 +106,11 @@ router.post("/signup", async (req, res) => {
     console.log(error.message);
     res.status(500).json({ success: false, message: "internal server error" });
   }
+
+
+
+
+  
 });
 
 //   const result = await UserModel.create({
@@ -138,6 +146,25 @@ router.get("/privado", auth, (req, res) => {
     title: "Privado",
     user: req.session.user,
   });
+}
+);
+
+
+router.post("/logout", async (req, res) => {
+	try {
+		req.session.destroy((error) => {
+			if (error) {
+				console.log(error);
+				res.status(500).json({ success: false, message: "Internal server error" });
+			} else {
+				res.status(200).json({ success: true, message: "User logged out", redirectUrl: "/login" });
+			}
+		});
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ success: false, message: "Internal server error" });
+	}
+
 });
 
 export default router;
