@@ -19,7 +19,7 @@ const userService = new UserService();
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await UserService.getUserByEmail(email);
+    const user = await userService.getUserByEmail(email);
 
     if (!user) {
       res.status(404).json({
@@ -38,37 +38,23 @@ router.post("/login", async (req, res) => {
     delete user.password;
     
 
-    req.session.user = user;
+    req.session.user = user
     res.status(200).json({
       success: true,
       message: "user logged in",
       redirectUrl: "/products",
     });
   } catch (error) {
+    
     res.status(500).json({
+    
       success: false,
       message: "internal server error",
+      
     });
   }
 });
 
-//     const result = await UserModel.findOne({ email, password });
-
-//     if (!bcrypt.compare(password, result.password)) {
-//       res.status(400).json({
-//         error: "Usuario o contraseña incorrectos",
-//       });
-//     } else {
-//       req.session.user = email;
-//       req.session.role = "admin";
-//       res.redirect("/products");
-//     }
-//   } catch (error) {
-//     res.status(500).json({
-//       error: error.message,
-//     });
-//   }
-// });
 
 router.post("/signup", async (req, res) => {
   try {
@@ -112,34 +98,6 @@ router.post("/signup", async (req, res) => {
 
   
 });
-
-//   const result = await UserModel.create({
-//     first_name,
-//     last_name,
-//     age,
-//     email,
-//     password: await bcrypt.hash(password, 10),
-//   });
-
-//   if (result === null) {
-//     res.status(400).json({
-//       error: "Error al crear el usuario",
-//     });
-//   } else {
-//     console.log(req.session);
-//     req.session.user = email;
-//     console.log(2);
-//     req.session.role = "admin";
-//     res.status(201).json({
-//       respuesta: "Usuario creado con éxito",
-//     });
-//   }
-// } catch (error) {
-//   console.log(error.message);
-//   res.status(500).json({
-//     error: error.message,
-//   });
-// }
 
 router.get("/privado", auth, (req, res) => {
   res.render("topsecret", {

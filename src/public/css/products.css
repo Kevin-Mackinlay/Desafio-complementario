@@ -49,6 +49,7 @@ button:hover {
 /* CSS for product cards */
 .product-list {
   display: flex;
+  flex-direction: row !important;
   flex-wrap: wrap;
   gap: 20px; /* Adjust as needed */
 }

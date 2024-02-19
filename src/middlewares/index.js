@@ -1,3 +1,3 @@
-import auth from "./auth.js";
+import isAuthenticated from "./isAuthenticated.js/index.js";
 
-export { auth };
+export { isAuthenticated };

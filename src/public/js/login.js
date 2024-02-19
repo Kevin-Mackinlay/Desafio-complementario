@@ -19,7 +19,7 @@ async function postLogin(email, password) {
 const loginForm = document.getElementById("login-form");
 
 loginForm.addEventListener("submit", async (event) => {
-  e.preventDefault();
+  event.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
