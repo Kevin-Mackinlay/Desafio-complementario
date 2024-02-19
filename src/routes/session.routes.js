@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { Router } from "express";
 import passport from "passport";
 // import UserModel from "../dao/models/user.model.js";
-import { auth } from "../middlewares/index.js";
+import  isAuthenticated  from "../middlewares/isAuthenticated.js";
 import UserService from "../services/db/User.service.db.js";
 
 const router = Router();
@@ -99,7 +99,7 @@ router.post("/signup", async (req, res) => {
   
 });
 
-router.get("/privado", auth, (req, res) => {
+router.get("/privado", isAuthenticated, (req, res) => {
   res.render("topsecret", {
     title: "Privado",
     user: req.session.user,
