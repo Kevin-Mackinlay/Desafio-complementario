@@ -1,12 +1,35 @@
 import passport from "passport";
+import passportLocal from "passport-local";
 import GitHubStrategy from "passport-github2";
 import userService from "../dao/models/user.model.js";
 import * as dotenv from "dotenv";
+import User from "../dao/models/user.model.js";
 
 dotenv.config();
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GITHUB_CALLBACK_URL = process.env.GITHUB_CALLBACK_URL;
+
+
+passport.use(
+  "login",
+   new passportLocal.Strategy({
+    function(username, password, done) {
+      User.findOne({ username: username }, function(err, user) {
+        if (err) { return done(err); }
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (!user.validPassword(password)) {
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      });
+    },
+  })
+);
+
+
 
 
 const initializePassport = () => {
