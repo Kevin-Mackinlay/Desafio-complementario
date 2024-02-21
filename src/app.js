@@ -13,6 +13,7 @@ import dotenv from "dotenv";
 import { __dirname } from "../src/utils.js";
 import sessionRouter from "./routes/session.routes.js";
 import viewsRouter from "./routes/views.routes.js";
+import  configPassport  from "./config/passport.config.js";
 
 
 dotenv.config();
@@ -59,6 +60,7 @@ app.use(
   })
 );
 
+configPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/", IndexRouter);

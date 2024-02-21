@@ -14,6 +14,7 @@ dotenv.config();
 const userService = new UserService();
 const cartService = new CartService();
 
+ const configPassport = () => {
 passport.use(
   "login",
   new passportLocal.Strategy(
@@ -25,7 +26,7 @@ passport.use(
 
     async function (req, username, password, done) {
       try {
-        const user = await userService.getUserByEmail({ username });
+        const user = await userService.getUserByEmail(username);
 
         if (!user) {
           return done(null, false, { message: "User not found" });
@@ -54,7 +55,7 @@ passport.use(
     },
     async function (req, username, password, done) {
       try {
-        const user = await userService.getUserByEmail({ username });
+        const user = await userService.getUserByEmail( username );
         if (user) {
           return done(null, false, { message: "User already exists" });
         }
@@ -65,8 +66,7 @@ passport.use(
 
         const cart = await cartService.createCart();
 
-        const newUser = await userService.createUser({ username, password: hashedPassword, age, first_name, last_name,
-           cart: cart._id});
+        const newUser = await userService.createUser({ username, password: hashedPassword, age, first_name, last_name, cart: cart._id });
 
         if (!newUser) {
           return done(null, false, { message: "internal server error" });
@@ -80,16 +80,19 @@ passport.use(
   )
 );
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
+passport.serializeUser(function (user, done) {
+
+  done(null, user._id);
 });
 
 passport.deserializeUser(async function (id, done) {
- const user = await  userService.getUserById(id);
+  const user = await userService.getUserById(id);
   done(null, user);
 });
+}
 
-export default passport;
+
+export default configPassport;
 
 // const initializePassport = () => {
 //   passport.use(
