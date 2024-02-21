@@ -14,6 +14,7 @@ import { __dirname } from "../src/utils.js";
 import sessionRouter from "./routes/session.routes.js";
 import viewsRouter from "./routes/views.routes.js";
 
+
 dotenv.config();
 const app = express();
 const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
@@ -32,7 +33,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");
 
-initializePassport();
+// initializePassport();
 
 
 
@@ -59,6 +60,7 @@ app.use(
 );
 
 app.use(passport.initialize());
+app.use(passport.session());
 app.use("/", IndexRouter);
 app.use("/", viewsRouter);
 app.use("/", sessionRouter);
