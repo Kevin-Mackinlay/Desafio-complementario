@@ -19,7 +19,7 @@ passport.use(
   "login",
   new passportLocal.Strategy(
     {
-      usernameField: "username",
+      usernameField: "email",
       passwordField: "password",
       passReqToCallback: true,
     },
@@ -48,7 +48,7 @@ passport.use(
   "signup",
   new passportLocal.Strategy(
     {
-      usernameField: "username",
+      usernameField: "email",
       passwordField: "password",
       passReqToCallback: true,
     },
