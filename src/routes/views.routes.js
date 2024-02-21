@@ -138,7 +138,7 @@ viewsRouter.get("/signup", isAuthenticated, async (req, res) => {
 viewsRouter.get("/logout", async (req, res) => {
   res.render("logout", {
     title: "Logout",
-    user: req.session.user,
+    user: req.user,
   });
 });
 

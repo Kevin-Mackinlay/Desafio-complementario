@@ -35,8 +35,7 @@ passport.use(
         if (!passwordMatches) {
           return done(null, false, { message: "Password incorrect" });
         }
-        delete user.password;
-        req.session.user = user;
+      
       } catch (error) {
         console.log(error.message);
         return done(error);
@@ -66,7 +65,7 @@ passport.use(
 
         const cart = await cartService.createCart();
 
-        const newUser = await userService.createUser({ username, password: hashedPassword, age, first_name, last_name, cart: cart._id });
+        const newUser = await userService.createUser({ email: username, password: hashedPassword, age, first_name, last_name, cart: cart._id });
 
         if (!newUser) {
           return done(null, false, { message: "internal server error" });
@@ -87,6 +86,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(async function (id, done) {
   const user = await userService.getUserById(id);
+  delete user.password;
   done(null, user);
 });
 }
