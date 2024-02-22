@@ -15,7 +15,9 @@ sessionRouter.post("/login", passport.authenticate("login", { failureRedirect:"/
 
 }); 
 
-sessionRouter.post("/signup", passport.authenticate("signup", { failureRedirect:"/signup"}), async (req, res) => {
+sessionRouter.post("/signup", 
+passport.authenticate("signup", {failureRedirect:"/signup", session: false }),
+ async (req, res) => {
   res.status(201).json({ success:true, message: "user created", redirectUrl: "/login" });
 });
 
