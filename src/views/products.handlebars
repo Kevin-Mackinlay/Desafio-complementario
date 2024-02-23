@@ -1,5 +1,5 @@
 <div class="product-list">
-  {{#each products}}
+  {{#each data.products}}
     <div class="product-card">
       <div class="product-card__image">
         <img src="{{this.thumbnail}}" alt="{{this.name}}" />
@@ -17,10 +17,13 @@
       </div>
     </div>
   {{/each}}
-  {{#if hasPrevPage}}
+  {{#if data.hasPrevPage}}
     <a href="/products?page={{prevPage}}"><button class="pagination-button">Previous</button></a>
   {{/if}}
-  {{#if hasNextPage}}
+  {{#if data.hasNextPage}}
     <a href="/products?page={{nextPage}}"><button class="pagination-button">Next</button></a>
   {{/if}}
 </div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/products.js"></script>
+```

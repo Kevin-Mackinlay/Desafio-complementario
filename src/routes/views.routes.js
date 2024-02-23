@@ -63,7 +63,7 @@ viewsRouter.get("/products", async (req, res) => {
     res.render("products", {
       title: "Listado de productos",
       data: pagesData,
-      user: req.session.user,
+      user: req.user,
       style: "css/products.css",
     });
   } catch (error) {
