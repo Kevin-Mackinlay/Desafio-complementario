@@ -35,7 +35,7 @@ passport.use(
         if (!passwordMatches) {
           return done(null, false, { message: "Password incorrect" });
         }
-      
+        return done(null, user);
       } catch (error) {
         console.log(error.message);
         return done(error);
