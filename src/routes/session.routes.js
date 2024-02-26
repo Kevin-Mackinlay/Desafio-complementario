@@ -27,7 +27,7 @@ sessionRouter.get("/api/sessions/current", async (req, res) => {
 	  } else {
 		const session = {
 			message: "User logged in",
-			user: req.session.user,
+			user: req.user,
 		};
 		console.log(req.user);
 		return res.status(200).json(session);
