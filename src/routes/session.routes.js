@@ -21,22 +21,18 @@ passport.authenticate("signup", {failureRedirect:"/signup", session: false }),
   res.status(201).json({ success:true, message: "user created", redirectUrl: "/login" });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+sessionRouter.get("/api/sessions/current", async (req, res) => {
+	  if (!req.isAuthenticated()) {
+		return res.status(401).json({ success: false, message: "User not logged in" });
+	  } else {
+		const session = {
+			message: "User logged in",
+			user: req.session.user,
+		};
+		console.log(req.user);
+		return res.status(200).json(session);
+	}
+});	
 
 // router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => {});
 
