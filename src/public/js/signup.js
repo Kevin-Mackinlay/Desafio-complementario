@@ -6,17 +6,20 @@ async function postSignup(first_name, last_name, email, password, age) {
     password,
     age,
   };
+  try {
+    const response = await fetch("/api/sessions/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-  const response = await fetch("/api/sessions/signup", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const result = await response.json();
-  return result;
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    return { success: false, message: "invalid credentials" };
+  }
 }
 
 const signupForm = document.getElementById("signup-form");
@@ -33,6 +36,6 @@ signupForm.addEventListener("submit", async (event) => {
   if (response.success == true) {
     window.location.href = response.redirectUrl;
   } else {
-    alert("Datos incorrectos");
+    alert(response.message);
   }
 });

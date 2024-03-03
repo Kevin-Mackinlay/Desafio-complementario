@@ -1,76 +1,146 @@
-const carts = [];
+import CartsService from "../services/db/Carts.service.db.js";
+
+const cartsService = new CartsService();
 
 const createCart = async (req, res) => {
-  const cart = req.body;
-  carts.push(cart);
-  res.send(cart);
+  try {
+    await cartsService.createCart({});
+    res.status(200).json({
+      success: true,
+      message: "New empty cart successfully created",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 async function getCarts(req, res) {
-  res.send(carts);
+  try {
+    const carts = await cartsService.getCarts();
+    res.status(200).json({ carts });
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 async function getCartById(req, res) {
-  const { cid } = req.params;
-  const cart = carts.find((cart) => cart.id === cid);
-  res.send(cart);
+  try {
+    const { cid } = req.params;
+    const cart = await cartsService.getCartById(cid);
+
+    if (!cart) {
+      res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: "Cart sent",
+      cart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 }
 
 async function addProductToCart(res, req) {
+  try {
     const { cid, pid } = req.params;
-  const cart = await getCartById(cid);
-  if (!cart) {
-   res.send("Cart not found");
+
+    const cart = await cartsService.addProductToCart(cid, pid);
+    if (!cart) {
+      res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: `Product ${pid} added to cart ${cid}`,
+      cart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
-  cart.products.push(pid);
-  res.send(cart);
 }
 
 async function updateCart(req, res) {
-    const { cid, pid } = req.params;
+  const { cid, pid } = req.params;
+  const { quantity } = req.body;
+  try {
     const { quantity } = req.body;
-    // const cart = await getCartById(cid);
-    // if (!cart) {
-    //     res.send("Cart not found");
-    // }
-    // cart.products[pid] = quantity;
-    // res.send(cart);
- 
+    const { cid, pid } = req.params;
+
+    const cart = await cartsService.updateProductQuantity(pid, cid, quantity);
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: `Product ${pid}'s quantity was modified ${cid}`,
+      cart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 }
 
 async function deleteProductFromCart(cid, pid) {
-  const cart = await getCartById(cid);
-  if (!cart) {
-    return null;
+  try {
+    const { cid, pid } = req.params;
+    const cart = await cartsService.deleteProductFromCart(cid, pid);
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: `Product ${pid} deleted from cart ${cid}`,
+      cart,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
-  cart.products = cart.products.filter((product) => product !== pid);
-  return cart;
 }
 
-async function deleteCart(cid) {
-  const cart = await getCartById(cid);
-  if (!cart) {
-    return null;
+async function deleteCart(req, res) {
+  const { cid } = req.params;
+
+  try {
+    await cartsService.emptyCart(cid);
+    res.status(200).json({
+      success: true,
+      message: `Cart ${cid} was emptied`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
-  const index = carts.indexOf(cart);
-  carts.splice(index, 1);
-  return cart;
 }
 
-export { createCart, getCarts, getCartById, addProductToCart, deleteProductFromCart, deleteCart };
-
-// To this snippet from src/controller/carts.controller.js:
-
-//  try {
-//    await cartsService.createCart({});
-
-//    res.status(200).json({
-//      success: true,
-//      message: "New empty cart successfully created",
-//    });
-//  } catch (error) {
-//    res.status(500).json({
-//      success: false,
-//      message: error.message,
-//    });
-//  }
+export { createCart, getCarts, getCartById, updateCart, addProductToCart, deleteProductFromCart, deleteCart };
