@@ -1,6 +1,6 @@
-import ChatService from "../services/chat.service.db.js";
-import ProductService from "../services/products.service.db.js";
-import CartsService from "../services/carts.service.db.js";
+import ChatService from "../services/db/Chat.service.db.js";
+import ProductService from "../services/db/Products.service.db.js";
+import CartsService from "../services/db/Carts.service.db.js";
 
 const chatService = new ChatService();
 const productService = new ProductService();

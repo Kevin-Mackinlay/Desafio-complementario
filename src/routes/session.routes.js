@@ -4,7 +4,7 @@ import passport from "passport";
 // import UserModel from "../dao/models/user.model.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 // import UserService from "../services/db/User.service.db.js";
-import { login, signup, privado, logout } from "../services/session.service.js";
+import { login, signup, privado, logout } from "../controller/session.controller.js";
 
 const sessionRouter = Router();
 // const userService = new UserService();

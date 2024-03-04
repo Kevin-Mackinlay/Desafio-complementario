@@ -50,3 +50,8 @@ async function logout(req, res) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
+
+export { login, signup, privado, logout };
+
+
+//65b2d4132440be292ec978c6 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import { get } from "mongoose";
-import { getCartById, getChat, getHome, getLogout, getProducts, getRealTimeProducts } from "../controllers/views.controller.js";
+import { getCartById, getChat, getHome, getLogout, getProducts, getRealTimeProducts } from "../controller/views.controller.js";
 
 const viewsRouter = Router();
 // const productsService = new ProductsService("src/products.json");
@@ -22,7 +22,8 @@ viewsRouter.get("/login", isAuthenticated, async (req, res) => {
   res.render("login", {
     title: "Login",
   });
-});
+}
+);
 viewsRouter.get("/signup", isAuthenticated, async (req, res) => {
   res.render("signup", {
     title: "Signup",

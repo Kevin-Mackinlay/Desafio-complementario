@@ -1,6 +1,6 @@
 import express from "express";
-import { create } from "connect-mongo";
-import { createMessage } from "../controllers/chat.controller.js";
+
+import { createMessage } from "../controller/chat.controller.js";
 
 
 
