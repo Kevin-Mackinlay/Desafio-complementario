@@ -10,7 +10,7 @@ const sessionRouter = Router();
 // const userService = new UserService();
 
 sessionRouter.post("/login", login);
-sessionRouter.post("/signup",  signup);
+sessionRouter.post("/signup", signup);
 sessionRouter.get("/privado", privado);
 sessionRouter.post("/logout", logout);
 
