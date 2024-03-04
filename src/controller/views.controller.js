@@ -104,19 +104,17 @@ async function getHome(req, res) {
     res.render("home");
 };
 
-// async function isAuthenticatedLogin(req, res, next) {
-//     if (req.isAuthenticated()) {
-//       return next();
-//     }
-//     res.redirect("/login");
-// }
+async function getLogin(req, res) {
+    res.render("login", {
+      title: "Login",
+    });
+}
 
-// async function isAuthenticatedSignup(req, res, next) {
-//     if (req.isAuthenticated()) {
-//       return next();
-//     }
-//     res.redirect("/signup");
-// }
+async function getSignup(req, res) {
+    res.render("signup", {
+      title: "Signup",
+    });
+}
 
 async function getLogout(req, res) {
     res.render("logout", {
@@ -125,4 +123,4 @@ async function getLogout(req, res) {
     });
 }
 
-export { getCartById, getProducts, getRealTimeProducts, getChat, getHome, getLogout };
+export { getCartById, getProducts, getRealTimeProducts, getChat, getHome,getLogin, getSignup, getLogout };
