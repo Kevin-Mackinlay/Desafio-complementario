@@ -51,7 +51,7 @@ async function getCartById(req, res) {
   }
 }
 
-async function addProductToCart(res, req) {
+async function addProductToCart(req,res) {
   try {
     const { cid, pid } = req.params;
 
