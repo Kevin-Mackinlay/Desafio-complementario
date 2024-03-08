@@ -14,6 +14,7 @@ import { __dirname } from "../src/utils.js";
 import sessionRouter from "./routes/session.routes.js";
 import viewsRouter from "./routes/views.routes.js";
 import  configPassport  from "./config/passport.config.js";
+import contactsRouter from "./routes/contacts.routes.js";
 
 
 dotenv.config();
@@ -66,6 +67,11 @@ app.use(passport.session());
 app.use("/", IndexRouter);
 app.use("/", viewsRouter);
 app.use("/", sessionRouter);
+app.use("/", contactsRouter);
+
+// app.get("/saludar", (req, res) => {
+//   res.send("Hola mundo");
+// });
 
 app.use("/", viewsRouter);
 // app.use("/api/sessions", sessionRouter);
