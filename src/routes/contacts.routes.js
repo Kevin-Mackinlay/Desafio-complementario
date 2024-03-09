@@ -1,6 +1,7 @@
 import { Router } from "express";
-import Contacts from "../dao/mongo/contact.mongo.js";
+// import Contacts from "../dao/mongo/contact.mongo.js";
 // import Contacts from "../dao/memory/contact.memory.js";
+import Contacts from "../dao/factory.js";
 
 const router = Router();
 const contacts = new Contacts();

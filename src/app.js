@@ -108,13 +108,13 @@ app.get("/", (req, res) => {
   }
 });
 
-startMongoConnection()
-  .then(() => {
-    console.log("Conectado a la base de datos");
-  })
-  .catch((err) => console.log(err));
+// startMongoConnection()
+//   .then(() => {
+//     console.log("Conectado a la base de datos");
+//   })
+//   .catch((err) => console.log(err));
 
-async function startMongoConnection() {
-  await mongoose.connect(DB_URL);
-}
+// async function startMongoConnection() {
+//   await mongoose.connect(DB_URL);
+// }
 
