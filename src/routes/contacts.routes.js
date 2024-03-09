@@ -1,17 +1,18 @@
 import { Router } from "express";
 import Contacts from "../dao/mongo/contact.mongo.js";
-import Contact from "../dao/memory/contact.memory.js";
+// import Contacts from "../dao/memory/contact.memory.js";
 
 const router = Router();
 const contacts = new Contacts();
 
 router.get("/", async (req, res) => {
   try {
-    const data = await contacts.getAll();
+    const data = await contacts.get();
     res.json(data);
   } catch (err) {
-    console.error("Error getting contacts", err);
+   console.log("Error getting contacts", err);
     res.status(500).json({ message: "Error getting contacts" });
+
   }
 });
 

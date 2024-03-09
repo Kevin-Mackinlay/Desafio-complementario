@@ -13,11 +13,13 @@ import dotenv from "dotenv";
 import { __dirname } from "../src/utils.js";
 import sessionRouter from "./routes/session.routes.js";
 import viewsRouter from "./routes/views.routes.js";
-import  configPassport  from "./config/passport.config.js";
+import configPassport  from "./config/passport.config.js";
 import contactsRouter from "./routes/contacts.routes.js";
 
 
 dotenv.config();
+
+
 const app = express();
 const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
 const PORT = process.env.PORT || 8080;
@@ -41,10 +43,10 @@ app.set("view engine", "handlebars");
 
 //routes
 
-app.use((req, res, next) => {
-  req.io = io;
-  next();
-});
+// app.use((req, res, next) => {
+//   req.io = io;
+//   next();
+// });
 
 app.use(
   session({
@@ -74,10 +76,13 @@ app.use("/", contactsRouter);
 // });
 
 app.use("/", viewsRouter);
-// app.use("/api/sessions", sessionRouter);
-// app.use("/", sessionRouter);
-// app.use("/login", loginRouter);
-// app.use("/signup", signupRouter);
+
+// app.listen(3000, () => {
+//   console.log("Server is running on port 3000");
+// });
+
+
+
 
 
 const server = app.listen(PORT, () => {
