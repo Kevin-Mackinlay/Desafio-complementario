@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ContactRepository from "../repository/Contacts.repository.js";
+import {contactService} from "../repository/index.js";
 // import ContactDTO from "../dao/DTO/contact.js";
 // import Contacts from "../dao/mongo/contact.mongo.js";
 // import Contacts from "../dao/memory/contact.memory.js";
@@ -14,7 +14,7 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   try{
-    const data = await contactRepository.getContacts();
+    const data = await contactService.getContacts();
     res.json(data); 
   }
   catch (err) {
@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
   router.post("/", async (req, res) => {
     try{
     const contact = req.body;
-    const data = await contactRepository.createContact(contact);
+    const data = await contactService.createContact(contact);
     res.json(data);
     }
     catch (err) {
@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
     try{
       const id = req.params.id;
       const contact = req.body
-      const data = await contactRepository.modifyContact(id, contact);
+      const data = await contactService.modifyContact(id, contact);
       res.json(data);
     }
     catch (err) {
@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
   router.delete("/:id", async (req, res) => {
     try{
       const id = req.params.id;
-      const data = await contactRepository.deleteContact(id);
+      const data = await contactService.deleteContact(id);
       res.json(data);
 
     }
