@@ -1,7 +1,6 @@
 import express from "express";
 import passport from "passport";
 import mongoose from "mongoose";
-import initializePassport from "./config/passport.config.js ";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 // import FileStore from "session-file-store";
@@ -11,14 +10,9 @@ import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils.js";
-import sessionRouter from "./routes/session.routes.js";
-import viewsRouter from "./routes/views.routes.js";
-import configPassport  from "./config/passport.config.js";
-import contactsRouter from "./routes/contacts.routes.js";
-
+import configPassport from "./config/passport.config.js";
 
 dotenv.config();
-
 
 const app = express();
 const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
@@ -36,17 +30,6 @@ app.use(express.static("src/public"));
 app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");
-
-// initializePassport();
-
-
-
-//routes
-
-// app.use((req, res, next) => {
-//   req.io = io;
-//   next();
-// });
 
 app.use(
   session({
@@ -67,23 +50,6 @@ configPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/", IndexRouter);
-app.use("/", viewsRouter);
-app.use("/", sessionRouter);
-app.use("/", contactsRouter);
-
-// app.get("/saludar", (req, res) => {
-//   res.send("Hola mundo");
-// });
-
-app.use("/", viewsRouter);
-
-// app.listen(3000, () => {
-//   console.log("Server is running on port 3000");
-// });
-
-
-
-
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
@@ -97,7 +63,6 @@ io.on("connection", (socket) => {
   console.log("Se conecto un nuevo ususario");
 });
 
-
 app.get("/", (req, res) => {
   if (req.session.counter) {
     req.session.counter++;
@@ -108,13 +73,12 @@ app.get("/", (req, res) => {
   }
 });
 
-// startMongoConnection()
-//   .then(() => {
-//     console.log("Conectado a la base de datos");
-//   })
-//   .catch((err) => console.log(err));
+startMongoConnection()
+  .then(() => {
+    console.log("Conectado a la base de datos");
+  })
+  .catch((err) => console.log(err));
 
-// async function startMongoConnection() {
-//   await mongoose.connect(DB_URL);
-// }
-
+async function startMongoConnection() {
+  await mongoose.connect(DB_URL);
+}

@@ -3,4 +3,5 @@ export default class ContactDTO{
         this.name = contact.name + " " + contact.lastName ;
         this.phone = contact.phone ? contact.phone.split("-").join("") : "";
     }
+
 }

@@ -6,6 +6,7 @@ import ChatRouter from "./chat.routes.js";
 import SessionsRouter from "../routes/session.routes.js";
 import indexRouter from "../routes/index.routes.js";
 
+
 const IndexRouter = express.Router();
 
 IndexRouter.use("/api/products", ProductsRouter);
@@ -15,5 +16,6 @@ IndexRouter.use("/", ViewsRouter);
 IndexRouter.use("/login", ViewsRouter);
 IndexRouter.use("/signup", ViewsRouter);
 IndexRouter.use("/api/sessions", SessionsRouter);
+
 
 export default IndexRouter;

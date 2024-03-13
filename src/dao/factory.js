@@ -8,7 +8,7 @@ export let Contacts;
 switch (config.persistence) {
   case "MONGO":
     const connection = await mongoose.connect(config.DB_URL);
-    const { default: ContactMongo } = await import("./mongo/models/contact.mongo.js");
+    const { default: ContactMongo } = await import("./mongo/modelsamodificar/contact.mongo.js");
     Contacts = ContactMongo;
     break;
   case "MEMORY":
