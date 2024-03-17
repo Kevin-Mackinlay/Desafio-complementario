@@ -1,6 +1,6 @@
 import {chatsService} from "../repository/index.js";
 
-const chatService = new chatsService();
+const chatService =  chatsService;
 
 async function createMessage(req, res) {
    try {

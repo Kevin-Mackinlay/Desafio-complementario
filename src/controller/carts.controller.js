@@ -1,6 +1,6 @@
-import {cartService} from "../repository/index";
+import {cartService} from "../repository/index.js";
 
-const cartsService = new cartService();
+const cartsService =  cartService;
 
 const createCart = async (req, res) => {
   try {

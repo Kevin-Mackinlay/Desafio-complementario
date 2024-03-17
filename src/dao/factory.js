@@ -1,7 +1,5 @@
 import config from "../config/config.js";
 import mongoose from "mongoose";
-// import ContactsMongoDao from "./mongo/contact.mongo.js";
-// import ContactsMemoryDao from "./memory/contact.memory.js";
 
 export let Carts;
 export let Products;
@@ -12,10 +10,10 @@ export let Chats;
 switch (config.persistence) {
   case "MONGO":
     const connection = await mongoose.connect(config.DB_URL);
-    const { default: CartMongo } = await import("./mongo/models/cart.mongo.js");
-    const { default: ProductMongo } = await import("./mongo/models/product.mongo.js");
-    const { default: UserMongo } = await import("./mongo/models/user.mongo.js");
-    const { default: ChatMongo } = await import("./mongo/models/message.mongo.js");
+    const { default: CartMongo } = await import("./mongo/cart.mongo.js");
+    const { default: ProductMongo } = await import("./mongo/product.mongo.js");
+    const { default: UserMongo } = await import("./mongo/user.mongo.js");
+    const { default: ChatMongo } = await import("./mongo/message.mongo.js");
 
     Carts = CartMongo;
     Products = ProductMongo;

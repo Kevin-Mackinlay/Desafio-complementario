@@ -1,6 +1,6 @@
-import {productService} from "../repository/index.js";
+import {productsService} from "../repository/index.js";
 
-const productService = new productService();
+const productService =  productsService;
 
 async function getProducts(req, res) {
   try {

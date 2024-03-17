@@ -1,5 +1,8 @@
 export default class ChatDTO {
-    constructor(messages) {
-        this.messages = messages;
-    }
+  constructor(message) {
+    this.senderId = message.senderId;
+    this.receiverId = message.receiverId;
+    this.message = message.message;
+    this.timestamp = new Date(); 
+  }
 }

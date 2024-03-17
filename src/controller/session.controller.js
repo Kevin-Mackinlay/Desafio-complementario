@@ -1,4 +1,4 @@
-import {userService} from "../repository/index.js";
+import {usersService} from "../repository/index.js";
 
 async function login(req, res) {
   try {
