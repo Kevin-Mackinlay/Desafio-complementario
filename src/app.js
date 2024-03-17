@@ -11,6 +11,7 @@ import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils.js";
 import configPassport from "./config/passport.config.js";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -19,9 +20,37 @@ const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
 const PORT = process.env.PORT || 8080;
 const COOCKIESECRET = process.env.CODERSECRET;
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.APP_PASSWORD,
+    method: "PLAIN"
+  },
+  
+});
+
 //middlewares para el manejo de datos
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+
+app.get("/mail", async (req, res) => {
+  try {
+    let result = await transporter.sendMail({
+      from: `Cliente de prueba <${process.env.EMAIL}>`,
+      to: "kemack83@gmail.com",
+      subject: "Prueba de envio de mail",
+      text: "Este es un mail de prueba",
+      html: "<h1 style=' color: blue' >Hola estoy probando nodemailer/h1>",
+    });
+    res.json({ status: "success", result });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ status: "error", error: error.message });
+  }
+});
 
 app.use(cookieParser(COOCKIESECRET));
 
@@ -63,6 +92,9 @@ io.on("connection", (socket) => {
   console.log("Se conecto un nuevo ususario");
 });
 
+
+
+
 app.get("/", (req, res) => {
   if (req.session.counter) {
     req.session.counter++;
@@ -72,6 +104,7 @@ app.get("/", (req, res) => {
     res.send("Bienvenido");
   }
 });
+
 
 startMongoConnection()
   .then(() => {
