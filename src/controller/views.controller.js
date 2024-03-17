@@ -1,28 +1,27 @@
-import ChatService from "../services/db/Chat.service.db.js";
-import ProductService from "../services/db/Products.service.db.js";
-import CartsService from "../services/db/Carts.service.db.js";
+import ChatService from "../dao/mongo/services/db/Chat.service.db.js";
+import ProductService from "../dao/mongo/services/db/Products.service.db.js";
+import CartsService from "../dao/mongo/services/db/Carts.service.db.js";
 
 const chatService = new ChatService();
 const productService = new ProductService();
 const cartsService = new CartsService();
 
-
-async function getCartById(req,res) {
-     try {
-       const { cid } = req.params;
-       const cart = await cartsManager.getCartById(cid);
-       console.log(cart.products);
-       res.render("carts", {
-         products: cart.products,
-         style: "/css/cart.css",
-       });
-     } catch (error) {
-       res.status(500).json({ error: error.message });
-     }
-};
+async function getCartById(req, res) {
+  try {
+    const { cid } = req.params;
+    const cart = await cartsManager.getCartById(cid);
+    console.log(cart.products);
+    res.render("carts", {
+      products: cart.products,
+      style: "/css/cart.css",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
 async function getProducts(req, res) {
-    try {
+  try {
     const { limit = 8, page = 1, sort, category } = req.query;
     const filter = {
       options: {
@@ -74,7 +73,7 @@ async function getProducts(req, res) {
 }
 
 async function getRealTimeProducts(req, res) {
-    try {
+  try {
     const products = await productManager.getProducts();
     res.render("realtime", {
       title: "Productos en tiempo real",
@@ -84,10 +83,10 @@ async function getRealTimeProducts(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 async function getChat(req, res) {
-    try {
+  try {
     const messages = await chatService.findMessages();
 
     res.render("chat", {
@@ -98,29 +97,29 @@ async function getChat(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 async function getHome(req, res) {
-    res.render("home");
-};
+  res.render("home");
+}
 
 async function getLogin(req, res) {
-    res.render("login", {
-      title: "Login",
-    });
+  res.render("login", {
+    title: "Login",
+  });
 }
 
 async function getSignup(req, res) {
-    res.render("signup", {
-      title: "Signup",
-    });
+  res.render("signup", {
+    title: "Signup",
+  });
 }
 
 async function getLogout(req, res) {
-    res.render("logout", {
-      title: "Logout",
-      user: req.user,
-    });
+  res.render("logout", {
+    title: "Logout",
+    user: req.user,
+  });
 }
 
-export { getCartById, getProducts, getRealTimeProducts, getChat, getHome,getLogin, getSignup, getLogout };
+export { getCartById, getProducts, getRealTimeProducts, getChat, getHome, getLogin, getSignup, getLogout };

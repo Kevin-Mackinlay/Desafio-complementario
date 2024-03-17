@@ -1,6 +1,7 @@
+//import CartModel from "../../models/Cart.mongo.js";
 
 export default class CartsManager {
-  constructor(dao){
+  constructor(dao) {
     this.dao = dao;
   }
   async createCart() {
@@ -16,7 +17,7 @@ export default class CartsManager {
 
   async getCarts() {
     try {
-      const carts = await this.dao.create().lean();
+      const carts = await this.dao.find().lean();
 
       return carts;
     } catch (error) {
@@ -26,7 +27,7 @@ export default class CartsManager {
 
   async getCartById(cid) {
     try {
-      const cart = await this.dao.find().lean();
+      const cart = await this.dao.findById(cid).lean();
 
       return cart;
     } catch (error) {
@@ -37,9 +38,12 @@ export default class CartsManager {
   async addProductToCart(cid, pid) {
     try {
       console.log(1, cid);
-      const productExistsInCart = await this.dao.exists({ _id: cid, "products.product": pid });
+      const productExistsInCart = await this.dao.exists({
+        _id: cid,
+        "products.product": pid,
+      });
       let cart;
-     
+
       if (!productExistsInCart) {
         cart = await this.dao.findByIdAndUpdate(cid, { $push: { products: { product: pid, quantity: 1 } } }, { new: true }).lean();
         // console.log("1",cart);
@@ -58,7 +62,10 @@ export default class CartsManager {
 
   async updateProductQuantity(pid, cid, quantity) {
     try {
-      const productExistsInCart = await this.dao.exists({ _id: cid, "products.product": pid });
+      const productExistsInCart = await this.dao.exists({
+        _id: cid,
+        "products.product": pid,
+      });
       if (!productExistsInCart) {
         return { message: "Product not found in cart" };
       }
@@ -72,7 +79,10 @@ export default class CartsManager {
 
   async deleteProductFromCart(cid, pid) {
     try {
-      const productExistsInCart = await this.dao.exists({ _id: cid, "products.product": pid });
+      const productExistsInCart = await this.dao.exists({
+        _id: cid,
+        "products.product": pid,
+      });
 
       if (!productExistsInCart) {
         return { message: "Product not found in cart" };

@@ -1,4 +1,4 @@
-import messageModel from "./message.schema.js";
+import messageModel from "./models/message.schema.js";
 
 export default class Messages {
   constructor() {}

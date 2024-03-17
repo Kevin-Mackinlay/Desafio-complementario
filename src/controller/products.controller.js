@@ -1,6 +1,6 @@
-import ProductService from "../services/db/Products.service.db.js";
+import {productService} from "../repository/index.js";
 
-const productService = new ProductService();
+const productService = new productService();
 
 async function getProducts(req, res) {
   try {

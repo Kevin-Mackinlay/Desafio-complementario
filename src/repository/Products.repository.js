@@ -1,7 +1,6 @@
-// import ProductModel from "../../dao/models/product.model.js";
-
+//import this.dao from "../../models/product.mongo.js";
 export default class ProductsManager {
-  constructor(dao){
+  constructor(dao) {
     this.dao = dao;
   }
   async createProduct(product) {
@@ -60,7 +59,11 @@ export default class ProductsManager {
   async updateProduct(id, productUpdates) {
     // {title: "nuevo titulo"}
     try {
-      const product = await this.dao.findByIdAndUpdate(id, productUpdates, { new: true }).lean();
+      const product = await this.dao
+        .findByIdAndUpdate(id, productUpdates, {
+          new: true,
+        })
+        .lean();
 
       return product;
     } catch (error) {

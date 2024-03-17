@@ -1,4 +1,4 @@
-import productModel from "./product.schema.js";
+import productModel from "./models/product.schema.js";
 
 export default class Products {
   constructor() {}

@@ -1,6 +1,6 @@
-import ChatService from "../services/db/Chat.service.db.js";
+import {chatsService} from "../repository/index.js";
 
-const chatService = new ChatService();
+const chatService = new chatsService();
 
 async function createMessage(req, res) {
    try {
