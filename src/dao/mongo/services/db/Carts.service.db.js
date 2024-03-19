@@ -16,7 +16,7 @@ export default class CartsManager {
 
   async getCarts() {
     try {
-      const carts = await this.dao.create().lean();
+      const carts = await this.dao.get();
 
       return carts;
     } catch (error) {
@@ -26,7 +26,8 @@ export default class CartsManager {
 
   async getCartById(cid) {
     try {
-      const cart = await this.dao.find().lean();
+      const cart = await this.dao.get(cid);
+      
 
       return cart;
     } catch (error) {

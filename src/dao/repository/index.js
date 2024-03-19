@@ -4,7 +4,7 @@ import ProductsRepository from "./Products.repository.js";
 import ChatsRepository from "./Chat.repository.js";
 import UserRepository from "./User.repository.js";
 
-export const cartService = new CartsRepository(new Carts());
-export const productsService = new ProductsRepository(new Products());
-export const chatsService = new ChatsRepository(new Chats());
-export const usersService = new UserRepository(new Users());
+export const cartService = new Carts();
+export const productsService = new Products();
+export const chatsService = new Chats();
+export const usersService = new Users();

@@ -41,7 +41,7 @@ app.get("/mail", async (req, res) => {
   try {
     let result = await transporter.sendMail({
       from: `Cliente de prueba <${process.env.EMAIL}>`,
-      to: "diana1588@gmail.com",
+      to: "dianaaranda1588@gmail.com",
       subject: "Prueba de envio de mail",
       text: "Este es un mail de prueba",
       html: "<h1 style=' color: red' >Hola soy yo, te estoy enviando un mail desde la aplicacion que estoy construyendo/h1>",
