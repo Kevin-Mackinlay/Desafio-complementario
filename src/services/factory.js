@@ -1,40 +1,33 @@
 import config from "../config/config.js";
+import repositories from "../dao/repositories/index.js";
 
-export let Carts;
-export let Products;
-export let Users;
-export let Chats;
+const services = {};
 
 switch (config.persistence) {
   case "MONGO":
-    const connection = await mongoose.connect(config.DB_URL);
-    const { default: CartService } = await import("./mongo/services/db/Carts.service.db.js");
-    const { default: ProductService } = await import("./mongo/services/db/Products.service.db.js");
-    const { default: UserService } = await import("./mongo/services/db/User.service.db.js");
-    const { default: ChatService } = await import("./mongo/services/db/Chat.service.db.js");
+    
+    const { default: CartServiceDb } = await import("./services/db/Carts.service.db.js");
+    const { default: ProductServiceDb } = await import("./services/db/Products.service.db.js");
+    const { default: UserServiceDb } = await import("./services/db/User.service.db.js");
+    const { default: ChatServiceDb } = await import("./services/db/Chat.service.db.js");
 
-    Carts = new CartService(CartMongo);
-    Products = new ProductService(ProductMongo);
-    Users = new UserService(UserMongo);
-    Chats = new ChatService(ChatMongo);
+    services.cartsService = new CartServiceDb(repositories.Carts);
+    services.productService= new ProductServiceDb(repositories.Products);
+    services.userService= new UserServiceDb(repositories.Users);
+    services.chatService = new ChatServiceDb(repositories.Chats);
     break;
-  case "MEMORY":
-    const { default: CartFs } = await import("./mongo/services/Carts.service.fs.js");
-    const { default: ProductFs } = await import("./mongo/services/Products.service.fs.js");
-    const { default: UserFs } = await import("./mongo/services/Users.service.fs.js");
-    const { default: ChatFs } = await import("./mongo/services/Chats.service.fs.js");
+  case "FS":
+    const { default: CartServiceFs } = await import("../services/db/Carts.service.fs.js");
+    const { default: ProductServiceFs } = await import("../services/db/Products.service.fs.js");
+    const { default: UserServiceFs } = await import("../services/db/Users.service.fs.js");
+    const { default: ChatServiceFs } = await import("../services/db/Chats.service.fs.js");
 
-    Carts = new CartFs(CartMem);
-    Products = new ProductFs(ProductMem);
-    Users = new UserFs(UserMem);
-    Chats = new ChatFs(ChatMem);
+    services.cartsService = new CartServiceFs("./fs/data/carts.json");
+    services.productService = new ProductServiceFs("./fs/data/products.json");
+    services.userService = new UserServiceFs("./fs/data/users.json");
+    services.chatService = new ChatServiceFs("./fs/data/messages.json");
 
     break;
 }
 
-export default {
-  Carts,
-  Products,
-  Users,
-  Chats,
-};
+export default services;

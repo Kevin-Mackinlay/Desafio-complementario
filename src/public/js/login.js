@@ -4,18 +4,19 @@ async function postLogin(email, password) {
     password,
   };
   try {
-    const response = await fetch("/api/sessions/login", {
+    const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
+    console.log(response);
     const result = await response.json();
     return result;
   } catch (error) {
     console.log(error.message);
-    return { success: false, message: error.message };
+    return { success: false, message: error.text };
   }
 }
 
