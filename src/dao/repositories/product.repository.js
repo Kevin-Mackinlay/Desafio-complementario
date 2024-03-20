@@ -1,23 +1,28 @@
-import productModel from "../models/product.schema.js";
+export default class ProductsRepository {
+  constructor(model) {
+    this.productModel = model;
+  }
 
-export default class Products {
-  constructor() {}
+  async create(product) {
+    return await this.productModel.create(product);
+  }
 
-  get = async () => {
-    return await productModel.find();
-  };
+  async get(searchParams) {
+    return await this.productModel.find(searchParams).lean();
+  }
 
-  create = async () => {
-    const newProduct = new productModel(product);
-    await newProduct.save();
-    return newProduct;
-  };
+  async getPaginated(filter) {
+    filter.options.lean = true;
+    const pagesData = await this.productModel.paginate(filter.query, filter.options);
 
-  modify = async (id, product) => {
-    return await productModel.finByIdAndUpdate(id, product, { new: true });
-  };
+    return pagesData;
+  }
 
-  delete = async (id) => {
-    return await productModel.findByIdAndDelete(id);
-  };
+  async delete(searchParams) {
+    return await this.productModel.findOneAndDelete(searchParams);
+  }
+
+  async update(searchParams, update, options = { new: true, lean: true }) {
+    return await this.productModel.findOneAndUpdate(searchParams, update, options);
+  }
 }

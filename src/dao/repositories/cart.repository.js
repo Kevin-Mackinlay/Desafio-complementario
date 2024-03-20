@@ -1,23 +1,21 @@
-import cartModel from "../models/cart.schema.js";
+export default class CartsRepository {
+  constructor(model) {
+    this.CartModel = model;
+  }
 
-export default class Carts {
-  constructor() {}
+  async create(cart) {
+    return await this.CartModel.create(cart);
+  }
 
-  get = async () => {
-    return await cartModel.find().lean();
-  };
+  async get(searchParams) {
+    return await this.CartModel.findOne(searchParams).lean();
+  }
 
-  create = async (cart) => {
-    const newCart = new cartModel(cart);
-    await newCart.save();
-    return newCart;
-  };
+  async exists(searchParams) {
+    return await this.CartModel.exists(searchParams).lean();
+  }
 
-  modify = async (id, cart) => {
-    return await cartModel.finByIdAndUpdate(id, cart, { new: true });
-  };
-
-  delete = async (id) => {
-    return await cartModel.findByIdAndDelete(id);
-  };
+  async update(searchParams, update, options = { new: true, lean: true }) {
+    return await this.CartModel.findOneAndUpdate(searchParams, update, options);
+  }
 }

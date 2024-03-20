@@ -1,23 +1,17 @@
-import userModel from "../models/user.schema.js";
+export default class UsersRepository {
+  constructor(model) {
+    this.userModel = model;
+  }
 
-export default class Users {
-  constructor() {}
+  async create(user) {
+    return await this.userModel.create(user);
+  }
 
-  get = async () => {
-    return await userModel.find();
-  };
+  async get(searchParams) {
+    return await this.userModel.findOne(searchParams).lean();
+  }
 
-  create = async () => {
-    const newUser = new userModel(user);
-    await newUser.save();
-    return newUser;
-  };
-
-  modify = async (id, user) => {
-    return await userModel.finByIdAndUpdate(id, user, { new: true });
-  };
-
-  delete = async (id) => {
-    return await userModel.findByIdAndDelete(id);
-  };
-} // End of Users class
+  async update(searchParams, update, options = { new: true, lean: true }) {
+    return await this.userModel.findOneAndUpdate(searchParams, update, options);
+  }
+}

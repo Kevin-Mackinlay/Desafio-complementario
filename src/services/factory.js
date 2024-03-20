@@ -1,17 +1,4 @@
 import config from "../config/config.js";
-import mongoose from "mongoose";
-import ProductMongo from "../dao/repositories/product.repository.js";
-import UserMongo from "../dao/repositories/user.repository.js";
-import ChatMongo from "../dao/repositories/chat.repository.js";
-import CartMongo from "../dao/repositories/cart.repository.js";
-// import ProductMem from "./repository/product.memory.js";
-// import UserMem from "./repository/user.memory.js";
-// import ChatMem from "./repository/chat.memory.js";
-// import CartMem from "./repository/cart.memory.js";
-// import ProductRepository from "./repository/product.mongo.js";
-// import UserRepository from "./repository/user.mongo.js";
-// import ChatRepository from "./repository/chat.mongo.js";
-// import CartRepository from "./repository/cart.mongo.js";
 
 export let Carts;
 export let Products;
