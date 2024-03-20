@@ -1,4 +1,4 @@
-import {chatsService} from "../repository/index.js";
+import {chatsService} from "../dao/repository/index.js";
 
 const chatService =  chatsService;
 

@@ -1,8 +1,8 @@
-import { Carts, Products, Users, Chats } from "../dao/factory.js";
-import CartsRepository from "./Carts.repository.js";
-import ProductsRepository from "./Products.repository.js";
-import ChatsRepository from "./Chat.repository.js";
-import UserRepository from "./User.repository.js";
+import { Carts, Products, Users, Chats } from "../../dao/factory.js";
+import CartsRepository from "./cart.repository.js";
+import ProductsRepository from "./product.repository.js";
+import ChatsRepository from "./chat.repository.js";
+import UserRepository from "./user.repository.js";
 
 export const cartService = new Carts();
 export const productsService = new Products();

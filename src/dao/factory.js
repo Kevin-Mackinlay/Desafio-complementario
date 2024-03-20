@@ -1,17 +1,17 @@
 import config from "../config/config.js";
 import mongoose from "mongoose";
-import ProductMongo from "./repository/product.mongo.js";
-import UserMongo from "./repository/user.mongo.js";
-import ChatMongo from "./repository/chat.mongo.js";
-import CartMongo from "./repository/cart.mongo.js";
-import ProductMem from "./repository/product.memory.js";
-import UserMem from "./repository/user.memory.js";
-import ChatMem from "./repository/chat.memory.js";
-import CartMem from "./repository/cart.memory.js";
-import ProductRepository from "./repository/product.mongo.js";
-import UserRepository from "./repository/user.mongo.js";
-import ChatRepository from "./repository/chat.mongo.js";
-import CartRepository from "./repository/cart.mongo.js";
+import ProductMongo from "./repository/product.repository.js";
+import UserMongo from "./repository/user.repository.js";
+import ChatMongo from "./repository/chat.repository.js";
+import CartMongo from "./repository/cart.repository.js";
+// import ProductMem from "./repository/product.memory.js";
+// import UserMem from "./repository/user.memory.js";
+// import ChatMem from "./repository/chat.memory.js";
+// import CartMem from "./repository/cart.memory.js";
+// import ProductRepository from "./repository/product.mongo.js";
+// import UserRepository from "./repository/user.mongo.js";
+// import ChatRepository from "./repository/chat.mongo.js";
+// import CartRepository from "./repository/cart.mongo.js";
 
 export let Carts;
 export let Products;
@@ -21,10 +21,10 @@ export let Chats;
 switch (config.persistence) {
   case "MONGO":
     const connection = await mongoose.connect(config.DB_URL);
-    const { default: CartService } = await import("./mongo/services/Carts.service.db.js");
-    const { default: ProductService } = await import("./mongo/services/Products.service.db.js");
-    const { default: UserService } = await import("./mongo/services/Users.service.db.js");
-    const { default: ChatService } = await import("./mongo/services/Chats.service.db.js");
+    const { default: CartService } = await import("./mongo/services/db/Carts.service.db.js");
+    const { default: ProductService } = await import("./mongo/services/db/Products.service.db.js");
+    const { default: UserService } = await import("./mongo/services/db/User.service.db.js");
+    const { default: ChatService } = await import("./mongo/services/db/Chat.service.db.js");
 
     Carts = new CartService(CartMongo);
     Products = new ProductService( ProductMongo);

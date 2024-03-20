@@ -1,4 +1,4 @@
-import {productsService} from "../repository/index.js";
+import {productsService} from "../dao/repository/index.js";
 
 const productService =  productsService;
 

@@ -1,4 +1,4 @@
-import {cartService} from "../repository/index.js";
+import {cartService} from "../dao/repository/index.js";
 
 const cartsService =  cartService;
 

@@ -1,4 +1,4 @@
-import {usersService} from "../repository/index.js";
+import {usersService} from "../dao/repository/index.js";
 
 async function login(req, res) {
   try {
