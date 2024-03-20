@@ -1,4 +1,4 @@
-import userModel from "../mongo/models/user.schema.js";
+import userModel from "../models/user.schema.js";
 
 export default class Users {
   constructor() {}

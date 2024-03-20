@@ -1,4 +1,4 @@
-import cartModel from "../mongo/models/cart.schema.js";
+import cartModel from "../models/cart.schema.js";
 
 export default class Carts {
   constructor() {}
