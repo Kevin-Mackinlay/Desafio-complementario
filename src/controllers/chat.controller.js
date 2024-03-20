@@ -1,9 +1,9 @@
-import {chatsService} from "../dao/repository/index.js";
+import { chatsService } from "../dao/repositories/index.js";
 
-const chatService =  chatsService;
+const chatService = chatsService;
 
 async function createMessage(req, res) {
-   try {
+  try {
     const { user, message } = req.body;
     const newMessage = await chatService.createMessage({ user, message });
     if (!newMessage) {
@@ -17,7 +17,6 @@ async function createMessage(req, res) {
     console.log(error.message);
     return res.status(500).json({ success: false, error: error.message });
   }
-};
+}
 
 export { createMessage };
-

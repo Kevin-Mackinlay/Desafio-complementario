@@ -1,6 +1,6 @@
-import {productsService} from "../dao/repository/index.js";
+import { productsService } from "../dao/repositories/index.js";
 
-const productService =  productsService;
+const productService = productsService;
 
 async function getProducts(req, res) {
   try {
@@ -43,7 +43,7 @@ async function getProducts(req, res) {
 }
 
 async function getProductById(req, res) {
-     try {
+  try {
     const { pid } = req.params;
 
     const product = await productService.getProductById(pid);
@@ -67,7 +67,7 @@ async function getProductById(req, res) {
       message: error.message,
     });
   }
-};
+}
 
 async function postProduct(req, res) {
   try {
@@ -104,7 +104,7 @@ async function postProduct(req, res) {
 }
 
 async function updateProduct(req, res) {
-     try {
+  try {
     const { pid } = req.params;
     const { product } = req.body;
 
@@ -129,10 +129,10 @@ async function updateProduct(req, res) {
       message: error.message,
     });
   }
-};
+}
 
 async function deleteProduct(req, res) {
-     try {
+  try {
     const { pid } = req.params;
     const { product } = req.body;
 
@@ -157,6 +157,6 @@ async function deleteProduct(req, res) {
       message: error.message,
     });
   }
-};
+}
 
 export { getProducts, getProductById, postProduct, updateProduct, deleteProduct };

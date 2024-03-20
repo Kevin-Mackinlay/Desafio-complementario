@@ -1,6 +1,6 @@
-import {cartService} from "../dao/repository/index.js";
+import { cartService } from "../dao/repositories/index.js";
 
-const cartsService =  cartService;
+const cartsService = cartService;
 
 const createCart = async (req, res) => {
   try {
@@ -51,7 +51,7 @@ async function getCartById(req, res) {
   }
 }
 
-async function addProductToCart(req,res) {
+async function addProductToCart(req, res) {
   try {
     const { cid, pid } = req.params;
 

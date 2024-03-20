@@ -1,4 +1,4 @@
-import { Carts, Products, Users, Chats } from "../../dao/factory.js";
+import { Carts, Products, Users, Chats } from "../../services/factory.js";
 // import CartsRepository from "./cart.repository.js";
 // import ProductsRepository from "./product.repository.js";
 // import ChatsRepository from "./chat.repository.js";

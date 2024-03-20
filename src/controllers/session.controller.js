@@ -1,4 +1,4 @@
-import {usersService} from "../dao/repository/index.js";
+import { usersService } from "../dao/repositories/index.js";
 
 async function login(req, res) {
   try {
@@ -53,5 +53,4 @@ async function logout(req, res) {
 
 export { login, signup, privado, logout };
 
-
-//65b2d4132440be292ec978c6 
+//65b2d4132440be292ec978c6

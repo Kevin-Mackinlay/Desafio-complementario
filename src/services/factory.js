@@ -1,9 +1,9 @@
 import config from "../config/config.js";
 import mongoose from "mongoose";
-import ProductMongo from "./repository/product.repository.js";
-import UserMongo from "./repository/user.repository.js";
-import ChatMongo from "./repository/chat.repository.js";
-import CartMongo from "./repository/cart.repository.js";
+import ProductMongo from "../dao/repositories/product.repository.js";
+import UserMongo from "../dao/repositories/user.repository.js";
+import ChatMongo from "../dao/repositories/chat.repository.js";
+import CartMongo from "../dao/repositories/cart.repository.js";
 // import ProductMem from "./repository/product.memory.js";
 // import UserMem from "./repository/user.memory.js";
 // import ChatMem from "./repository/chat.memory.js";
@@ -27,9 +27,9 @@ switch (config.persistence) {
     const { default: ChatService } = await import("./mongo/services/db/Chat.service.db.js");
 
     Carts = new CartService(CartMongo);
-    Products = new ProductService( ProductMongo);
-    Users = new UserService (UserMongo);
-    Chats = new ChatService (ChatMongo);
+    Products = new ProductService(ProductMongo);
+    Users = new UserService(UserMongo);
+    Chats = new ChatService(ChatMongo);
     break;
   case "MEMORY":
     const { default: CartFs } = await import("./mongo/services/Carts.service.fs.js");
@@ -37,10 +37,10 @@ switch (config.persistence) {
     const { default: UserFs } = await import("./mongo/services/Users.service.fs.js");
     const { default: ChatFs } = await import("./mongo/services/Chats.service.fs.js");
 
-    Carts = new CartFs (CartMem);
-    Products =new ProductFs (ProductMem);
-    Users = new UserFs (UserMem);
-    Chats = new ChatFs (ChatMem);
+    Carts = new CartFs(CartMem);
+    Products = new ProductFs(ProductMem);
+    Users = new UserFs(UserMem);
+    Chats = new ChatFs(ChatMem);
 
     break;
 }
