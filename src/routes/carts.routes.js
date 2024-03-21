@@ -1,6 +1,7 @@
 import express from "express";
-import { createCart, getCarts, addProductToCart, updateCart, deleteCart, deleteProductFromCart, getCartById } from "../controller/carts.controller.js";
-
+import CartController from "../controllers/carts.controller.js";
+import services from "../services/factory.js";
+const cartsController = new CartController(services.cartsService);
 const cartsRouter = express.Router();
 
 cartsRouter.post("/", createCart);

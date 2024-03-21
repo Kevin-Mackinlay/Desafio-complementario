@@ -1,56 +1,45 @@
-import { usersService } from "../dao/repositories/index.js";
-
-async function login(req, res) {
-  try {
+export default class SessionsController {
+  login = async (req, res) => {
     if (!req.loginSuccess) {
-      res.status(401).json({ success: false, message: "user not found" });
-    } else {
-      res.status(200).json({ success: true, message: "user logged in", redirectUrl: "/products" });
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
-  } catch (error) {
-    res.status(500).json({ success: false, message: "server error" });
-  }
-}
 
-async function signup(req, res) {
-  try {
-    if (!req.SignupSuccess) {
-      res.status(400).json({ success: false, message: "user already exists" });
-    } else {
-      res.status(201).json({ success: true, message: "user created", redirectUrl: "/login" });
+    res.status(200).json({ success: true, message: "User logged in", redirectUrl: "/products" });
+  };
+
+  signup = async (req, res) => {
+    if (!req.signupSuccess) {
+      return res.status(400).json({ success: false, text: "User already exists" });
     }
-  } catch (error) {
-    res.status(500).json({ success: false, message: "server error" });
-  }
+
+    res.status(201).json({ success: true, message: "User created", redirectUrl: "/login" });
+  };
+
+  logout = async (req, res) => {
+    try {
+      req.session.destroy((error) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({ success: false, message: "Internal server error" });
+        } else {
+          res.status(200).json({ success: true, message: "User logged out", redirectUrl: "/login" });
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  };
+
+  getCurrentSession = async (req, res) => {
+    if (!req.isAuthenticated()) {
+      res.status(401).json({ message: "No hay una sesión activa" });
+    } else {
+      const session = {
+        message: "Sesión activa",
+        user: req.user,
+      };
+      res.status(200).json(session);
+    }
+  };
 }
-
-async function privado(req, res) {
-  try {
-    res.render("topsecret", {
-      title: "Privado",
-      user: req.session.user,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "server error" });
-  }
-}
-
-async function logout(req, res) {
-  try {
-    req.session.destroy((error) => {
-      if (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Internal server error" });
-      } else {
-        res.status(200).json({ success: true, message: "User logged out", redirectUrl: "/login" });
-      }
-    });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-}
-
-export { login, signup, privado, logout };
-
-//65b2d4132440be292ec978c6

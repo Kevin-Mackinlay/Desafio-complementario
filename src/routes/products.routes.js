@@ -1,8 +1,9 @@
 import express from "express";
-import { get } from "mongoose";
-import { getProducts, getProductById, postProduct, updateProduct, deleteProduct } from "../controller/products.controller.js";
+import services from "../services/factory.js";
+import ProductsController from "../controllers/products.controller.js";
 
 const productsRouter = express.Router();
+const productsController = new ProductsController(services.productService);
 
 productsRouter.get("/", getProducts);
 productsRouter.get("/:pid", getProductById);

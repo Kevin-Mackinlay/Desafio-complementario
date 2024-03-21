@@ -1,162 +1,155 @@
-import { productsService } from "../dao/repositories/index.js";
+import ProductsService from "../services/db/products.service.db.js";
 
-const productService = productsService;
+const productsService = new ProductsService;
 
-async function getProducts(req, res) {
-  try {
-    const { limit = 10, page = 1, sort, category } = req.query;
-    const filter = {
-      options: {
-        limit,
-        page,
-      },
-    };
-
-    if (category) {
-      filter.query = { category: category };
-    }
-
-    if (sort) {
-      filter.options.sort = { price: sort };
-    }
-
-    const products = await productService.getPaginatedProducts(filter);
-
-    if (products.length < 1) {
-      res.status(404).json({
-        success: false,
-        message: "Could not retrieve products",
-      });
-      return;
-    }
-    res.status(200).json({
-      success: true,
-      data: products,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+export default class ProductsController {
+  constructor(ProductsService) {
+    this.productsService = ProductsService;
   }
-}
 
-async function getProductById(req, res) {
-  try {
-    const { pid } = req.params;
+  getProducts = async (req, res) => {
+    try {
+      const { limit = 8, page = 1, sort, category } = req.query;
+      const filter = {
+        options: {
+          limit,
+          page,
+        },
+      };
 
-    const product = await productService.getProductById(pid);
+      if (category) {
+        filter.query = { category: category };
+      }
 
-    if (!product) {
-      res.status(404).json({
-        success: false,
-        message: "Product not found",
+      if (sort) {
+        filter.options.sort = { price: sort };
+      }
+      const pagesData = await productsService.getPaginatedProducts(filter);
+
+      if (pagesData.products.length < 1) {
+        res.status(404).json({
+          success: false,
+          message: "Could not retrieve products",
+        });
+        return;
+      }
+
+      //console.log(pagesData);
+      res.status(200).json({
+        success: true,
+        data: pagesData,
       });
-      return;
-    }
-
-    res.status(200).json({
-      success: true,
-      data: product,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-}
-
-async function postProduct(req, res) {
-  try {
-    const { product } = req.body;
-    const newProduct = await productService.createProduct(product);
-
-    if (!newProduct) {
-      res.status(400).json({
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
         success: false,
-        message: "Could not add the product",
+        message: error.message,
       });
-      return;
     }
+  };
 
-    const products = await productService.getProducts();
-    // Alternativa a HTTPs
-    // req.io.emit("updateProducts", {
-    // 	success: true,
-    // 	products,
-    // });
+  getProductById = async (req, res) => {
+    try {
+      const { pid } = req.params;
 
-    res.status(200).json({
-      success: true,
-      // newProduct: newProduct,
-      products,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-}
+      const product = await productsService.getProductById(pid);
 
-async function updateProduct(req, res) {
-  try {
-    const { pid } = req.params;
-    const { product } = req.body;
+      if (!product) {
+        res.status(404).json({
+          success: false,
+          message: "Product not found",
+        });
+        return;
+      }
 
-    const updatedProduct = await productService.updateProduct(pid, product);
-
-    if (!updatedProduct) {
-      res.status(400).json({
+      res.status(200).json({
+        success: true,
+        data: product,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
         success: false,
-        message: "Could not update the product",
+        message: error.message,
       });
-      return;
     }
+  };
 
-    res.status(200).json({
-      success: true,
-      data: updatedProduct,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-}
+  createProduct = async (req, res) => {
+    try {
+      const { product } = req.body;
+      const newProduct = await productsService.createProduct(product);
 
-async function deleteProduct(req, res) {
-  try {
-    const { pid } = req.params;
-    const { product } = req.body;
+      if (!newProduct) {
+        res.status(400).json({
+          success: false,
+          message: "Could not add the product",
+        });
+        return;
+      }
 
-    const updatedProduct = await productService.updateProduct(pid, product);
-
-    if (!updatedProduct) {
-      res.status(400).json({
+      const products = await productsService.getProducts();
+   
+      res.status(200).json({
+        success: true,
+        products,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
         success: false,
-        message: "Could not update the product",
+        message: error.message,
       });
-      return;
     }
+  };
 
-    res.status(200).json({
-      success: true,
-      data: updatedProduct,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+  updateProduct = async (req, res) => {
+    try {
+      const { pid } = req.params;
+      const { product } = req.body;
+
+      const updatedProduct = await productsService.updateProduct(pid, product);
+
+      if (!updatedProduct) {
+        res.status(400).json({
+          success: false,
+          message: "Could not update the product",
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: updatedProduct,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  deleteProduct = async (req, res) => {
+    try {
+      const { pid } = req.params;
+
+      await productsService.deleteProductById(pid);
+
+      const products = await productsService.getProducts();
+
+      res.status(200).json({
+        success: true,
+        message: `Product with ID ${pid} was deleted.`,
+        products,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
 }
-
-export { getProducts, getProductById, postProduct, updateProduct, deleteProduct };

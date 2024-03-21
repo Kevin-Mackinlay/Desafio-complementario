@@ -6,7 +6,7 @@ import MessagesRepository from "./messages.repository.js";
 import CartModel from "../models/cart.schema.js";
 import ProductModel from "../models/product.schema.js";
 import UserModel from "../models/user.schema.js";
-import MessageModel from "../models/schema.model.js";
+import MessageModel from "../models/message.schema.js";
 
 export default {
   carts: new CartsRepository(CartModel),

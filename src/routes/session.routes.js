@@ -1,18 +1,16 @@
-// import bcrypt from "bcrypt";
+
 import { Router } from "express";
 import passport from "passport";
-// import UserModel from "../dao/models/user.model.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
-// import UserService from "../services/db/User.service.db.js";
-import { login, signup, privado, logout } from "../controller/session.controller.js";
+import sessionController from "../controllers/session.controller.js";
 
 const sessionRouter = Router();
-// const userService = new UserService();
+const sessionsController = new sessionController();
 
-sessionRouter.post("/login", login);
-sessionRouter.post("/signup", signup);
-sessionRouter.get("/privado", privado);
-sessionRouter.post("/logout", logout);
+sessionRouter.post("/login",  passport.authenticate("login", {}), sessionsController.login);
+sessionRouter.post("/signup", passport.authenticate("signup", { session: false }), sessionsController.signup);
+sessionRouter.get("/privado", passport.authenticate("privado", { session: false }), sessionsController.privado);
+sessionRouter.post("/logout", sessionController.logout);
+sessionRouter.get("/current", sessionController.currentSession);
 
 
 export default sessionRouter;
