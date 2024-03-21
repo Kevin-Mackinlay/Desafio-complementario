@@ -1,7 +1,7 @@
 
 export default class CartsController {
-  contructor(serv) {
-    this.cartsServ = serv;
+  contructor(service) {
+    this.cartsService = service;
   }
   createCart = async (req, res) => {
     try {
@@ -154,4 +154,77 @@ export default class CartsController {
       });
     }
   };
+
+  cartPurchase = async (req, res) => {
+    try{
+      const {cid} = req.params;
+      const cart = await cartsService.getCartById(cid);
+      const insufficientStock = [];
+      const buyProducts = [];
+
+if(!cart) return res.status(404).json({success: false, message: "Cart not found"});
+cart.products.forEach(async item => {
+  const product = item.product
+  const quantity = item.quantity
+  const stock = product.stock
+
+  quantity > stock ? insufficientStock.push(product) : buyProducts.push({product, quantity})
+   && await productsService.updateProduct(product, {stock: stock - quantity})
+    && await cartsService.removeProductFromCart(cart, product)
+});
+
+const totalAmount = buyProducts.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+const totalPrice = buyProducts.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toFixed(3)
+
+if(!buyProducts.length) return res.status(400).json
+({
+  status: "Error",
+  message: "No products were purchased",
+
+})
+  
 }
+catch (error) {
+  console.log(error)
+  res.status(500).json({success: false, message: error.message})
+}
+
+  }
+}
+
+  //   if(buyProducts.length > 0){  
+  //               const ticket = await ticketService.createTicket({
+  //                   code: uuidv4(),
+  //                   amount: totalAmount,
+  //                   purchaser: req.user.email,
+  //               })
+
+  //               await transport.sendMail({
+  //                   from: objectConfig.gmailUser,
+  //                   to: req.user.email,
+  //                   subject: "Thanks for your purchase",
+  //                   html:`<div>
+  //                               <h1>
+  //                                   Thanks for your purchase.
+  //                                   the total to pay is ${totalPrice}$
+  //                               </h1>
+  //                               <img src="cid:gracias-por-comprar">
+  //                         </div>`,
+  //                   attachments:[{
+  //                       filename:'gracias-por-comprar.jpg',
+  //                       path:"src/public/images/gracias-por-comprar.jpg",
+  //                       cid:'gracias-por-comprar'
+  //                   }]
+  //               })
+
+  //               return res.send({status:"Success", message:"Successful purchase", toTicket: ticket})
+  //           }
+  //       } catch (error) {
+  //           logger.error(error)
+
+
+  //       }
+  //   }
+  // });
+
+

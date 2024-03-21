@@ -1,10 +1,10 @@
 export default class Tickets {
-    constructor(serv) {
-        this.ticketsServ = serv;
+    constructor(service) {
+        this.ticketsService = service;
     }
     createTicket = async (res, req) => {
         try {
-            const newTicket = await this.ticketsServ.create(req.body);
+            const newTicket = await this.ticketsService.create(req.body);
             if (!newTicket) {
                 return res.status(400).json({ success: false, error: "Ticket could not be created" });
             }
@@ -17,7 +17,7 @@ export default class Tickets {
 
     getTickets = async (res, req) => {
         try {
-            const tickets = await this.ticketsServ.getTickets();
+            const tickets = await this.ticketsService.getTickets();
             if (!tickets) {
                 return res.status(404).json({ success: false, error: "Tickets not found" });
             }
@@ -31,7 +31,7 @@ export default class Tickets {
     getTicketById = async (res, req) => {
         try {
             const { tid } = req.params;
-            const ticket = await this.ticketsServ.getTicketById(tid);
+            const ticket = await this.ticketsService.getTicketById(tid);
             if (!ticket) {
                 return res.status(404).json({ success: false, error: "Ticket not found" });
             }
@@ -45,7 +45,7 @@ export default class Tickets {
     updateTicket = async (res, req) => {
         try {
             const { tid } = req.params;
-            const updatedTicket = await this.ticketsServ.updateTicket(tid, req.body);
+            const updatedTicket = await this.ticketsService.updateTicket(tid, req.body);
             if (!updatedTicket) {
                 return res.status(404).json({ success: false, error: "Ticket not found" });
             }
@@ -59,7 +59,7 @@ export default class Tickets {
     deleteTicket = async (res, req) => {
         try {
             const { tid } = req.params;
-            const deletedTicket = await this.ticketsServ.deleteTicket(tid);
+            const deletedTicket = await this.ticketsService.deleteTicket(tid);
             if (!deletedTicket) {
                 return res.status(404).json({ success: false, error: "Ticket not found" });
             }
