@@ -1,4 +1,4 @@
-export default class Tickets {
+export default class TicketsController {
     constructor(service) {
         this.ticketsService = service;
     }

@@ -4,15 +4,17 @@ import passport from "passport";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-// import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
-import { __dirname } from "../src/utils.js";
+import { __dirname } from "../src/utils/utils.js";
 import configPassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errorHandler/errorHandling.js";
+import  {addLogger}  from "./utils/logger.js";
+import compression from "express-compression";
+import cors from "cors";
 
 dotenv.config();
 
@@ -21,6 +23,54 @@ const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
 const PORT = process.env.PORT || 8080;
 const COOCKIESECRET = process.env.CODERSECRET;
 
+
+//config de app
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("src/public"));
+app.use(cors());
+app.use(compression({
+  brotli :{
+    enabled: true,
+    zlib:{}
+  }
+}))
+
+//configuración de handlebars
+app.engine("handlebars", handlebars.engine());
+app.set("views", "src/views");
+app.set("view engine", "handlebars");
+
+
+//middlewares para el manejo de datos
+app.use(cookieParser(COOCKIESECRET));
+
+//passport
+
+configPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+//rutas
+app.use("/", IndexRouter);
+app.use(errorHandler);
+app.use(addLogger);
+
+
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: DB_URL,
+      mongoOptions: {
+        useNewUrlParser: true,
+      },
+      ttl: 600,
+    }),
+    secret: "COOCKIESECRET",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 
 console.log(process.env.EMAIL, process.env.APP_PASSWORD);
@@ -31,13 +81,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL,
     pass: process.env.APP_PASSWORD,
   },
- 
 });
-
-//middlewares para el manejo de datos
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 
 app.get("/mail", async (req, res) => {
   try {
@@ -55,33 +99,6 @@ app.get("/mail", async (req, res) => {
   }
 });
 
-app.use(cookieParser(COOCKIESECRET));
-
-app.use(express.static("src/public"));
-app.use(errorHandler);
-app.engine("handlebars", handlebars.engine());
-app.set("views", "src/views");
-app.set("view engine", "handlebars");
-
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl: DB_URL,
-      mongoOptions: {
-        useNewUrlParser: true,
-      },
-      ttl: 600,
-    }),
-    secret: "COOCKIESECRET",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-configPassport();
-app.use(passport.initialize());
-app.use(passport.session());
-app.use("/", IndexRouter);
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
@@ -104,6 +121,18 @@ app.get("/", (req, res) => {
     res.send("Bienvenido");
   }
 });
+
+app.get('/', (req, res) => {
+  req.logger.warn('!Alerta!')
+  res.send({message:'Prueba de logger'});
+
+})
+
+app.get('/', (req, res) => {
+  res.send({message:'errorHandler'});
+
+})
+
 
 startMongoConnection()
   .then(() => {
