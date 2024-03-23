@@ -12,6 +12,7 @@ import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils.js";
 import configPassport from "./config/passport.config.js";
+import errorHandler from "./middlewares/errorHandler/errorHandling.js";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ const transporter = nodemailer.createTransport({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 app.get("/mail", async (req, res) => {
   try {
     let result = await transporter.sendMail({
@@ -56,7 +58,7 @@ app.get("/mail", async (req, res) => {
 app.use(cookieParser(COOCKIESECRET));
 
 app.use(express.static("src/public"));
-
+app.use(errorHandler);
 app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");

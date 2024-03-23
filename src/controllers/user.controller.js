@@ -12,6 +12,15 @@ export default class Users {
   };
   create = async (newUser) => {
     try {
+      const { first_name, last_name, email, password } = req.body;
+      if (!first_name || !last_name || !email || !password) {
+        CustomError.createError({
+          name: "Error creando usuario",
+          cause: generateUserErrorInfo(req.body),
+          message: "Uno o más campos son inválidos",
+          code: EErrors.INVALID_TYPES_ERROR,
+        });
+      }
       const userDb = await this.service.create(newUser);
       return userDb;
     } catch (error) {
@@ -19,11 +28,10 @@ export default class Users {
     }
   };
   modify = async (id, user) => {
-    try{
-        const userDb = await this.service.modify(id, user);
-        return userDb;
-    }
-    catch (error) {
+    try {
+      const userDb = await this.service.modify(id, user);
+      return userDb;
+    } catch (error) {
       throw error;
     }
   };
@@ -42,6 +50,6 @@ export default class Users {
       return userDb;
     } catch (error) {
       throw error;
-    }   
+    }
   };
 }

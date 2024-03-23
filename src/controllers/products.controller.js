@@ -1,6 +1,6 @@
 import ProductsService from "../services/db/products.service.db.js";
 
-const productsService = new ProductsService;
+const productsService = new ProductsService();
 
 export default class ProductsController {
   constructor(ProductsService) {

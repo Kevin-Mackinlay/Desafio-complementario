@@ -1,11 +1,11 @@
 export default class ProductsService {
-    constructor(serv) {
-        this.serv = serv;
+    constructor(service) {
+        this.service = service;
     }
 
     async createProduct(product) {
         try {
-            const newProduct = await this.serv.create(product);
+            const newProduct = await this.service.create(product);
             return newProduct;
         } catch (error) {
             throw error;
@@ -14,7 +14,7 @@ export default class ProductsService {
 
      async getProducts() {
         try {
-            const products = await this.serv.get();
+            const products = await this.service.get();
             return products;
         } catch (error) {
             throw error;
@@ -23,7 +23,7 @@ export default class ProductsService {
 
         async getPaginatedProducts(filter) {
             try {
-                const pagesData = await this.serv.getPaginated(filter);
+                const pagesData = await this.service.getPaginated(filter);
                 pagesData.status = "success";
 
                 pagesData.products = pagesData.docs;
@@ -37,16 +37,25 @@ export default class ProductsService {
 
         async getProductsById(pid) {
             try {
-                const product = await this.serv.get({_id :pid});
+                const product = await this.service.get({_id :pid});
                 return product;
             } catch (error) {
                 throw error;
             }
         }
 
+    async deleteProductById(pid) {
+        try {
+            const deletedProduct = await this.service.delete({ _id:pid });
+            return deletedProduct;
+        } catch (error) {
+            throw error;
+        }
+    }
+
         async updateProduct(pid, productUpdates) {
             try {
-                const updatedProduct = await this.serv.get({ _id:pid}, productUpdates);
+                const updatedProduct = await this.service.get({ _id:pid}, productUpdates);
                 return updatedProduct;
             } catch (error) {
                 throw error;
