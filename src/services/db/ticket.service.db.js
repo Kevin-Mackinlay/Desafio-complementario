@@ -1,6 +1,6 @@
 export default class TicketService {
-  constructor(serv) {
-    this.serv = serv;
+  constructor(service) {
+    this.ticketService = service;
   }
 
   create = async (ticket) => {

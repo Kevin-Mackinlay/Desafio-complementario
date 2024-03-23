@@ -1,8 +1,8 @@
-export default class Users {
+export default class UsersController {
   constructor(service) {
-    this.service = service;
+    this.usersService = service;
   }
-  get = async () => {
+  getUsers = async () => {
     try {
       const userDb = await this.service.get();
       return userDb;
@@ -10,7 +10,7 @@ export default class Users {
       throw error;
     }
   };
-  create = async (newUser) => {
+  createUser = async (newUser) => {
     try {
       const { first_name, last_name, email, password } = req.body;
       if (!first_name || !last_name || !email || !password) {
@@ -27,7 +27,7 @@ export default class Users {
       throw error;
     }
   };
-  modify = async (id, user) => {
+  modifyUser = async (id, user) => {
     try {
       const userDb = await this.service.modify(id, user);
       return userDb;
@@ -44,7 +44,7 @@ export default class Users {
       throw error;
     }
   };
-  delete = async (id) => {
+  deleteUser = async (id) => {
     try {
       const userDb = await this.service.delete(id);
       return userDb;

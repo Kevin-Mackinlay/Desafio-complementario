@@ -1,5 +1,5 @@
 export default class CartsController {
-  contructor(service) {
+  constructor(service) {
     this.cartsService = service;
   }
   createCart = async (req, res) => {
@@ -34,7 +34,7 @@ export default class CartsController {
     }
   };
 
-  getCartById = async (req, res) => {
+  getCart = async (req, res) => {
     try {
       const { cid } = req.params;
       const cart = await this.cartsService.getCartById(cid);

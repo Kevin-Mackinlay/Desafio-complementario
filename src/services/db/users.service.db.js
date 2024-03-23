@@ -1,11 +1,11 @@
 export default class UserService {
-  constructor(serv) {
-    this.serv = serv;
+  constructor(service) {
+    this.productService = service;
   }
 
   async createUser(user) {
     try {
-      const newUser = await this.serv.create(user);
+      const newUser = await this.service.create(user);
       return newUser;
     } catch (error) {
       throw error;
@@ -13,21 +13,21 @@ export default class UserService {
   }
 
   async getUserByEmail(email) {
-    const user = await this.serv.get({ email: email });
+    const user = await this.service.get({ email: email });
     return user;
   }
 
   async getUserById(id) {
-    const user = await this.serv.get({ _id: uid });
+    const user = await this.service.get({ _id: uid });
     return user;
   }
 
   async getOrCreateUser(userData) {
-    const user = await this.serv.get({ email: userData.email });
+    const user = await this.service.get({ email: userData.email });
     if (user) {
       return user;
     }
-    const newUser = await this.serv.create(userData);
+    const newUser = await this.service.create(userData);
     return newUser;
   }
 }
