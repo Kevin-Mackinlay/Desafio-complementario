@@ -4,13 +4,13 @@ import services from "../services/factory.js";
 const cartsController = new CartController(services.cartsService);
 const cartsRouter = express.Router();
 
-cartsRouter.post("/", createCart);
-cartsRouter.get("/", getCarts);
-cartsRouter.get("/:cid", getCartById);
-cartsRouter.post("/:cid/product/:pid", addProductToCart);
-cartsRouter.put("/:cid/product/:pid", updateCart);
-cartsRouter.delete("/:cid/product/:pid", deleteProductFromCart);
-cartsRouter.delete("/:cid", deleteCart);
+cartsRouter.post("/", cartsController.createCart);
+cartsRouter.get("/", cartsController.getCarts);
+cartsRouter.get("/:cid", cartsController.getCartById);
+cartsRouter.post("/:cid/product/:pid", cartsController.addProductToCart);
+cartsRouter.put("/:cid/product/:pid", cartsController.updateProductQuantity);
+cartsRouter.delete("/:cid/product/:pid", cartsController.removeProductFromCart);
+cartsRouter.delete("/:cid", cartsController.deleteCart);
 
 export default cartsRouter;
 

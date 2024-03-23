@@ -6,10 +6,10 @@ const services = {};
 switch (config.persistence) {
   case "MONGO":
     
-    const { default: CartServiceDb } = await import("./services/db/Carts.service.db.js");
-    const { default: ProductServiceDb } = await import("./services/db/Products.service.db.js");
-    const { default: UserServiceDb } = await import("./services/db/User.service.db.js");
-    const { default: ChatServiceDb } = await import("./services/db/Chat.service.db.js");
+    const { default: CartServiceDb } = await import("./db/carts.service.db.js");
+    const { default: ProductServiceDb } = await import("./db/products.service.db.js");
+    const { default: UserServiceDb } = await import("./db/users.service.db.js");
+    const { default: ChatServiceDb } = await import("./db/chat.service.db.js");
 
     services.cartsService = new CartServiceDb(repositories.Carts);
     services.productService= new ProductServiceDb(repositories.Products);

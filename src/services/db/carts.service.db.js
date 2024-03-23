@@ -1,13 +1,13 @@
 
 export default class CartsService {
-  constructor(serv) {
-    this.cartServ = serv;
+  constructor(service) {
+    this.cartService = service;
   }
 
   async createCart() {
     try {
       const products = [];
-      const cart = await this.cartServ.create({ products });
+      const cart = await this.cartService.create({ products });
 
       return cart;
     } catch (error) {
@@ -17,7 +17,7 @@ export default class CartsService {
 
   async getCarts() {
     try {
-      const carts = await this.cartServ.get();
+      const carts = await this.cartService.get();
       return carts;
     } catch (error) {
       throw error;
@@ -26,7 +26,7 @@ export default class CartsService {
 
   async getCartById(id) {
     try {
-      const cart = await this.cartServ.get(id);
+      const cart = await this.cartService.get(id);
       return cart;
     } catch (error) {
       throw error;
@@ -35,12 +35,12 @@ export default class CartsService {
 
   async addProductToCart(cid, pid) {
     try {
-      const productExistsInCart = await this.cartServ.existis({ _id: cid, "products.product": pid });
+      const productExistsInCart = await this.cartService.existis({ _id: cid, "products.product": pid });
       let cart;
       if (!productExistsInCart) {
-        cart = await this.cartServ.update({ _id: cid }, { $push: { products: { product: pid, quantity: 1 } } });
+        cart = await this.cartService.update({ _id: cid }, { $push: { products: { product: pid, quantity: 1 } } });
       } else {
-        cart = await this.cartServ.update({ _id: cid, "products.product": pid },
+        cart = await this.cartService.update({ _id: cid, "products.product": pid },
          { $inc: { "products.$.quantity": 1 } });
       }
       return cart;
@@ -51,11 +51,11 @@ export default class CartsService {
 
 async updateProductQuantity(cid, pid, quantity) {
     try {
-        const productExistsInCart = await this.cartServ.exists({ _id: cid, "products.product": pid });
+        const productExistsInCart = await this.cartService.exists({ _id: cid, "products.product": pid });
         if (!productExistsInCart) {
             throw new Error("Product not found in cart");
         }
-        const cart = await this.cartServ.update(
+        const cart = await this.cartService.update(
             { _id: cid, "products.product": pid },
             { $set: { "products.$.quantity": quantity } });
         return cart;
@@ -68,7 +68,7 @@ async updateProductQuantity(cid, pid, quantity) {
 
 async removeProductFromCart(cid, pid) {
     try {
-        const productExistsInCart = await this.cartServ.exists({ _id: cid, "products.product": pid });
+        const productExistsInCart = await this.cartService.exists({ _id: cid, "products.product": pid });
         if (!productExistsInCart) {
             throw new Error("Product not found in cart");
         }
@@ -85,7 +85,7 @@ async removeProductFromCart(cid, pid) {
 
 async emptyCart(cid) { 
     try{
-          const cart = await this.cartServ.update({ _id: cid }, { $set: { products: [] } });
+          const cart = await this.cartService.update({ _id: cid }, { $set: { products: [] } });
             return cart;   
     } catch (error) {
         throw error;
