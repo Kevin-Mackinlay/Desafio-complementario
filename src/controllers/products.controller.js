@@ -3,8 +3,8 @@ import ProductsService from "../services/db/products.service.db.js";
 const productsService = new ProductsService();
 
 export default class ProductsController {
-  constructor(ProductsService) {
-    this.productsService = ProductsService;
+  constructor() {
+    this.productsService = productsService
   }
 
   getProducts = async (req, res) => {

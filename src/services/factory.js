@@ -11,10 +11,10 @@ switch (config.persistence) {
     const { default: UserServiceDb } = await import("./db/users.service.db.js");
     const { default: ChatServiceDb } = await import("./db/chat.service.db.js");
 
-    services.cartsService = new CartServiceDb(repositories.Carts);
-    services.productService= new ProductServiceDb(repositories.Products);
-    services.userService= new UserServiceDb(repositories.Users);
-    services.chatService = new ChatServiceDb(repositories.Chats);
+    services.cartsService = new CartServiceDb(repositories.carts);
+    services.productService= new ProductServiceDb(repositories.products);
+    services.userService= new UserServiceDb(repositories.users);
+    services.chatService = new ChatServiceDb(repositories.chat);
     break;
   case "FS":
     const { default: CartServiceFs } = await import("../services/db/Carts.service.fs.js");
