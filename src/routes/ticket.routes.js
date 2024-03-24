@@ -1,13 +1,14 @@
-import express from 'express';
-import TicketController from '../controllers/ticket.controller.js';
-import services from '../services/factory.js';
+import express from "express";
+import services from "../services/factory.js";
+import TicketsController from "../controllers/tickets.controller.js";
 
-const ticketController = new TicketController(services.ticketService);
 const ticketRouter = express.Router();
+const ticketsController = new TicketsController(services.ticketService);
 
-ticketRouter.get('/', ticketController.createTicket);
-ticketRouter.get('/:cid', ticketController.getTicket);
-ticketRouter.put('/:cid', ticketController.updateTicket);
-ticketRouter.delete('/:cid', ticketController.deleteTicket);
+
+ticketRouter.get("/", ticketsController.createTicket);
+ticketRouter.get("/:cid", ticketsController.getTickets);
+ticketRouter.put("/:cid", ticketsController.updateTicket);
+ticketRouter.delete("/:cid", ticketsController.deleteTicket);
 
 export default ticketRouter;

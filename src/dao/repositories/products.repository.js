@@ -3,26 +3,62 @@ export default class ProductsRepository {
     this.productModel = model;
   }
 
-  async create(product) {
-    return await this.productModel.create(product);
+  async createProduct(product) {
+    try {
+      const newProduct = await this.productModel.create(product);
+      return newProduct;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async get(searchParams) {
-    return await this.productModel.find(searchParams).lean();
+  async getProducts(data) {
+    try {
+      return await this.productModel.get(data);
+    }
+    catch (error) {
+      throw error;
+    }
+   
+  }
+
+
+  async getProduct(product) {
+    try {
+      return await this.productModel.getBy(product);
+    }
+    catch (error) {
+      throw error;
+    }
   }
 
   async getPaginated(filter) {
+    try{
     filter.options.lean = true;
     const pagesData = await this.productModel.paginate(filter.query, filter.options);
 
     return pagesData;
+    }
+    catch(error){
+      throw error;
+    }
+
   }
 
-  async delete(searchParams) {
-    return await this.productModel.findOneAndDelete(searchParams);
+  async deleteProduct(pid) {
+    try {
+      return await this.productModel.findOneAndDelete(pid);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async update(searchParams, update, options = { new: true, lean: true }) {
-    return await this.productModel.findOneAndUpdate(searchParams, update, options);
+  async updateProduct(id, update, options = { new: true, lean: true }) {
+    try{
+    return await this.productModel.findOneAndUpdate(id, update, options);
+  }
+  catch(error){
+    throw error;
+  }
   }
 }

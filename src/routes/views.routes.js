@@ -13,5 +13,6 @@ viewsRouter.get("/", viewsController.renderHome);
 viewsRouter.get("/login", isAuthenticated, viewsController.renderLogin);
 viewsRouter.get("/signup", isAuthenticated, viewsController.renderSignup);
 viewsRouter.get("/logout", viewsController.renderLogout);
+viewsRouter.get("/tickets", viewsController.renderTickets);
 
 export default viewsRouter;

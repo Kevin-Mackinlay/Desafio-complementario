@@ -3,15 +3,25 @@ export default class UsersRepository {
     this.userModel = model;
   }
 
-  async create(user) {
+  async createUser(newUser) {
+    try{
     return await this.userModel.create(user);
+    }
+    catch(error){
+      throw error;
+    }
   }
 
-  async get(searchParams) {
-    return await this.userModel.findOne(searchParams).lean();
+  async getUser(data) {
+    try{
+    return await this.userModel.findOne(data).lean();
+    }
+    catch(error){
+      throw error;
+    }
   }
 
-  async update(searchParams, update, options = { new: true, lean: true }) {
-    return await this.userModel.findOneAndUpdate(searchParams, update, options);
+  async updateUser(id, update, options = { new: true, lean: true }) {
+    return await this.userModel.findOneAndUpdate(id, update, options);
   }
 }

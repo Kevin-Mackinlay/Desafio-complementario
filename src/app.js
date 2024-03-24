@@ -45,16 +45,6 @@ app.set("view engine", "handlebars");
 //middlewares para el manejo de datos
 app.use(cookieParser(COOCKIESECRET));
 
-//passport
-
-configPassport();
-app.use(passport.initialize());
-app.use(passport.session());
-
-//rutas
-app.use("/", IndexRouter);
-app.use(errorHandler);
-// app.use(addLogger);
 
 
 app.use(
@@ -71,6 +61,19 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+//passport
+
+configPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+//rutas
+app.use("/", IndexRouter);
+app.use(errorHandler);
+// app.use(addLogger);
+
+
 
 
 console.log(process.env.EMAIL, process.env.APP_PASSWORD);

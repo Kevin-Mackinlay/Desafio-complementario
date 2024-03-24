@@ -106,5 +106,13 @@ export default class ViewsController {
 			style: "css/chat.css",
 		});
 	};
+	
+	renderTickets = async (req, res) => {
+		res.render("tickets", {
+			title: "Tickets",
+			user: req.user,
+			style: "css/tickets.css",
+		});
+	};
 }
   

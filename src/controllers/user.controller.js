@@ -4,7 +4,7 @@ export default class UsersController {
   }
   getUsers = async () => {
     try {
-      console.log(error.message);
+     
       const userDb = await this.service.get();
       return userDb;
     } catch (error) {
