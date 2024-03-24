@@ -31,6 +31,6 @@ loginForm.addEventListener("submit", async (event) => {
   if (response.success == true) {
     window.location.href = response.redirectUrl;
   } else {
-    alert("Datos incorrectos");
+    alert(response.message);
   }
 });

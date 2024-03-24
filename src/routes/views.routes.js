@@ -2,7 +2,7 @@ import { Router } from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import ViewsController from "../controllers/views.controller.js";
 import services from "../services/factory.js";
-const viewsController = new ViewsController(services.chatService, services.productsService);
+const viewsController = new ViewsController(services.chatService, services.productService);
 const viewsRouter = Router();
 
 

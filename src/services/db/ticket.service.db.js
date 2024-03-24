@@ -1,10 +1,10 @@
 export default class TicketService {
-  constructor(service) {
-    this.ticketService = service;
+  constructor(repo) {
+    this.repo = repo;
   }
 
   create = async (ticket) => {
-    const newTicket = [{ id: this.tickets.length + 1, ticket }];
+    const newTicket = [{ id: this.repo.length + 1, ticket }];
 
     if (this.path.length > 1) {
       const ticketsList = await this.get();

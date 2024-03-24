@@ -1,13 +1,12 @@
-import MessageModel from "../../dao/models/message.model.js";
 
 export default class ChatService {
-  constructor(service) {
-    this.messageService = service;
+  constructor(repo) {
+    this.repo= repo;
   }
 
   async createMessage(message) {
     try {
-      const newMessage = await this.service.create(message);
+      const newMessage = await this.repo.create(message);
       return newMessage;
     } catch (error) {
       throw error;
@@ -16,7 +15,7 @@ export default class ChatService {
 
   async getMessages(message) {
     try {
-      const newMessage = await this.service.get(message);
+      const newMessage = await this.repo.get(message);
       return newMessage;
     } catch (error) {
       throw error;
