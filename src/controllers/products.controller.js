@@ -1,14 +1,18 @@
+import { model } from "mongoose";
 import ProductsService from "../services/db/products.service.db.js";
+// import { error } from "winston";
 
 const productsService = new ProductsService();
 
 export default class ProductsController {
   constructor() {
-    this.productsService = productsService
+    this.productsService = productsService;
   }
 
   getProducts = async (req, res) => {
+      console.log(error.message);
     try {
+    
       const { limit = 8, page = 1, sort, category } = req.query;
       const filter = {
         options: {
@@ -40,7 +44,7 @@ export default class ProductsController {
         data: pagesData,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -89,7 +93,7 @@ export default class ProductsController {
       }
 
       const products = await productsService.getProducts();
-   
+
       res.status(200).json({
         success: true,
         products,

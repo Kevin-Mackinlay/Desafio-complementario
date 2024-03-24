@@ -12,7 +12,7 @@ import dotenv from "dotenv";
 import { __dirname } from "../src/utils/utils.js";
 import configPassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errorHandler/errorHandling.js";
-import  {addLogger}  from "./utils/logger.js";
+import  addLogger  from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
 
@@ -54,7 +54,7 @@ app.use(passport.session());
 //rutas
 app.use("/", IndexRouter);
 app.use(errorHandler);
-app.use(addLogger);
+// app.use(addLogger);
 
 
 app.use(
