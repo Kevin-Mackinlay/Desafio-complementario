@@ -1,6 +1,9 @@
+import ProductModel from "../models/product.model.js";
+
+
 export default class ProductsRepository {
-  constructor(model) {
-    this.productModel = model;
+  constructor() {
+    this.productModel = ProductModel;
   }
 
   async createProduct(product) {

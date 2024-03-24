@@ -15,6 +15,7 @@ import errorHandler from "./middlewares/errorHandler/errorHandling.js";
 import  addLogger  from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
+import usersRouter from "./routes/users.routes.js";
 
 dotenv.config();
 
@@ -29,12 +30,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("src/public"));
 app.use(cors());
-app.use(compression({
-  brotli :{
-    enabled: true,
-    zlib:{}
-  }
-}))
+// app.use(compression()); //gzip
+app.use(compression(
+  { brotli: {enabled: true, zlib:{}},
+}
+));
 
 //configuración de handlebars
 app.engine("handlebars", handlebars.engine());
@@ -73,6 +73,8 @@ app.use("/", IndexRouter);
 app.use(errorHandler);
 // app.use(addLogger);
 
+app.use("/api/user", usersRouter);
+
 
 
 
@@ -101,6 +103,16 @@ app.get("/mail", async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 });
+
+app.get("/ejemploBrotli", (req, res) => {
+  let ejemploString = "Hola soy un string de ejemplo";
+
+  for (let i = 0; i < 1000; i++) {
+    ejemploString += "y sigue siendo pesado"
+  }
+  res.send(ejemploString);
+}
+);
 
 
 const server = app.listen(PORT, () => {

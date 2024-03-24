@@ -1,18 +1,12 @@
-import { model } from "mongoose";
-import ProductsService from "../services/db/products.service.db.js";
-// import { error } from "winston";
 
-const productsService = new ProductsService();
 
 export default class ProductsController {
   constructor(ProductsService) {
-    this.productsService = ProductsService;
+    this.productService = new ProductsService();
   }
 
   getProducts = async (req, res) => {
-      console.log(error.message);
     try {
-    
       const { limit = 8, page = 1, sort, category } = req.query;
       const filter = {
         options: {
@@ -28,7 +22,7 @@ export default class ProductsController {
       if (sort) {
         filter.options.sort = { price: sort };
       }
-      const pagesData = await productsService.getPaginatedProducts(filter);
+      const pagesData = await productsRepository.getPaginated(filter);
 
       if (pagesData.products.length < 1) {
         res.status(404).json({

@@ -1,11 +1,17 @@
+
+
+import CustomError from "../customErrors/customError.js";
+// import generateUserErrorInfo from "../customErrors/info.js";
+
+
 export default class UsersController {
-  constructor(service) {
-    this.usersService = service;
+  constructor(UsersService) {
+    this.usersService = UsersService;
   }
   getUsers = async () => {
     try {
      
-      const userDb = await this.service.get();
+      const userDb = await this.usersService.get();
       return userDb;
     } catch (error) {
       throw error;
@@ -15,22 +21,22 @@ export default class UsersController {
     try {
       const { first_name, last_name, email, password } = req.body;
       if (!first_name || !last_name || !email || !password) {
-        CustomError.createError({
-          name: "Error creando usuario",
-          cause: generateUserErrorInfo(req.body),
-          message: "Uno o más campos son inválidos",
-          code: EErrors.INVALID_TYPES_ERROR,
-        });
+        throw new CustomError(generateUserErrorInfo(newUser));
       }
-      const userDb = await this.service.create(newUser);
+      const userDb = await this.usersService.create(newUser);
       return userDb;
-    } catch (error) {
+    }
+    catch (error) {
       throw error;
     }
+
+   
+   
   };
+
   modifyUser = async (id, user) => {
     try {
-      const userDb = await this.service.modify(id, user);
+      const userDb = await this.usersService.modify(id, user);
       return userDb;
     } catch (error) {
       throw error;
@@ -39,7 +45,7 @@ export default class UsersController {
 
   getUserById = async (id) => {
     try {
-      const userDb = await this.service.getUserById(id);
+      const userDb = await this.usersService.getUserById(id);
       return userDb;
     } catch (error) {
       throw error;
@@ -47,7 +53,7 @@ export default class UsersController {
   };
   deleteUser = async (id) => {
     try {
-      const userDb = await this.service.delete(id);
+      const userDb = await this.usersService.delete(id);
       return userDb;
     } catch (error) {
       throw error;
