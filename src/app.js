@@ -16,6 +16,9 @@ import  addLogger  from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
 import usersRouter from "./routes/users.routes.js";
+import CustomError from "./customErrors/customError.js";
+import { generateUserErrorInfo } from "./customErrors/info.js";
+import typeErrors from "./customErrors/enums.js";
 
 dotenv.config();
 
@@ -114,9 +117,19 @@ app.get("/ejemploBrotli", (req, res) => {
 }
 );
 
-// app.get("*", (req, res) => {
-//   res.status(404).send("Error 404, página no encontrada");
-// });
+app.get("*", (req, res) => {
+CustomError.createError({
+  name: " Estas perdido",
+  cause: req.body,
+  message: "No encontramos la página que buscas",
+  code: typeErrors.ROUTING_ERROR,
+});
+
+}
+
+
+);
+
 
 
 const server = app.listen(PORT, () => {
