@@ -19,6 +19,7 @@ import usersRouter from "./routes/users.routes.js";
 import CustomError from "./customErrors/customError.js";
 import { generateUserErrorInfo } from "./customErrors/info.js";
 import typeErrors from "./customErrors/enums.js";
+import mockingRouter from "./routes/mocking.routes.js";
 
 dotenv.config();
 
