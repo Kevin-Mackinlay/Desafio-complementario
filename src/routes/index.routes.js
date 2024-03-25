@@ -6,6 +6,7 @@ import ChatRouter from "./chat.routes.js";
 import SessionsRouter from "../routes/session.routes.js";
 import TicketRouter from "../routes/ticket.routes.js";
 import indexRouter from "../routes/index.routes.js";
+// import mockingRouter from "../routes/mocking.routes.js";
 
 
 const IndexRouter = express.Router();
@@ -18,7 +19,7 @@ IndexRouter.use("/login", ViewsRouter);
 IndexRouter.use("/signup", ViewsRouter);
 IndexRouter.use("/api/sessions", SessionsRouter);
 IndexRouter.use("/api/tickets", TicketRouter);
-indexRouter.use("/api/mockingProducts", mockingRouter);
+// indexRouter.use("/api/mockingProducts", mockingRouter);
 
 
 export default IndexRouter;

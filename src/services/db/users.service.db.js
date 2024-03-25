@@ -12,6 +12,15 @@ export default class UserService {
     }
   }
 
+  async getUsers() {
+    try {
+      const users = await this.repo.get();
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getUserByEmail(email) {
     const user = await this.service.get({ email: email });
     return user;
@@ -22,12 +31,4 @@ export default class UserService {
     return user;
   }
 
-  async getOrCreateUser(userData) {
-    const user = await this.repo.get({ email: userData.email });
-    if (user) {
-      return user;
-    }
-    const newUser = await this.repo.create(userData);
-    return newUser;
-  }
 }

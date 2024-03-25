@@ -8,13 +8,25 @@ export default class UsersController {
   }
   getUsers = async (req, res) => {
    try {
-      const usersDb = await this.usersService.getUsers();
-      return usersDb;
+      const usersDb = await this.usersService.get();
+      const users = usersDb.map((user) => {
+        return {
+          id: user._id,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+        };
+      });
+      return users;
     }
     catch (error) {
+      console.log(error);
       throw error;
     }
+
   };
+
+
   createUser = async (newUser) => {
     try {
       const { first_name, last_name, email, password } = req.body;

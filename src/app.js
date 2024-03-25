@@ -12,14 +12,14 @@ import dotenv from "dotenv";
 import { __dirname } from "../src/utils/utils.js";
 import configPassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errorHandler/errorHandling.js";
-import  addLogger  from "./utils/logger.js";
+import addLogger from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
 import usersRouter from "./routes/users.routes.js";
 import CustomError from "./customErrors/customError.js";
 import { generateUserErrorInfo } from "./customErrors/info.js";
 import typeErrors from "./customErrors/enums.js";
-import mockingRouter from "./routes/mocking.routes.js";
+// import mockingRouter from "./routes/mocking.routes.js";
 
 dotenv.config();
 
@@ -28,28 +28,21 @@ const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
 const PORT = process.env.PORT || 8080;
 const COOCKIESECRET = process.env.CODERSECRET;
 
-
 //config de app
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("src/public"));
 app.use(cors());
 // app.use(compression()); //gzip
-app.use(compression(
-  { brotli: {enabled: true, zlib:{}},
-}
-));
+app.use(compression({ brotli: { enabled: true, zlib: {} } }));
 
 //configuración de handlebars
 app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");
 
-
 //middlewares para el manejo de datos
 app.use(cookieParser(COOCKIESECRET));
-
-
 
 app.use(
   session({
@@ -78,9 +71,6 @@ app.use(errorHandler);
 // app.use(addLogger);
 
 app.use("/api/user", usersRouter);
-
-
-
 
 console.log(process.env.EMAIL, process.env.APP_PASSWORD);
 const transporter = nodemailer.createTransport({
@@ -112,26 +102,19 @@ app.get("/ejemploBrotli", (req, res) => {
   let ejemploString = "Hola soy un string de ejemplo";
 
   for (let i = 0; i < 1000; i++) {
-    ejemploString += "y sigue siendo pesado"
+    ejemploString += "y sigue siendo pesado";
   }
   res.send(ejemploString);
-}
-);
-
-app.get("*", (req, res) => {
-CustomError.createError({
-  name: " Estas perdido",
-  cause: req.body,
-  message: "No encontramos la página que buscas",
-  code: typeErrors.ROUTING_ERROR,
 });
 
-}
-
-
-);
-
-
+// app.get("*", (req, res) => {
+//   CustomError.createError({
+//     name: " Estas perdido",
+//     cause: req.body,
+//     message: "No encontramos la página que buscas",
+//     code: typeErrors.ROUTING_ERROR,
+//   });
+// });
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
@@ -155,17 +138,14 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  req.logger.warn('!Alerta!')
-  res.send({message:'Prueba de logger'});
+app.get("/", (req, res) => {
+  req.logger.warn("!Alerta!");
+  res.send({ message: "Prueba de logger" });
+});
 
-})
-
-app.get('/', (req, res) => {
-  res.send({message:'errorHandler'});
-
-})
-
+app.get("/", (req, res) => {
+  res.send({ message: "errorHandler" });
+});
 
 startMongoConnection()
   .then(() => {
