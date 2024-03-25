@@ -20,7 +20,7 @@ export default class ProductsController {
       if (sort) {
         filter.options.sort = { price: sort };
       }
-      const pagesData = await this.productsService.getPaginated(filter);
+      const pagesData = await this.productsService.getPaginatedProducts(filter);
 
       if (pagesData.products.length < 1) {
         res.status(404).json({
