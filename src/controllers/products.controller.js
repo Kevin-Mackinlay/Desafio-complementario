@@ -1,8 +1,6 @@
-
-
 export default class ProductsController {
   constructor(ProductsService) {
-    this.productService = new ProductsService();
+    this.productsService =  ProductsService;
   }
 
   getProducts = async (req, res) => {
@@ -22,7 +20,7 @@ export default class ProductsController {
       if (sort) {
         filter.options.sort = { price: sort };
       }
-      const pagesData = await productsRepository.getPaginated(filter);
+      const pagesData = await this.productsService.getPaginated(filter);
 
       if (pagesData.products.length < 1) {
         res.status(404).json({
@@ -38,7 +36,7 @@ export default class ProductsController {
         data: pagesData,
       });
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -50,7 +48,7 @@ export default class ProductsController {
     try {
       const { pid } = req.params;
 
-      const product = await productsService.getProductById(pid);
+      const product = await this.productsService.getProductById(pid);
 
       if (!product) {
         res.status(404).json({
@@ -76,7 +74,7 @@ export default class ProductsController {
   createProduct = async (req, res) => {
     try {
       const { product } = req.body;
-      const newProduct = await productsService.createProduct(product);
+      const newProduct = await this.productsService.createProduct(product);
 
       if (!newProduct) {
         res.status(400).json({
@@ -86,7 +84,7 @@ export default class ProductsController {
         return;
       }
 
-      const products = await productsService.getProducts();
+      const products = await this.productsService.getProducts();
 
       res.status(200).json({
         success: true,
@@ -106,7 +104,7 @@ export default class ProductsController {
       const { pid } = req.params;
       const { product } = req.body;
 
-      const updatedProduct = await productsService.updateProduct(pid, product);
+      const updatedProduct = await this.productsService.updateProduct(pid, product);
 
       if (!updatedProduct) {
         res.status(400).json({
@@ -135,7 +133,7 @@ export default class ProductsController {
 
       await productsService.deleteProductById(pid);
 
-      const products = await productsService.getProducts();
+      const products = await this.productsService.getProducts();
 
       res.status(200).json({
         success: true,

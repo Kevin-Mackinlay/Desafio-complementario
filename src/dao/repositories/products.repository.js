@@ -2,7 +2,7 @@ import ProductModel from "../models/product.model.js";
 
 
 export default class ProductsRepository {
-  constructor() {
+  constructor(ProductModel) {
     this.productModel = ProductModel;
   }
 
@@ -18,34 +18,28 @@ export default class ProductsRepository {
   async getProducts(data) {
     try {
       return await this.productModel.get(data);
-    }
-    catch (error) {
+    } catch (error) {
       throw error;
     }
-   
   }
-
 
   async getProduct(product) {
     try {
       return await this.productModel.getBy(product);
-    }
-    catch (error) {
+    } catch (error) {
       throw error;
     }
   }
 
   async getPaginated(filter) {
-    try{
-    filter.options.lean = true;
-    const pagesData = await this.productModel.paginate(filter.query, filter.options);
+    try {
+      filter.options.lean = true;
+      const pagesData = await this.productModel.paginate(filter.query, filter.options);
 
-    return pagesData;
-    }
-    catch(error){
+      return pagesData;
+    } catch (error) {
       throw error;
     }
-
   }
 
   async deleteProduct(pid) {
@@ -57,11 +51,10 @@ export default class ProductsRepository {
   }
 
   async updateProduct(id, update, options = { new: true, lean: true }) {
-    try{
-    return await this.productModel.findOneAndUpdate(id, update, options);
-  }
-  catch(error){
-    throw error;
-  }
+    try {
+      return await this.productModel.findOneAndUpdate(id, update, options);
+    } catch (error) {
+      throw error;
+    }
   }
 }
