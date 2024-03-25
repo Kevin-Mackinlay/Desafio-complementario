@@ -1,15 +1,8 @@
 import { Router } from "express";
 
+const mockingRouter = Router();
 
-const router = Router();
-
-router.use(
-  compression({
-    brotli: { enabled: true, zlib: {} },
-  })
-);
-
-router.get("/mockingProducts", (req, res) => {
+mockingRouter.get("/mockingproducts", (req, res) => {
   let products = [];
   let product = {
     id: "1",
@@ -25,4 +18,4 @@ router.get("/mockingProducts", (req, res) => {
   res.send({ status: "success", totalProducts: products.length, products: products });
 });
 
-export default Router;
+export default mockingRouter;

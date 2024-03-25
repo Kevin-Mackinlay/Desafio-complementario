@@ -19,7 +19,8 @@ import usersRouter from "./routes/users.routes.js";
 import CustomError from "./customErrors/customError.js";
 import { generateUserErrorInfo } from "./customErrors/info.js";
 import typeErrors from "./customErrors/enums.js";
-// import mockingRouter from "./routes/mocking.routes.js";
+import mockingRouter from "./routes/mocking.routes.js";
+import cluster from "cluster";
 
 dotenv.config();
 
@@ -69,8 +70,11 @@ app.use(passport.session());
 app.use("/", IndexRouter);
 app.use(errorHandler);
 // app.use(addLogger);
+app.use("/api/mockingproducts", mockingRouter);
 
-app.use("/api/user", usersRouter);
+
+console.log(cluster.isPrimary);
+
 
 console.log(process.env.EMAIL, process.env.APP_PASSWORD);
 const transporter = nodemailer.createTransport({
