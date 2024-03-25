@@ -1,6 +1,6 @@
 export default class CartsController {
-  constructor(service) {
-    this.cartsService = service;
+  constructor(CartsService) {
+    this.cartsService = CartsService;
   }
   createCart = async (req, res) => {
     try {
@@ -27,6 +27,7 @@ export default class CartsController {
         data: carts,
       });
     } catch (error) {
+     
       res.status(500).json({
         success: false,
         message: error.message,
@@ -40,6 +41,7 @@ export default class CartsController {
       const cart = await this.cartsService.getCartById(cid);
 
       if (!cart) {
+       
         res.status(404).json({
           success: false,
           message: "Cart not found",
@@ -52,6 +54,7 @@ export default class CartsController {
         data: cart,
       });
     } catch (error) {
+     
       res.status(500).json({
         success: false,
         message: error.message,

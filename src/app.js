@@ -114,6 +114,10 @@ app.get("/ejemploBrotli", (req, res) => {
 }
 );
 
+// app.get("*", (req, res) => {
+//   res.status(404).send("Error 404, página no encontrada");
+// });
+
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

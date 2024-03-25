@@ -1,6 +1,3 @@
-import ProductModel from "../models/product.model.js";
-
-
 export default class ProductsRepository {
   constructor(ProductModel) {
     this.productModel = ProductModel;

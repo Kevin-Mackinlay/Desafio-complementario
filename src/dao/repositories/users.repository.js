@@ -1,9 +1,9 @@
 export default class UsersRepository {
-  constructor(model) {
-    this.userModel = model;
+  constructor(UserModel) {
+    this.userModel = UserModel;
   }
 
-  async createUser(newUser) {
+  async createUser(user) {
     try{
     return await this.userModel.create(user);
     }

@@ -7,7 +7,7 @@ export default class CartsService {
   async createCart() {
     try {
       const products = [];
-      const cart = await this.cartRepo.create({ products });
+      const cart = await this.cartRepo.create( {products} );
 
       return cart;
     } catch (error) {
@@ -20,6 +20,7 @@ export default class CartsService {
       const carts = await this.cartRepo.get();
       return carts;
     } catch (error) {
+     
       throw error;
     }
   }

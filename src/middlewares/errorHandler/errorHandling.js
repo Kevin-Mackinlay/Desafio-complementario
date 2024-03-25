@@ -13,7 +13,7 @@ export default (error, req, res,next) => {
         return res.send({ status: "Error", error: error.name, message: error.message });
 
       default:
-        return res.send({ status: "Error", error: "Unhandbled error" });
+        return res.send({ status: "Error", error: "Unhandable error" });
     }
 }
 
