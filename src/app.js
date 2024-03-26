@@ -12,7 +12,7 @@ import dotenv from "dotenv";
 import { __dirname } from "../src/utils/utils.js";
 import configPassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errorHandler/errorHandling.js";
-import addLogger from "./utils/logger.js";
+import {addLoggers} from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
 import usersRouter from "./routes/users.routes.js";
@@ -21,6 +21,7 @@ import { generateUserErrorInfo } from "./customErrors/info.js";
 import typeErrors from "./customErrors/enums.js";
 import mockingRouter from "./routes/mocking.routes.js";
 import cluster from "cluster";
+import { cpus } from "os";
 
 dotenv.config();
 
@@ -28,6 +29,10 @@ const app = express();
 const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/";
 const PORT = process.env.PORT || 8080;
 const COOCKIESECRET = process.env.CODERSECRET;
+const numeroDeCPUs = cpus().length;
+console.log(numeroDeCPUs);
+
+
 
 //config de app
 app.use(express.json());
@@ -37,13 +42,22 @@ app.use(cors());
 // app.use(compression()); //gzip
 app.use(compression({ brotli: { enabled: true, zlib: {} } }));
 
+
+
+
+
 //configuración de handlebars
 app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");
 
+
+
+
+
 //middlewares para el manejo de datos
 app.use(cookieParser(COOCKIESECRET));
+app.use(addLoggers);
 
 app.use(
   session({
@@ -60,20 +74,32 @@ app.use(
   })
 );
 
-//passport
 
+
+
+//passport
 configPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 //rutas
 app.use("/", IndexRouter);
-app.use(errorHandler);
-// app.use(addLogger);
+// app.use(errorHandler);
+
 app.use("/api/mockingproducts", mockingRouter);
 
 
-console.log(cluster.isPrimary);
+// if (cluster.isPrimary) {
+// console.log(
+//   `Primary ${process.pid} is running`
+// );
+// cluster.fork();
+// cluster.fork();
+// } else {
+//   console.log(`proceso hijo ${process.pid} corriendo`);
+// }
+
 
 
 console.log(process.env.EMAIL, process.env.APP_PASSWORD);
@@ -102,6 +128,8 @@ app.get("/mail", async (req, res) => {
   }
 });
 
+
+
 app.get("/ejemploBrotli", (req, res) => {
   let ejemploString = "Hola soy un string de ejemplo";
 
@@ -111,6 +139,7 @@ app.get("/ejemploBrotli", (req, res) => {
   res.send(ejemploString);
 });
 
+
 // app.get("*", (req, res) => {
 //   CustomError.createError({
 //     name: " Estas perdido",
@@ -119,6 +148,7 @@ app.get("/ejemploBrotli", (req, res) => {
 //     code: typeErrors.ROUTING_ERROR,
 //   });
 // });
+
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
@@ -131,6 +161,9 @@ const io = new Server(server);
 io.on("connection", (socket) => {
   console.log("Se conecto un nuevo ususario");
 });
+
+
+
 
 app.get("/", (req, res) => {
   if (req.session.counter) {
@@ -147,9 +180,9 @@ app.get("/", (req, res) => {
   res.send({ message: "Prueba de logger" });
 });
 
-app.get("/", (req, res) => {
-  res.send({ message: "errorHandler" });
-});
+// app.get("/", (req, res) => {
+//   res.send({ message: "errorHandler" });
+// });
 
 startMongoConnection()
   .then(() => {

@@ -11,9 +11,11 @@ const logger = winston.createLogger({
 
 
 export const addLoggers = (req, res, next) => {
+  const textDate = new Date().toISOString();
   req.logger = logger;
-  req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString}`);
+  req.logger.http(`${req.method} en ${req.url} - ${textDate}`);
   next();
 };
+
 
 export default logger;
