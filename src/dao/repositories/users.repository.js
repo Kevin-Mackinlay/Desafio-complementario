@@ -22,6 +22,20 @@ export default class UsersRepository {
   }
 
   async updateUser(id, update, options = { new: true, lean: true }) {
-    return await this.userModel.findOneAndUpdate(id, update, options);
+    try{
+    return await this.userModel.update(id, update);
+  }
+    catch(error){
+      throw error;
+    }
+  }
+
+  async deleteUser(id) {
+    try{
+    return await this.userModel.findByIdAndDelete(id);
+}
+    catch(error){
+      throw error;
+    }
   }
 }

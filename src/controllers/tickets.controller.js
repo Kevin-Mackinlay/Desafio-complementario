@@ -31,7 +31,7 @@ export default class TicketsController {
     getTicketById = async (res, req) => {
         try {
             const { tid } = req.params;
-            const ticket = await this.ticketsService.getTicketById(tid);
+            const ticket = await this.ticketsService.getById(tid);
             if (!ticket) {
                 return res.status(404).json({ success: false, error: "Ticket not found" });
             }
@@ -42,19 +42,6 @@ export default class TicketsController {
         }
     }
 
-    updateTicket = async (res, req) => {
-        try {
-            const { tid } = req.params;
-            const updatedTicket = await this.ticketsService.updateTicket(tid, req.body);
-            if (!updatedTicket) {
-                return res.status(404).json({ success: false, error: "Ticket not found" });
-            }
-            return res.status(200).json({ success: true, data: updatedTicket });
-        } catch (error) {
-            console.log(error.message);
-            return res.status(500).json({ success: false, error: error.message });
-        }
-    }
 
     deleteTicket = async (res, req) => {
         try {

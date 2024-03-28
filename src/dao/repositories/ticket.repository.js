@@ -1,3 +1,5 @@
+// const {logger} = require('../../utils/logger');
+
 export default class TicketService {
     constructor(repo) {
         this.repo = repo;

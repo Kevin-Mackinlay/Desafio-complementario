@@ -1,18 +1,19 @@
 import express from "express";
 import services from "../services/factory.js";
 import CartController from "../controllers/carts.controller.js";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 const cartsRouter = express.Router();
-const cartsController = new CartController(services.cartService);
+const cartsController = new CartController(services.cartsService);
 
 
-cartsRouter.post("/", cartsController.createCart);
-cartsRouter.get("/", cartsController.getCarts);
-cartsRouter.get("/:cid", cartsController.getCart);
-cartsRouter.post("/:cid/product/:pid", cartsController.addProductToCart);
-cartsRouter.put("/:cid/product/:pid", cartsController.updateProductQuantity);
-cartsRouter.delete("/:cid/product/:pid", cartsController.removeProductFromCart);
-cartsRouter.delete("/:cid", cartsController.deleteCart);
+cartsRouter.post("/", isAuthenticated(["admin"]), cartsController.createCart);
+cartsRouter.get("/", isAuthenticated(["admin"]), cartsController.getCarts);
+cartsRouter.get("/:cid", isAuthenticated(["admin"]), cartsController.getCart);
+cartsRouter.post("/:cid/product/:pid", isAuthenticated(["admin"]), cartsController.addProductToCart);
+cartsRouter.put("/:cid/product/:pid", isAuthenticated(["admin"]), cartsController.updateProductQuantity);
+cartsRouter.delete("/:cid/product/:pid", isAuthenticated(["admin"]), cartsController.removeProductFromCart);
+cartsRouter.delete("/:cid", isAuthenticated(["admin"]), cartsController.deleteCart);
 
 export default cartsRouter;
 

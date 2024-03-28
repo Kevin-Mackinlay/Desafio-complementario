@@ -1,4 +1,24 @@
 export default class SessionsController {
+
+  signup = async (req, res) => {
+    try{
+      const {firstName, lastName, userName, email, birthDate, password} = req.body;
+      if(!firstName || !lastName || !userName || !email || !birthDate || !password){
+        res.status(400).json({message: "Faltan datos obligatorios"});
+      }
+      if(await this.userService.getUserByEmail(email)){
+        res.status(400).json({message: "El usuario ya existe"});
+      }
+      const newUser = await this.userService.createUser(req.body);
+      res.status(201).json({message: "Usuario creado", user: newUser});
+
+    }
+    catch(error){
+      res.status(500).json({message: error.message});
+    }
+  }
+
+
   login = async (req, res) => {
     if (!req.loginSuccess) {
       return res.status(401).json({ success: false, message: "Invalid credentials" });
@@ -7,13 +27,6 @@ export default class SessionsController {
     res.status(200).json({ success: true, message: "User logged in", redirectUrl: "/products" });
   };
 
-  signup = async (req, res) => {
-    if (!req.signupSuccess) {
-      return res.status(400).json({ success: false, text: "User already exists" });
-    }
-
-    res.status(201).json({ success: true, message: "User created", redirectUrl: "/login" });
-  };
 
   logout = async (req, res) => {
     try {
@@ -40,6 +53,14 @@ export default class SessionsController {
         user: req.user,
       };
       res.status(200).json(session);
+    }
+  };
+
+  private = async (req, res) => {
+    try{
+    res.status(200).json({ message: "Ruta privada" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   };
 }
