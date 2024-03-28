@@ -12,7 +12,7 @@ export default class UserService {
     }
   }
 
-  async getUsers() {
+  async getAllUsers() {
     try {
       const users = await this.repo.get();
       return users;
@@ -29,6 +29,16 @@ export default class UserService {
   async getUserById(id) {
     const user = await this.repo.get({ _id: uid });
     return user;
+  }
+
+  async modifyUser(id, user) {
+    const userDb = await this.repo.modify(id, user);
+    return userDb;
+  }
+
+  async deleteUser(id) {
+    const userDb = await this.repo.delete(id);
+    return userDb;
   }
 
 }
