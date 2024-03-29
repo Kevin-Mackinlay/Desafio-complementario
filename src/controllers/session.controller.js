@@ -43,18 +43,21 @@ export default class SessionsController {
       res.status(500).json({ success: false, message: "Internal server error" });
     }
   };
-
-  getCurrentSession = async (req, res) => {
-    if (!req.isAuthenticated()) {
-      res.status(401).json({ message: "No hay una sesión activa" });
-    } else {
-      const session = {
-        message: "Sesión activa",
-        user: req.user,
-      };
-      res.status(200).json(session);
+  
+    infoCurrent = async(req,res) => {
+        try {
+            const {email} = req.user
+            const contact = await contactService.getContact({email})
+    
+            contact 
+            ? res.status(200).send({status:"success", toInfo: contact}) 
+            : res.status(404).send({status:"Error", message:"Your information does not exist"})
+        } catch (error) {
+            logger.error(error)
+        }
     }
-  };
+
+  
 
   private = async (req, res) => {
     try{
