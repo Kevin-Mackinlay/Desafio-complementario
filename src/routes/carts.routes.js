@@ -2,18 +2,19 @@ import express from "express";
 import services from "../services/factory.js";
 import CartController from "../controllers/carts.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
+import authorization from "../config/authorization.js";
 
 const cartsRouter = express.Router();
 const cartsController = new CartController(services.cartsService);
 
 
-cartsRouter.post("/", isAuthenticated(["admin"]), cartsController.createCart);
-cartsRouter.get("/", isAuthenticated(["admin"]), cartsController.getCarts);
-cartsRouter.get("/:cid", isAuthenticated(["admin"]), cartsController.getCart);
-cartsRouter.post("/:cid/product/:pid", isAuthenticated(["admin"]), cartsController.addProductToCart);
-cartsRouter.put("/:cid/product/:pid", isAuthenticated(["admin"]), cartsController.updateProductQuantity);
-cartsRouter.delete("/:cid/product/:pid", isAuthenticated(["admin"]), cartsController.removeProductFromCart);
-cartsRouter.delete("/:cid", isAuthenticated(["admin"]), cartsController.deleteCart);
+cartsRouter.post("/", authorization(["admin"]), cartsController.createCart);
+cartsRouter.get("/", authorization(["admin"]), cartsController.getCarts);
+cartsRouter.get("/:cid", authorization(["admin"]), cartsController.getCart);
+cartsRouter.post("/:cid/product/:pid", authorization(["admin"]), cartsController.addProductToCart);
+cartsRouter.put("/:cid/product/:pid", authorization(["admin"]), cartsController.updateProductQuantity);
+cartsRouter.delete("/:cid/product/:pid", authorization(["admin"]), cartsController.removeProductFromCart);
+cartsRouter.delete("/:cid", authorization(["admin"]), cartsController.deleteCart);
 
 export default cartsRouter;
 

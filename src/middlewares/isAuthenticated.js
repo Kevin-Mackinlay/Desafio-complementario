@@ -1,12 +1,18 @@
-const isAuthenticated = (roles) => {
-  return async (req, res, next) => {
-    const getRole = roles.find(role => role === req.user.role)
-    if(!req.user) return res.status(401).json({message: 'Unauthorized'})
-    if(req.user.role !== getRole) return res.status(403).json({
-      status:"Error",
-      message: `You don't have permission because you are ${req.user.role} and you need to be ${roles}`})
-    next()
-  }
+// export default function (req, res, next) {
+//   if (req.isAuthenticated()) {
+//    res.redirect("/products");
+//   } else {
+//     next();
+//   }
+// }
+
+  
+function isAuthenticated (req, res, next) {
+    console.log(req.session);
+    if(req.session?.user?.role === "user" || req.session?.user?.role === "admin"){
+        return next() 
+    }
+    return res.render("erro401", {title: "401", style:"error401.css"})
 }
 
 export default isAuthenticated;
