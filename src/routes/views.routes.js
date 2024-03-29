@@ -10,8 +10,8 @@ viewsRouter.get("/products", viewsController.renderProducts);
 viewsRouter.get("/realtimeproducts", viewsController.renderRealTime);
 viewsRouter.get("/chat", viewsController.renderChat);
 viewsRouter.get("/", viewsController.renderHome);
-viewsRouter.get("/login", isAuthenticated, viewsController.renderLogin);
-viewsRouter.get("/signup", isAuthenticated, viewsController.renderSignup);
+viewsRouter.get("/login",  viewsController.renderLogin);
+viewsRouter.get("/signup",  viewsController.renderSignup);
 viewsRouter.get("/logout", viewsController.renderLogout);
 viewsRouter.get("/tickets", viewsController.renderTickets);
 

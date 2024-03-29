@@ -1,7 +1,6 @@
 import express from "express";
 import services from "../services/factory.js";
 import UsersController from "../controllers/user.controller.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
 import authorization from "../config/authorization.js";
 
 const usersRouter = express.Router();

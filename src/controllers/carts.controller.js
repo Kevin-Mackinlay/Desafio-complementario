@@ -21,13 +21,12 @@ export default class CartsController {
   getCarts = async (req, res) => {
     try {
       const carts = await this.cartsService.getCarts();
-
+console.log(error);
       res.status(200).json({
         success: true,
         data: carts,
       });
     } catch (error) {
-     
       res.status(500).json({
         success: false,
         message: error.message,
@@ -35,13 +34,12 @@ export default class CartsController {
     }
   };
 
-  getCart = async (req, res) => {
+  getCartById = async (req, res) => {
     try {
       const { cid } = req.params;
       const cart = await this.cartsService.getCartById(cid);
 
       if (!cart) {
-       
         res.status(404).json({
           success: false,
           message: "Cart not found",
@@ -54,7 +52,6 @@ export default class CartsController {
         data: cart,
       });
     } catch (error) {
-     
       res.status(500).json({
         success: false,
         message: error.message,
@@ -62,7 +59,7 @@ export default class CartsController {
     }
   };
 
-  addProductToCart = async (req, res) => {
+  addAndUpdate = async (req, res) => {
     try {
       const { cid, pid } = req.params;
 
@@ -87,21 +84,21 @@ export default class CartsController {
     }
   };
 
-  updateProductQuantity = async (req, res) => {
+ deleteOne = async (req, res) => {
     try {
-      const { quantity } = req.body;
       const { cid, pid } = req.params;
+      const cart = await cartsService.deleteProduct(cid, pid);
 
-      const cart = await cartsService.updateProductQuantity(pid, cid, quantity);
       if (!cart) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Cart not found",
         });
+        return;
       }
       res.status(200).json({
         success: true,
-        message: `Product ${pid}'s quantity was modified ${cid}`,
+        message: `Product ${pid} removed from cart ${cid}`,
         cart,
       });
     } catch (error) {
@@ -112,80 +109,66 @@ export default class CartsController {
     }
   };
 
-  removeProductFromCart = async (req, res) => {
-    try {
-      const { cid, pid } = req.params;
-
-      const cart = await cartsService.removeProductFromCart(cid, pid);
-
-      if (!cart) {
-        return res.status(404).json({
-          success: false,
-          message: "Cart not found",
-        });
-      }
-
-      return res.status(200).json({
-        success: true,
-        message: `Product ${pid} deleted from cart ${cid}`,
-        cart,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  };
-
-  deleteCart = async (req, res) => {
-    const { cid } = req.params;
-
-    try {
-      await cartsService.emptyCart(cid);
-
-      res.status(200).json({
-        success: true,
-        message: `Cart ${cid} was emptied`,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  };
-
-  cartPurchase = async (req, res) => {
+deleteAll = async (req, res) => {
     try {
       const { cid } = req.params;
-      const cart = await cartsService.getCartById(cid);
-      const insufficientStock = [];
-      const buyProducts = [];
+      const cart = await cartsService.deleteAllProd(cid);
 
-      if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
-      cart.products.forEach(async (item) => {
-        const product = item.product;
-        const quantity = item.quantity;
-        const stock = product.stock;
-
-        quantity > stock ? insufficientStock.push(product) : buyProducts.push({ product, quantity }) && (await productsService.updateProduct(product, { stock: stock - quantity })) && (await cartsService.removeProductFromCart(cart, product));
-      });
-
-      const totalAmount = buyProducts.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
-      const totalPrice = buyProducts.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toFixed(3);
-
-      if (!buyProducts.length)
-        return res.status(400).json({
-          status: "Error",
-          message: "No products were purchased",
+      if (!cart) {
+        res.status(404).json({
+          success: false,
+          message: "Cart not found",
         });
+        return;
+      }
+      res.status(200).json({
+        success: true,
+        message: `All products removed from cart ${cid}`,
+        cart,
+      });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
+
   };
+
 }
+
+  
+
+//   cartPurchase = async (req, res) => {
+//     try {
+//       const { cid } = req.params;
+//       const cart = await cartsService.getCartById(cid);
+//       const insufficientStock = [];
+//       const buyProducts = [];
+
+//       if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
+//       cart.products.forEach(async (item) => {
+//         const product = item.product;
+//         const quantity = item.quantity;
+//         const stock = product.stock;
+
+//         quantity > stock ? insufficientStock.push(product) : buyProducts.push({ product, quantity }) && (await productsService.updateProduct(product, { stock: stock - quantity })) && (await cartsService.removeProductFromCart(cart, product));
+//       });
+
+//       const totalAmount = buyProducts.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+//       const totalPrice = buyProducts.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toFixed(3);
+
+//       if (!buyProducts.length)
+//         return res.status(400).json({
+//           status: "Error",
+//           message: "No products were purchased",
+//         });
+//     } catch (error) {
+//       console.log(error);
+//       res.status(500).json({ success: false, message: error.message });
+//     }
+//   };
+// }
 
 //   if(buyProducts.length > 0){
 //               const ticket = await ticketService.createTicket({

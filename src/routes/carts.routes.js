@@ -1,7 +1,6 @@
 import express from "express";
 import services from "../services/factory.js";
 import CartController from "../controllers/carts.controller.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
 import authorization from "../config/authorization.js";
 
 const cartsRouter = express.Router();
@@ -10,11 +9,10 @@ const cartsController = new CartController(services.cartsService);
 
 cartsRouter.post("/", authorization(["admin"]), cartsController.createCart);
 cartsRouter.get("/", authorization(["admin"]), cartsController.getCarts);
-cartsRouter.get("/:cid", authorization(["admin"]), cartsController.getCart);
-cartsRouter.post("/:cid/product/:pid", authorization(["admin"]), cartsController.addProductToCart);
-cartsRouter.put("/:cid/product/:pid", authorization(["admin"]), cartsController.updateProductQuantity);
-cartsRouter.delete("/:cid/product/:pid", authorization(["admin"]), cartsController.removeProductFromCart);
-cartsRouter.delete("/:cid", authorization(["admin"]), cartsController.deleteCart);
+cartsRouter.get("/:cid", authorization(["admin"]), cartsController.getCartById);;
+cartsRouter.post("/:cid/product/:pid", authorization(["admin"]), cartsController.addAndUpdate);
+cartsRouter.delete("/:cid/product/:pid", authorization(["admin"]), cartsController.deleteOne);
+cartsRouter.delete("/:cid", authorization(["admin"]), cartsController.deleteAll);
 
 export default cartsRouter;
 
