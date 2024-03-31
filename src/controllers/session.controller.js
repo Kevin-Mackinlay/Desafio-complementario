@@ -1,10 +1,15 @@
+import { logger } from "../utils/logger";
+import { transport } from "winston";
+
+
+
 export default class SessionsController {
 
   signup = async (req, res) => {
     try{
       const {firstName, lastName, userName, email, birthDate, password} = req.body;
       if(!firstName || !lastName || !userName || !email || !birthDate || !password){
-        res.status(400).json({message: "Faltan datos obligatorios"});
+        res.status(400).send({ status: "error", message: "Fill in the missing fields" });
       }
       if(await this.userService.getUserByEmail(email)){
         res.status(400).json({message: "El usuario ya existe"});
