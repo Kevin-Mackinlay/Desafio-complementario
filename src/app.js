@@ -10,9 +10,10 @@ import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils/utils.js";
+import initPassport from "./passportJwt/passportJwt.js";
 import configPassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errorHandler/errorHandling.js";
-import { addLogger } from "./utils/logger.js";
+import { addLogger , logger} from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
 import usersRouter from "./routes/users.routes.js";
@@ -47,7 +48,7 @@ app.set("view engine", "handlebars");
 
 //middlewares para el manejo de datos
 app.use(cookieParser(COOCKIESECRET));
-app.use(addLogger);
+app.use(addLogger, logger);
 
 app.use(
   session({
@@ -85,31 +86,31 @@ app.use("/api/mockingproducts", mockingRouter);
 //   console.log(`proceso hijo ${process.pid} corriendo`);
 // }
 
-console.log(process.env.EMAIL, process.env.APP_PASSWORD);
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  port: 587,
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.APP_PASSWORD,
-  },
-});
+// console.log(process.env.EMAIL, process.env.APP_PASSWORD);
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   port: 587,
+//   auth: {
+//     user: process.env.EMAIL,
+//     pass: process.env.APP_PASSWORD,
+//   },
+// });
 
-app.get("/mail", async (req, res) => {
-  try {
-    let result = await transporter.sendMail({
-      from: `Cliente de prueba <${process.env.EMAIL}>`,
-      to: "dianaaranda1588@gmail.com",
-      subject: "Prueba de envio de mail",
-      text: "Este es un mail de prueba",
-      html: "<h1 style=' color: red' >Hola soy yo, te estoy enviando un mail desde la aplicacion que estoy construyendo/h1>",
-    });
-    res.json({ status: "success", result });
-  } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ status: "error", error: error.message });
-  }
-});
+// app.get("/mail", async (req, res) => {
+//   try {
+//     let result = await transporter.sendMail({
+//       from: `Cliente de prueba <${process.env.EMAIL}>`,
+//       to: "dianaaranda1588@gmail.com",
+//       subject: "Prueba de envio de mail",
+//       text: "Este es un mail de prueba",
+//       html: "<h1 style=' color: red' >Hola soy yo, te estoy enviando un mail desde la aplicacion que estoy construyendo/h1>",
+//     });
+//     res.json({ status: "success", result });
+//   } catch (error) {
+//     console.error("Error sending email:", error);
+//     res.status(500).json({ status: "error", error: error.message });
+//   }
+// });
 
 app.get("/ejemploBrotli", (req, res) => {
   let ejemploString = "Hola soy un string de ejemplo";
@@ -157,20 +158,20 @@ io.on("connection", (socket) => {
   console.log("Se conecto un nuevo ususario");
 });
 
-app.get("/", (req, res) => {
-  if (req.session.counter) {
-    req.session.counter++;
-    res.send(`Counter: ${req.session.counter}`);
-  } else {
-    req.session.counter = 1;
-    res.send("Bienvenido");
-  }
-});
+// app.get("/", (req, res) => {
+//   if (req.session.counter) {
+//     req.session.counter++;
+//     res.send(`Counter: ${req.session.counter}`);
+//   } else {
+//     req.session.counter = 1;
+//     res.send("Bienvenido");
+//   }
+// });
 
-app.get("/", (req, res) => {
-  req.logger.warn("!Alerta!");
-  res.send({ message: "Prueba de logger" });
-});
+// app.get("/", (req, res) => {
+//   req.logger.warn("!Alerta!");
+//   res.send({ message: "Prueba de logger" });
+// });
 
 // app.get("/", (req, res) => {
 //   res.send({ message: "errorHandler" });
