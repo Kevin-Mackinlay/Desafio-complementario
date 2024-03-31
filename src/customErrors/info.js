@@ -8,21 +8,24 @@ export const generateUserErrorInfo = (user) => {
 };
 
 
-export const generateInvalidProductErrorInfo = (product) => {
-  return `One or more fields are missing or invalid in the product.
-    List of required properties:
-    * name: needs to be a string, received ${product.name}
-    * price: needs to be a number, received ${product.price}
-    * stock: needs to be a number, received ${product.stock}`;
+export const generateInfoProductError = (product) => {
+    return `One or more properties were incomplete or invalid
+    List of required product properties
+    * title        : Need to be string, received: ${product.title}
+    * description  : Need to be string, received: ${product.description}
+    * description  : Need to be number, received: ${product.price}
+    * thumbnails   : Need to be string, received: ${product.thumbnails}
+    * stock        : Need to be number, received: ${product.stock}
+    * code         : Need to be number, received: ${product.code}`;
 };
 
 //propertie deberia de contener un array de propiedades que no son validas y su tipo de dato
-export const genericInvalidErrorInfo = (message, properties) => {
-  let temporalMessage = message;
-  let listOfProperties = "";
-  properties.forEach((property) => {
-    listOfProperties += `* ${property.name}: needs to be a ${property.type}, received ${property.value}\n`;
-  });
-  return `${temporalMessage}
-    ${listOfProperties}`;
-};
+// export const genericInvalidErrorInfo = (message, properties) => {
+//   let temporalMessage = message;
+//   let listOfProperties = "";
+//   properties.forEach((property) => {
+//     listOfProperties += `* ${property.name}: needs to be a ${property.type}, received ${property.value}\n`;
+//   });
+//   return `${temporalMessage}
+//     ${listOfProperties}`;
+// };

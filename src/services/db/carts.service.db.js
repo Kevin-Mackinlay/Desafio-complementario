@@ -65,12 +65,4 @@ export default class CartsService {
     }
   }
 
-  async delete(id){
-    try{
-      return await cartModel.deleteOne({ _id: id });
-    }
-    catch(error){
-      throw error;
-    }
-  }
 }

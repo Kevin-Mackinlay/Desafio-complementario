@@ -1,6 +1,11 @@
+import { logger } from "../utils/logger.js";
+import CustomError from "../customErrors/customError.js";
+import { generateInfoProductError } from "../customErrors/info.js";
+import {typeErrors} from "../customErrors/enums.js";
+
 export default class ProductsController {
   constructor(ProductsService) {
-    this.productsService =  ProductsService;
+    this.productsService = ProductsService;
   }
 
   getProducts = async (req, res) => {
@@ -36,11 +41,7 @@ export default class ProductsController {
         data: pagesData,
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+      logger.error(error);
     }
   };
 
@@ -63,69 +64,78 @@ export default class ProductsController {
         data: product,
       });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+      logger.error(error);
     }
   };
 
   createProduct = async (req, res) => {
     try {
-      const { product } = req.body;
-      const newProduct = await this.productsService.createProduct(product);
+      const { title, description, price, thumbnails, stock } = req.body;
+      const code = uuidv4();
+      const owner = req.user.email;
 
-      if (!newProduct) {
-        res.status(400).json({
-          success: false,
-          message: "Could not add the product",
+      //validacion si los campos estan vacios
+      if (!title || !description || !price || !thumbnails || !stock) {
+        throw CustomError.createError({
+          name: "Error creating product",
+          cause: generateInfoProductError({ title, description, price, thumbnails, stock }),
+          message: "Error trying to create a product",
+          code: typeErrors.INVALID_TYPE_ERROR,
         });
-        return;
       }
 
-      const products = await this.productsService.getProducts();
-
-      res.status(200).json({
-        success: true,
-        products,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+      //validacion si el code del producto ya existe
+      if(await this.productsService.getProduct({code})){
+        CustomError.createError({
+          name: "Error creating product",
+          cause: generateInfoProductError({title, description, price, thumbnails, stock}),
+          message: "Existing code error",
+          code: typeErrors.INVALID_TYPE_ERROR,
+      })
+    } 
+    let result = await this.productsService.createProduct({ title, description, price, thumbnails, stock, code, owner });
+    result
+       ? res.status(200).send({ status: "A product has been created successfully", payload: result })
+            : res.status(404).send({ status:"Error", error: "Something went wrong" })
+   } catch (error) {
+    next(error);
+      logger.error(error);
     }
   };
 
   updateProduct = async (req, res) => {
-    try {
-      const { pid } = req.params;
-      const { product } = req.body;
+   try{
+    let { pid } = req.params;
+    let updateBody = req.body;
+    const product = await this.productsService.getProductById({_id: pid})
 
-      const updatedProduct = await this.productsService.updateProduct(pid, product);
+    if(!product) return
+      res.status(404).send({ status: "Error", error: "Product not found" })
+    
+      const updateProduct = async(pid, updateBody) => {
+        await this.productsService.updateProductById(pid, updateBody)
+        res.status(200).send({ status: "Product has been updated successfully",
+        message:`The product was updated ${product.title}`
+       })
+   }
+if(req.user.role === "premium") {
+  req.user.email !== product.owner ?
+   res.status(403).send({ status: "Error",
+    message: "You are not allowed to update this product" }) : updateProduct(pid, updateBody)
+}
+else {
+  updateProduct(pid, updateBody)
+}
 
-      if (!updatedProduct) {
-        res.status(400).json({
-          success: false,
-          message: "Could not update the product",
-        });
-        return;
-      }
-
-      res.status(200).json({
-        success: true,
-        data: updatedProduct,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
+}
+catch(error) {
+  logger.error(error);
+}
   };
+
+
+
+
 
   deleteProduct = async (req, res) => {
     try {
@@ -141,11 +151,8 @@ export default class ProductsController {
         products,
       });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+      logger.error(error);
     }
   };
 }
+
