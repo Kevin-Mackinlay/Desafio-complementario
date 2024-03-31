@@ -11,15 +11,19 @@ export default class SessionsController {
       if(!firstName || !lastName || !userName || !email || !birthDate || !password){
         res.status(400).send({ status: "error", message: "Fill in the missing fields" });
       }
-      if(await this.userService.getUserByEmail(email)){
-        res.status(400).json({message: "El usuario ya existe"});
+      if(await this.userService.getUserByEmail({email})){
+        res.status(400).send({ status: "Error", message: "This email is registered" });
       }
-      const newUser = await this.userService.createUser(req.body);
-      res.status(201).json({message: "Usuario creado", user: newUser});
+      if (await userService.getUser({ userName })) {
+        return res.status(400).send({ status: "Error", message: "Username is not available" });
+      }
 
+      const newUser = await userService.createUser({firstName, lastName, userName, email, birthDate, password});
+      res.status(201).send({ status: "success", message: "User created", data: newUser });
     }
+
     catch(error){
-      res.status(500).json({message: error.message});
+      logger.error(error)
     }
   }
 
