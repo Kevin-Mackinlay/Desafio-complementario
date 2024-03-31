@@ -136,23 +136,46 @@ catch(error) {
 
 
 
+deleteProduct = async (req, res) => {
+  try {
+    let { pid } = req.params;
+    let product = await this.productsService.getProductById({ _id: pid });
 
-  deleteProduct = async (req, res) => {
-    try {
-      const { pid } = req.params;
-
-      await productsService.deleteProductById(pid);
-
-      const products = await this.productsService.getProducts();
-
-      res.status(200).json({
-        success: true,
-        message: `Product with ID ${pid} was deleted.`,
-        products,
-      });
-    } catch (error) {
-      logger.error(error);
+    if (!product) {
+      return res.status(404).send({ status: "Error", error: "Product not found" });
     }
-  };
-}
 
+    const removeProduct = async (pid) => {
+      await productsService.deleteProductById(pid);
+      res.status(200).send({
+        status: "Product has been deleted successfully",
+        message: `The product was deleted ${product.title}`
+      });
+    };
+
+    if (req.user.role === "premium") {
+      if (req.user.email !== product.owner) {
+        return res.status(403).send({
+          status: "Error",
+          message: "You are not allowed to delete this product"
+        });
+      } else {
+        removeProduct(pid);
+      }
+    } else {
+      removeProduct(pid);
+      await transport.sendMail({
+        from: process.env.EMAIL,
+        to: product.owner,
+        subject: "Product deleted",
+        html: `<div>
+          <h1>Hi user, your product was removed by the admin</h1>
+        </div>`
+      });
+    }
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
+}
