@@ -1,26 +1,36 @@
-import CustomError from "../customErrors/customError.js";
-import typeErrors from "../customErrors/enums.js";
-import { generateUserErrorInfo } from "../customErrors/info.js";
+import { userService, cartService } from "../services/index.js";
+import objectConfig from "../config/objectConfig.js";
+import { logger } from "../utils/logger.js";
+import transport from "../utils/nodeMailer.js";
+import { contactDTO } from "../dto/contact.dto.js";
 
 export default class UsersController {
-  constructor(UsersService) {
-    this.usersService = UsersService;
-  }
-  getUsers = async (req, res) => {
+  getAllUsers = async (req, res) => {
     try {
-      const usersDb = await this.usersService.get();
-      const users = usersDb.map((user) => {
-        return {
-          id: user._id,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-        };
+      const usersDb = await userService.getUsers();
+      const users = usersDb.map((user) => new contactDTO(user));
+
+      res.render("usersPanel", {
+        title: "Users Panel",
+        style: "usersPanel.css",
+        users,
       });
-      return users;
+      // users
+      // ? res.status(200).send({ status:"information was successfully extracted from the database", payload: users })
+      // : res.status(500).send({ status:"Error", message: "No user data found" })
     } catch (error) {
-      console.log(error);
-      throw error;
+      logger.error(error);
+    }
+  };
+
+  getById = async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const user = await userService.getUser({ _id: uid });
+
+      !user ? res.send({ status: "error", message: "User not available" }) : res.send({ status: "the user was found", payload: user });
+    } catch (error) {
+      logger.error(error);
     }
   };
 
@@ -34,61 +44,45 @@ export default class UsersController {
     }
   };
 
-  // createUser = async (newUser) => {
-  //   try {
-  //     const { first_name, last_name, email, password } = req.body;
-  //     if (!first_name || !last_name || !email || !password) {
-  //     CustomError.createError({
-  //       name:"Error creando usuario",
-  //     cause: generateUserErrorInfo(req.body),
-  //     message: "Faltan datos obligatorios",
-  //     code:typeErrors.INVALID_TYPES_ERROR,
 
-  //     });
-  //     const userDb = await this.usersService.create(newUser);
-  //     return userDb;
-  //   }
-  //   }
-  //   catch (error) {
-  //     throw error;
-  //   }
-
-  // modifyUser = async (id, user) => {
-  //   try {
-  //     const userDb = await this.usersService.modify(id, user);
-  //     return userDb;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
-
-  modifyUser = async (req, res) => {
+  updateOldUser = async (req, res) => {
     try {
-      const { id } = req.params;
-      const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true });
-      if (!updatedUser) {
-        return res.status(404).json({ message: "User not found" });
+      const { uid } = req.params;
+      const userToReplace = req.body;
+      const user = await userService.getUser({ _id: uid });
+      let result = await userService.updateUser({ _id: uid }, userToReplace);
+
+      if (!user) return res.status(404).send({ status: "Error", message: "User not found" });
+
+      result
+        ? res.status(200).send({
+            status: `the user ${user.firtsName} ${user.lastName} is updated correctly`,
+            payload: result,
+          })
+        : res.status(410).send({
+            status: "Error",
+            message: "Could not update user data",
+          });
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  deleteByUser = async (id) => {
+    try {
+      let { uid } = req.params;
+      let user = await userService.getUser({ _id: uid });
+
+      if (user) {
+        await userService.deleteUser({ _id: uid });
+        await cartService.deleteCart({ _id: user.cart._id });
+
+        res.status(200).send({ status: "success", payload: user });
+      } else {
+        res.status(400).send({ status: "error", message: "could not delete user" });
       }
-      res.status(200).json({ message: "User updated successfully", user: updatedUser });
     } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  };
-
-  getUserById = async (id) => {
-    try {
-      const userDb = await this.usersService.getUserById(id);
-      return userDb;
-    } catch (error) {
-      throw error;
-    }
-  };
-  deleteUser = async (id) => {
-    try {
-      const userDb = await this.usersService.delete(id);
-      return userDb;
-    } catch (error) {
-      throw error;
+      logger.error(error);
     }
   };
 }

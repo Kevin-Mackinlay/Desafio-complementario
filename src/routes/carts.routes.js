@@ -1,15 +1,14 @@
 import express from "express";
-import services from "../services/factory.js";
+import services from "../dao/factory.js";
 import CartController from "../controllers/carts.controller.js";
 import authorization from "../config/authorization.js";
 
 const cartsRouter = express.Router();
 const cartsController = new CartController(services.cartsService);
 
-
 cartsRouter.post("/", authorization(["admin"]), cartsController.createCart);
 cartsRouter.get("/", authorization(["admin"]), cartsController.getCarts);
-cartsRouter.get("/:cid", authorization(["admin"]), cartsController.getCartById);;
+cartsRouter.get("/:cid", authorization(["admin"]), cartsController.getCartById);
 cartsRouter.post("/:cid/product/:pid", authorization(["admin"]), cartsController.addAndUpdate);
 cartsRouter.delete("/:cid/product/:pid", authorization(["admin"]), cartsController.deleteOne);
 cartsRouter.delete("/:cid", authorization(["admin"]), cartsController.deleteAll);

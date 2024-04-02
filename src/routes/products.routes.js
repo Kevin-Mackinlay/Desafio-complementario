@@ -1,5 +1,5 @@
 import express from "express";
-import services from "../services/factory.js";
+import services from "../dao/factory.js";
 import ProductsController from "../controllers/products.controller.js";
 import authorization from "../config/authorization.js";
 
