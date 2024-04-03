@@ -1,4 +1,4 @@
-import TicketsService from "../services/tickets.service.js";
+import ticketService from "../services/services.js";
 import { logger } from "../utils/logger.js";
 
 export default class TicketsController {

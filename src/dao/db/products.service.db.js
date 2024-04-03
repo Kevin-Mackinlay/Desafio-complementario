@@ -1,69 +1,52 @@
+import { productModel } from "../../models/products.model.js";
+import { logger } from "../../utils/logger.js";
+
 export default class ProductsService {
-  constructor(repo) {
-    this.repo = repo;
-  }
-
-  async createProduct(product) {
+  async create(newProduct) {
     try {
-      const newProduct = await this.repo.create(product);
-
-      return newProduct;
+      return await productModel.create(newProduct);
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
-  async getProducts() {
+  async get(page, sort) {
     try {
-      const products = await this.repo.get();
+      let sortOpt = {};
 
-      return products;
+      if (sort === "asc") {
+        sortOpt = { price: 1 };
+      } else if (sort === "des") {
+        sortOpt = { price: -1 };
+      }
+
+      return await productModel.paginate({}, { limit: 6, page: page, lean: true, sort: sortOpt });
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
-  async getPaginatedProducts(filter) {
+  async getBy(data) {
     try {
-      const pagesData = await this.repo.getPaginated(filter);
-      pagesData.status = "success";
-
-      pagesData.products = pagesData.docs; // Cambio nombre de propiedad para ser más explícito
-      delete pagesData.docs; // Elimino propiedad que ya no uso
-
-      return pagesData;
+      return await productModel.findOne({ ...data });
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
-  async getProductById(pid) {
+  async update(id, updateBody) {
     try {
-      const product = await this.repo.get({ _id: pid });
-
-      return product;
+      return await productModel.updateOne({ _id: id }, updateBody);
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
-  async deleteProductById(pid) {
+  async delete(id) {
     try {
-      const product = await this.repo.delete({ _id: pid });
-
-      return product;
+      return await productModel.deleteOne({ _id: id });
     } catch (error) {
-      throw error;
-    }
-  }
-
-  async updateProduct(pid, productUpdates) {
-    try {
-      const product = await this.repo.get({ _id: pid }, productUpdates);
-
-      return product;
-    } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 }

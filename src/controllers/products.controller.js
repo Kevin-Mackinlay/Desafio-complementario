@@ -1,7 +1,7 @@
 import { logger } from "../utils/logger.js";
 import CustomError from "../customErrors/customError.js";
 import { generateInfoProductError } from "../customErrors/info.js";
-import {typeErrors} from "../customErrors/enums.js";
+import typeErrors from "../customErrors/enums.js";
 
 export default class ProductsController {
   constructor(ProductsService) {

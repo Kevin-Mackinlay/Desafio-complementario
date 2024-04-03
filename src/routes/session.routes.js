@@ -2,7 +2,7 @@
 import { Router } from "express";
 import passport from "passport";
 import sessionController from "../controllers/session.controller.js";
-import authorization from "../config/authorization.js";
+import authorization from "../passportJwt/authorization.js";
 
 const sessionRouter = Router();
 const sessionsController = new sessionController();

@@ -1,38 +1,31 @@
-// const {logger} = require('../../utils/logger');
+const { logger } = require('../../utils/logger');
 
-export default class TicketService {
-    constructor(repo) {
-        this.repo = repo;
-    }
-    
-  async createTicket(ticket) {
+export default class TicketRepository {
+  constructor(dao) {
+    this.dao = dao;
+  }
+
+  getTickets = async () => {
     try {
-        const newTicket = await this.repo.create(ticket);
-        return newTicket;
+      return await this.dao.get();
+    } catch (error) {
+      logger.error(error);
     }
-    catch (error) {
-        throw error;
+  };
+
+  getTicket = async (tid) => {
+    try {
+      return await this.dao.getById(tid);
+    } catch (error) {
+      logger.error(error);
     }
+  };
+
+  createTicket = async (ticket) => {
+    try {
+      return await this.dao.create(ticket);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
 }
-    
-    async getTickets() {
-        try {
-            const tickets = await this.repo.get();
-            return tickets;
-        }
-        catch (error) {
-            throw error;
-        }
-    }
-   
-    getTicket = async (id) => {
-        try{
-        let tickets = await this.getById(id);
-        if (!tickets) return;
-        return tickets.find((ticket) => ticket.id == id);
-        }
-        catch (error) {
-            throw error;
-        }
-    };
-    }

@@ -1,8 +1,8 @@
 import express from "express";
 import services from "../dao/factory.js";
 import TicketsController from "../controllers/tickets.controller.js";
-import authorization from "../config/authorization.js";
-import passportCall from "../config/passport.config.js";
+import authorization from "../passportJwt/authorization.js";
+import passportCall from "../passportJwt/passportCall.js";
 
 const ticketRouter = express.Router();
 const ticketsController = new TicketsController(services.ticketService);

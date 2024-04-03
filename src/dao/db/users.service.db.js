@@ -1,44 +1,54 @@
+import{ userModel} from "../../dao/models/user.model.js";
+import { logger } from "../../utils/logger.js";
+import CartService from "./carts.service.db.js";
+
+const cart = new CartService();
+
 export default class UserService {
-  constructor(repo) {
-    this.repo = repo;
-  }
-
-  async createUser(user) {
+  async create({ firtsName, lastName, userName, email, birthDate, password }) {
     try {
-      const newUser = await this.repo.create(user);
-      return newUser;
+      return await userModel.create({
+        firtsName,
+        lastName,
+        userName,
+        email,
+        birthDate,
+        password,
+        cart: await cart.create(),
+      });
     } catch (error) {
-      throw error;
+      logger.error(error);
+    }
+  }
+  async getByUser(userData) {
+    try {
+      return await userModel.findOne({ ...userData });
+    } catch (error) {
+      logger.error(error);
     }
   }
 
-  async getAllUsers() {
+  async get() {
     try {
-      const users = await this.repo.get();
-      return users;
+      return await userModel.find();
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
-  async getUserByEmail(email) {
-    const user = await this.service.get({ email: email });
-    return user;
+  async update(id, updateBody) {
+    try {
+      return await userModel.updateOne({ _id: id }, updateBody);
+    } catch (error) {
+      logger.error(error);
+    }
   }
 
-  async getUserById(id) {
-    const user = await this.repo.get({ _id: uid });
-    return user;
+  async delete(id) {
+    try {
+      return await userModel.deleteOne({ _id: id });
+    } catch (error) {
+      logger.error(error);
+    }
   }
-
-  async modifyUser(id, user) {
-    const userDb = await this.repo.modify(id, user);
-    return userDb;
-  }
-
-  async deleteUser(id) {
-    const userDb = await this.repo.delete(id);
-    return userDb;
-  }
-
 }

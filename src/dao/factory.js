@@ -1,5 +1,5 @@
-import config from "../config/config.js";
-import repositories from "../dao/repositories/index.js";
+const config = require("../config/objectConfig.js");
+// import repositories from "../dao/repositories/index.js";
 
 const services = {};
 

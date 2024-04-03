@@ -1,41 +1,47 @@
+import { logger} from "../utils/logger.js";
+
 export default class UsersRepository {
-  constructor(UserModel) {
-    this.userModel = UserModel;
+  constructor(dao) {
+    this.dao = dao;
   }
 
-  async createUser(user) {
-    try{
-    return await this.userModel.create(user);
+  createUser = async (newUser) => {
+    try {
+      return await this.dao.create(newUser);
+    } catch (error) {
+      logger.error(error);
     }
-    catch(error){
-      throw error;
-    }
-  }
+  };
 
-  async getUser(data) {
-    try{
-    return await this.userModel.findOne(data).lean();
+  getUser = async (data) => {
+    try {
+      return await this.dao.getByUser(data);
+    } catch (error) {
+      logger.error(error);
     }
-    catch(error){
-      throw error;
-    }
-  }
+  };
 
-  async updateUser(id, update, options = { new: true, lean: true }) {
-    try{
-    return await this.userModel.update(id, update);
-  }
-    catch(error){
-      throw error;
+  getUsers = async () => {
+    try {
+      return await this.dao.get();
+    } catch (error) {
+      logger.error(error);
     }
-  }
+  };
 
-  async deleteUser(id) {
-    try{
-    return await this.userModel.findByIdAndDelete(id);
-}
-    catch(error){
-      throw error;
+  updateUser = async (uid, updateData) => {
+    try {
+      return await this.dao.update(uid, updateData);
+    } catch (error) {
+      logger.error(error);
     }
-  }
+  };
+
+  deleteUser = async (uid) => {
+    try {
+      return await this.dao.delete(uid);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
 }

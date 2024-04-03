@@ -1,68 +1,70 @@
-import cartModel  from "../../dao/models/cart.model.js";
-import  productModel  from "../../dao/models/product.model.js";
+import {cartModel}  from "../../dao/models/cart.model.js";
+import  {productModel}  from "../../dao/models/product.model.js";
+import { logger } from "../../utils/logger.js";
 
-export default class CartsService {
-  // constructor(repo) {
-  //   this.cartRepo = repo;
-  // }
-
-  async createCart() {
+export default class CartService {
+  async create() {
     try {
       return await cartModel.create({});
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
-  async getCarts() {
+  async get() {
     try {
       return await cartModel.find();
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
-  async getCartById(id) {
+  async getCart(id) {
     try {
-    return await cartModel.findOne({ _id: id }).lean()
+      return await cartModel.findOne({ _id: id }).lean();
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
   }
 
   async addAndUpdate(cid, pid) {
-    try{
+    try {
       const cart = await cartModel.findById({ _id: cid });
-      const products = cart.products.find(prod => prod.product == pid)
-      if(!products){
+      const products = cart.products.find((prod) => prod.product._id == pid);
+
+      if (!products) {
         return await cartModel.updateOne({ _id: cid }, { $push: { products: { product: pid, quantity: 1 } } });
-      
-    }else {
-      return await cartModel.updateOne({ _id: cid, "products.product": pid }, { $inc: { "products.$.quantity": 1 } });
-    }
-    }
-    catch(error){
-      throw error;
+      } else {
+        return await cartModel.updateOne({ _id: cid, "products.product": pid }, { $inc: { "products.$.quantity": 1 } }, { new: true, upset: true });
+      }
+    } catch (error) {
+      logger.error(error);
     }
   }
 
-  async deleteOne( cid,pid){
-    try{
+  async deleteOne(cid, pid) {
+    try {
       let prod = await productModel.findById(pid);
+
       return await cartModel.updateOne({ _id: cid }, { $pull: { products: { product: prod } } });
-    }
-    catch(error){
-      throw error;
-    }
-  }
- 
-  async deleteAll(id) {
-    try{
-      return await cartModel.updateOne({ _id: id }, {products: []});
-    }
-    catch(error){
-      throw error;
+    } catch (error) {
+      logger.error(error);
     }
   }
 
+  async deleteAll(id) {
+    try {
+      return await cartModel.updateOne({ _id: id }, { products: [] });
+    } catch (error) {
+      logger.error(error);
+    }
+  }
+
+  async delete(id) {
+    try {
+      return await cartModel.deleteOne({ _id: id });
+    } catch (error) {
+      logger.error(error);
+    }
+  }
 }

@@ -1,57 +1,45 @@
 export default class ProductsRepository {
-  constructor(ProductModel) {
-    this.productModel = ProductModel;
+  constructor(dao) {
+    this.dao = dao;
   }
 
-  async createProduct(product) {
+  getProducts = async (data) => {
     try {
-      const newProduct = await this.productModel.create(product);
-      return newProduct;
+      return await this.dao.get(data);
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
-  }
+  };
 
-  async getProducts(data) {
+  getProduct = async (product) => {
     try {
-      return await this.productModel.get(data);
+      return await this.dao.getBy(product);
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
-  }
+  };
 
-  async getProduct(product) {
+  addProduct = async (title, description, price, thumbnails, code, stock, owener) => {
     try {
-      return await this.productModel.getBy(product);
+      return await this.dao.create({ title, description, price, thumbnails, code, stock, owener });
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
-  }
+  };
 
-  async getPaginated(filter) {
+  updateProduct = async (id, updateBody) => {
     try {
-      filter.options.lean = true;
-      const pagesData = await this.productModel.paginate(filter.query, filter.options);
-
-      return pagesData;
+      return await this.dao.update(id, updateBody);
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
-  }
+  };
 
-  async deleteProduct(pid) {
+  deleteProduct = async (pid) => {
     try {
-      return await this.productModel.findOneAndDelete(pid);
+      return await this.dao.delete(pid);
     } catch (error) {
-      throw error;
+      logger.error(error);
     }
-  }
-
-  async updateProduct(id, update, options = { new: true, lean: true }) {
-    try {
-      return await this.productModel.findOneAndUpdate(id, update, options);
-    } catch (error) {
-      throw error;
-    }
-  }
+  };
 }

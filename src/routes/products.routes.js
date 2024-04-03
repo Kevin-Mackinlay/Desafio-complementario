@@ -1,7 +1,7 @@
 import express from "express";
 import services from "../dao/factory.js";
 import ProductsController from "../controllers/products.controller.js";
-import authorization from "../config/authorization.js";
+import authorization from "../passportJwt/authorization.js";
 
 const productsRouter = express.Router();
 const productsController = new ProductsController(services.productService);
