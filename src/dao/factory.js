@@ -5,11 +5,11 @@ const services = {};
 
 switch (config.persistence) {
   case "MONGO":
-    const { default: CartServiceDb } = await import("../services/db/carts.service.db.js");
-    const { default: ProductServiceDb } = await import("../services/db/products.service.db.js");
-    const { default: UserServiceDb } = await import("../services/db/users.service.db.js");
-    const { default: ChatServiceDb } = await import("../services/db/chat.service.db.js");
-    const { default: TicketServiceDb } = await import("../services/db/ticket.service.db.js");
+    const { default: CartServiceDb } = await import("./db/carts.service.db.js");
+    const { default: ProductServiceDb } = await import("./db/products.service.db.js");
+    const { default: UserServiceDb } = await import("./db/users.service.db.js");
+    const { default: ChatServiceDb } = await import("./db/chat.service.db.js");
+    const { default: TicketServiceDb } = await import("./db/ticket.service.db.js");
 
     services.cartService = new CartServiceDb(repositories.carts);
     services.productService = new ProductServiceDb(repositories.products);
@@ -19,17 +19,17 @@ switch (config.persistence) {
 
     break;
   case "FS":
-    const { default: CartServiceFs } = await import("../services/db/cart.service.fs.js");
-    const { default: ProductServiceFs } = await import("../services/db/product.service.fs.js");
-    const { default: UserServiceFs } = await import("../services/db/user.service.fs.js");
-    const { default: ChatServiceFs } = await import("../services/db/chat.service.fs.js");
-    const { default: TicketServiceFs } = await import("../services/db/ticket.service.fs.js");
+    const { default: CartServiceFs } = await import("./db/cart.service.fs.js");
+    const { default: ProductServiceFs } = await import("./db/product.service.fs.js");
+    const { default: UserServiceFs } = await import("./db/user.service.fs.js");
+    const { default: ChatServiceFs } = await import("./db/chat.service.fs.js");
+    const { default: TicketServiceFs } = await import("./db/ticket.service.fs.js");
 
-    services.cartsService = new CartServiceFs("./fs/data/carts.json");
-    services.productService = new ProductServiceFs("./fs/data/products.json");
-    services.userService = new UserServiceFs("./fs/data/users.json");
-    services.chatService = new ChatServiceFs("./fs/data/messages.json");
-    services.ticketService = new TicketServiceFs("./fs/data/tickets.json");
+    services.cartsService = new CartServiceFs("../../src/carts.json");
+    services.productService = new ProductServiceFs("../../src/products.json");
+    services.userService = new UserServiceFs("../../src/users.json");
+    services.chatService = new ChatServiceFs("../../src/messages.json");
+    services.ticketService = new TicketServiceFs("../../src//tickets.json");
 
     break;
 }
