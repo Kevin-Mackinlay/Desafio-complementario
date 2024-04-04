@@ -1,4 +1,4 @@
-export default class Users {
+export default class UsersService {
   constructor() {
     this.data = [];
   }

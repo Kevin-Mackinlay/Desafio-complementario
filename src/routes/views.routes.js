@@ -1,13 +1,14 @@
 import { Router } from "express";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
+import {passportCall, passportCallUrl} from "../passportJwt/passportCall.js";
 import ViewsController from "../controllers/views.controller.js";
-import services from "../dao/factory.js";
+import authorization from "../passportJwt/authorization.js";
+
 const viewsController = new ViewsController(services.chatService, services.productService);
 const viewsRouter = Router();
 
 viewsRouter.get("/products", viewsController.renderProducts);
 viewsRouter.get("/realtimeproducts", viewsController.renderRealTime);
-viewsRouter.get("/chat", viewsController.renderChat);
+viewsRouter.get("/chat",authorization("user"),  viewsController.renderChat);
 viewsRouter.get("/", viewsController.renderHome);
 viewsRouter.get("/login", viewsController.renderLogin);
 viewsRouter.get("/signup", viewsController.renderSignup);

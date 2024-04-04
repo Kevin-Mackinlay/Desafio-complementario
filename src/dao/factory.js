@@ -1,37 +1,42 @@
 const config = require("../config/objectConfig.js");
-// import repositories from "../dao/repositories/index.js";
 
-const services = {};
+let UserServiceDb;
+let ProductServiceDb;
+let CartServiceDb;
+let ChatServiceDb;
+let TicketServiceDb;
 
 switch (config.persistence) {
   case "MONGO":
-    const { default: CartServiceDb } = await import("./db/carts.service.db.js");
-    const { default: ProductServiceDb } = await import("./db/products.service.db.js");
-    const { default: UserServiceDb } = await import("./db/users.service.db.js");
-    const { default: ChatServiceDb } = await import("./db/chat.service.db.js");
-    const { default: TicketServiceDb } = await import("./db/ticket.service.db.js");
+    config.connectDB();
 
-    services.cartService = new CartServiceDb(repositories.carts);
-    services.productService = new ProductServiceDb(repositories.products);
-    services.userService = new UserServiceDb(repositories.users);
-    services.chatService = new ChatServiceDb(repositories.chat);
-    services.ticketService = new TicketServiceDb(repositories.tickets);
+    const UserServiceMongo = require("../dao/db/users.service.db.js");
+    const ProductServiceMongo = require("../dao/db/products.service.db.js");
+    const CartServiceMongo = require("../dao/db/carts.service.db.js");
+    const ChatServiceMongo = require("../dao/db/chat.service.db.js");
+    const TicketServiceMongo = require("../dao/db/ticket.service.db.js");
+
+    UserServiceDb = new UserServiceMongo();
+    ProductServiceDb = new ProductServiceMongo();
+    CartServiceDb = new CartServiceMongo();
+    ChatServiceDb = new ChatServiceMongo();
+    TicketServiceDb = new TicketServiceMongo();
 
     break;
+
   case "FS":
-    const { default: CartServiceFs } = await import("./db/cart.service.fs.js");
-    const { default: ProductServiceFs } = await import("./db/product.service.fs.js");
-    const { default: UserServiceFs } = await import("./db/user.service.fs.js");
-    const { default: ChatServiceFs } = await import("./db/chat.service.fs.js");
-    const { default: TicketServiceFs } = await import("./db/ticket.service.fs.js");
+    const UserServiceFs = require("../dao/fs/user.service.fs.js");
+    const ProductServiceFs = require("../dao/fs/product.service.fs.js");
+    const CartServiceFs = require("../dao/fs/cart.service.fs.js");
+    const ChatServiceFs = require("../dao/fs/chat.service.fs.js");
+    const TicketServiceFs = require("../dao/fs/ticket.service.fs.js");
 
-    services.cartsService = new CartServiceFs("../../src/carts.json");
-    services.productService = new ProductServiceFs("../../src/products.json");
-    services.userService = new UserServiceFs("../../src/users.json");
-    services.chatService = new ChatServiceFs("../../src/messages.json");
-    services.ticketService = new TicketServiceFs("../../src//tickets.json");
-
+    UserServiceDb = new UserServiceFs();
+    ProductServiceDb = new ProductServiceFs();
+    CartServiceDb = new CartServiceFs();
+    ChatServiceDb = new ChatServiceFs();
+    TicketServiceDb = new TicketServiceFs();
     break;
 }
 
-export default services;
+module.exports = { UserServiceDb, ProductServiceDb, CartServiceDb, ChatServiceDb, TicketServiceDb };
