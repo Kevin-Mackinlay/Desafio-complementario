@@ -24,4 +24,4 @@ const passportCall = (strategy) => {
           
     }
 
-export {passportCall, passportCallUrl}
+export default {passportCall, passportCallUrl}

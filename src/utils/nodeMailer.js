@@ -1,5 +1,5 @@
 import nodeMailer from 'nodemailer';
-import objectConfig from '../config/objectConfig.js'; 
+const objectConfig = require("../config/objectConfig.js");
 
 
 

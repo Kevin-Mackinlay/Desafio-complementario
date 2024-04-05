@@ -1,4 +1,4 @@
-import{ userModel} from "../../dao/models/user.model.js";
+import userModel from "../../dao/models/user.model.js";
 import { logger } from "../../utils/logger.js";
 import CartService from "./carts.service.db.js";
 

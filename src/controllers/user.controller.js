@@ -1,8 +1,10 @@
-import { userService, cartService } from "../services/services.js";
+import services from "../services/services.js";
 import objectConfig from "../config/objectConfig.js";
 import { logger } from "../utils/logger.js";
 import transport from "../utils/nodeMailer.js";
 import {contactDTO}  from "../DTOs/contact.dto.js";
+
+const { userService, cartService } = services;
 
 export default class UsersController {
   getAllUsers = async (req, res) => {
