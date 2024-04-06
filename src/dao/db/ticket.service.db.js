@@ -1,11 +1,7 @@
-
-import { ticketModel } from './models/ticket.model.js';
-import { logger } from '../../utils/logger.js';
-
-
+import ticketModel from "../models/ticket.model.js"
+import { logger } from "../../utils/logger.js";
 
 export default class TicketService {
-
   async create(ticket) {
     try {
       return await ticketModel.create(ticket);
@@ -30,4 +26,3 @@ export default class TicketService {
     }
   }
 }
-

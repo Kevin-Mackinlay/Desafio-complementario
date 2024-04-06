@@ -1,5 +1,5 @@
 import express from "express";
-import services from "../dao/factory.js";
+import {TicketServiceDb} from "../dao/factory.js";
 import TicketsController from "../controllers/tickets.controller.js";
 import authorization from "../passportJwt/authorization.js";
 import passportCall from "../passportJwt/passportCall.js";

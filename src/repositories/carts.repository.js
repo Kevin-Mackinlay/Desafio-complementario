@@ -1,5 +1,4 @@
-const {logger} = require('../../utils/logger');
-
+import {logger}  from "../utils/logger.js";
 
 export default class CartsRepository {
   constructor(dao) {
@@ -62,4 +61,3 @@ export default class CartsRepository {
     }
   };
 }
-

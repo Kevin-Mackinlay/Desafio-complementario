@@ -1,6 +1,6 @@
 import passport from "passport";
 import jwt from "passport-jwt";
-const objectConfig = require("../config/objectConfig.js");
+import objectConfig from "../config/objectConfig.js ";
 
 const JwtStrategy = jwt.Strategy;
 const ExtractJwt = jwt.ExtractJwt;

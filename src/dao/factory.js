@@ -1,19 +1,18 @@
 import config from "../config/objectConfig.js";
 
-let UserServiceDb;
-let ProductServiceDb;
-let CartServiceDb;
-let TicketServiceDb;
+export let UserServiceDb;
+export let ProductServiceDb;
+export let CartServiceDb;
+export let TicketServiceDb;
 
 switch (config.persistence) {
   case "MONGO":
     config.connectDB();
 
-   import {UserServiceMongo} from "../dao/db/users.service.db.js";
-
-    const ProductServiceMongo = require("../dao/db/products.service.db.js");
-    const CartServiceMongo = require("../dao/db/carts.service.db.js");
-    const TicketServiceMongo = require("../dao/db/ticket.service.db.js");
+    const { default: UserServiceMongo } = await import("../dao/mongo/user.service.mongo.js");
+    const { default: ProductServiceMongo } = await import("../dao/mongo/product.service.mongo.js");
+    const { default: CartServiceMongo } = await import("../dao/mongo/cart.service.mongo.js");
+    const { default: TicketServiceMongo } = await import("../dao/mongo/ticket.service.mongo.js");
 
     UserServiceDb = new UserServiceMongo();
     ProductServiceDb = new ProductServiceMongo();
@@ -23,10 +22,11 @@ switch (config.persistence) {
     break;
 
   case "FS":
-    const UserServiceFs = require("../dao/fs/user.service.fs.js");
-    const ProductServiceFs = require("../dao/fs/product.service.fs.js");
-    const CartServiceFs = require("../dao/fs/cart.service.fs.js");
-    const TicketServiceFs = require("../dao/fs/ticket.service.fs.js");
+    const { default: UserServiceFs } = await import("../dao/fs/user.service.fs.js");
+    const { default: ProductServiceFs } = await import("../dao/fs/product.service.fs.js");
+    const { default: CartServiceFs } = await import("../dao/fs/cart.service.fs.js");
+    const { default: TicketServiceFs } = await import("../dao/fs/ticket.service.fs.js");
+
 
     UserServiceDb = new UserServiceFs(); // Corrección: userServiceFs => userServiceDb
     ProductServiceDb = new ProductServiceFs(); // Corrección: productServiceFs => productServiceDb
@@ -35,5 +35,3 @@ switch (config.persistence) {
 
     break;
 }
-
-export default { UserServiceDb, ProductServiceDb, CartServiceDb, TicketServiceDb };
