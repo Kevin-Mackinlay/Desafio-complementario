@@ -3,7 +3,7 @@ import ChatControllers from "../controllers/chat.controller.js";
 
 
 const ChatRouter = express.Router();
-const chatController = new ChatControllers(services.chatService);
+const chatController = new ChatControllers();
 
 ChatRouter.post("/", chatController.createMessage);
 

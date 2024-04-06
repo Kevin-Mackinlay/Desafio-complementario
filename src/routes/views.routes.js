@@ -6,7 +6,7 @@ import authorization from "../passportJwt/authorization.js";
 
 const passportCall = passportCallModule.passportCall;
 const passportCallUrl = passportCallModule.passportCallUrl;
-const viewsController = new ViewsController(services.chatService, services.productService);
+const viewsController = new ViewsController();
 const viewsRouter = Router();
 
 viewsRouter.get("/products", viewsController.renderProducts);

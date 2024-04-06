@@ -4,7 +4,7 @@ import CartController from "../controllers/carts.controller.js";
 import authorization from "../passportJwt/authorization.js";
 
 const cartsRouter = express.Router();
-const cartsController = new CartController(services.cartsService);
+const cartsController = new CartController();
 
 cartsRouter.post("/", authorization(["admin"]), cartsController.createCart);
 cartsRouter.get("/", authorization(["admin"]), cartsController.getCarts);

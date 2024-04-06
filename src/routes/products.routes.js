@@ -4,7 +4,7 @@ import ProductsController from "../controllers/products.controller.js";
 import authorization from "../passportJwt/authorization.js";
 
 const productsRouter = express.Router();
-const productsController = new ProductsController(services.productService);
+const productsController = new ProductsController();
 
 productsRouter.get("/", authorization(["admin"]), productsController.getProducts);
 productsRouter.get("/:pid", authorization(["admin"]), productsController.getProductById);

@@ -1,4 +1,4 @@
-const config = require("../config/objectConfig.js");
+import config from "../config/objectConfig.js";
 
 let UserServiceDb;
 let ProductServiceDb;
@@ -9,7 +9,8 @@ switch (config.persistence) {
   case "MONGO":
     config.connectDB();
 
-    const UserServiceMongo = require("../dao/db/users.service.db.js");
+   import {UserServiceMongo} from "../dao/db/users.service.db.js";
+
     const ProductServiceMongo = require("../dao/db/products.service.db.js");
     const CartServiceMongo = require("../dao/db/carts.service.db.js");
     const TicketServiceMongo = require("../dao/db/ticket.service.db.js");
