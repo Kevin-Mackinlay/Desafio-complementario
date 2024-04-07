@@ -24,6 +24,8 @@ import mockingRouter from "./routes/mocking.routes.js";
 import cluster from "cluster";
 import { cpus } from "os";
 
+
+
 dotenv.config();
 
 const app = express();
@@ -48,7 +50,8 @@ app.set("view engine", "handlebars");
 
 //middlewares para el manejo de datos
 app.use(cookieParser(COOCKIESECRET));
-app.use(addLogger, logger);
+app.use(addLogger);
+// app.use(logger);
 
 app.use(
   session({

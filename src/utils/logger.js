@@ -1,11 +1,9 @@
 import winston from "winston";
-import dotenv from "dotenv";
 
-dotenv.config();
 
-const mode = process.env.MODE || "dev";
+const mode = process.env.NODE_ENV === "production" ? "prod" : "dev";
 
-let logger;
+let logger
 
 const customLevels = {
   levels: {
@@ -56,10 +54,13 @@ switch (mode) {
     break;
 }
 
+
+
 const addLogger = (req, res, next) => {
   req.logger = logger;
   req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleString()}`);
   next();
 };
 
-export { logger, addLogger };
+
+export {logger, addLogger}

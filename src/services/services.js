@@ -14,8 +14,8 @@ const userService = new UsersRepository(UserServiceDb);
 const cartService = new CartsRepository(CartServiceDb);
 const productService = new ProductsRepository(ProductServiceDb);
 const ticketService = new TicketsRepository(TicketServiceDb);
-const contactService = new ContactRepository(ContactServiceDb);
+// const contactService = new ContactRepository(ContactServiceDb);
 
 
 
-export default {userService, cartService, productService, ticketService, contactService};
+export default {userService, cartService, productService, ticketService};

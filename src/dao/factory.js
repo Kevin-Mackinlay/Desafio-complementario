@@ -9,10 +9,10 @@ switch (config.persistence) {
   case "MONGO":
     config.connectDB();
 
-    const { default: UserServiceMongo } = await import("../dao/mongo/user.service.mongo.js");
-    const { default: ProductServiceMongo } = await import("../dao/mongo/product.service.mongo.js");
-    const { default: CartServiceMongo } = await import("../dao/mongo/cart.service.mongo.js");
-    const { default: TicketServiceMongo } = await import("../dao/mongo/ticket.service.mongo.js");
+    const { default: UserServiceMongo } = await import("../dao/db/users.service.db.js");
+    const { default: ProductServiceMongo } = await import("../dao/db/products.service.db.js");
+    const { default: CartServiceMongo } = await import("../dao/db/carts.service.db.js");
+    const { default: TicketServiceMongo } = await import("../dao/db/ticket.service.db.js");
 
     UserServiceDb = new UserServiceMongo();
     ProductServiceDb = new ProductServiceMongo();

@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
 import {logger} from "../utils/logger.js";
+import { connect } from "mongoose";
 
 class MongoSingleton{
     static #instance
     constructor(){
-        RTCPeerConnectionIceEvent(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+        connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 
     }
     static getInstance(){

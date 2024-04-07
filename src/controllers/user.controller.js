@@ -2,7 +2,7 @@ import services from "../services/services.js";
 import { logger } from "../utils/logger.js";
 import transport from "../utils/nodeMailer.js";
 import contactDTO  from "../DTOs/contact.dto.js";
-const config = require("../config/config.js");
+import config from "../config/objectConfig.js";
 const { userService, cartService } = services;
 
 export default class UsersController {

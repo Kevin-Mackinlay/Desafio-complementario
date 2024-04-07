@@ -4,7 +4,7 @@ import UsersController from "../controllers/user.controller.js";
 import authorization from "../passportJwt/authorization.js";
 
 const usersRouter = express.Router();
-const usersController = new UsersController(services.userService);
+const usersController = new UsersController();
 
 usersRouter.get("/", authorization(["admin"], usersController.getAllUsers));
 usersRouter.get("/:uid", authorization(["admin"], usersController.getById));
