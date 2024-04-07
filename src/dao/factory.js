@@ -23,8 +23,8 @@ switch (config.persistence) {
 
   case "FS":
     const { default: UserServiceFs } = await import("../dao/fs/user.service.fs.js");
-    const { default: ProductServiceFs } = await import("../dao/fs/product.service.fs.js");
-    const { default: CartServiceFs } = await import("../dao/fs/cart.service.fs.js");
+    const { default: ProductServiceFs } = await import("../dao/fs/products.service.fs.js");
+    const { default: CartServiceFs } = await import("../dao/fs/carts.service.fs.js");
     const { default: TicketServiceFs } = await import("../dao/fs/ticket.service.fs.js");
 
 

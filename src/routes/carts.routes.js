@@ -9,9 +9,10 @@ const cartsController = new CartController();
 cartsRouter.post("/", passportCall("jwt"), authorization(["admin"]), cartsController.createCart);
 cartsRouter.get("/",passportCall("jwt"), authorization(["admin"]), cartsController.getCarts);
 cartsRouter.get("/:cid", passportCall("jwt"),  cartsController.getCartById);
-cartsRouter.post("/:cid/product/:pid", passportCall("jwt"), authorization(["admin"]), cartsController.addProduct);
-cartsRouter.delete("/:cid/product/:pid", passportCall("jwt"), authorization(["admin"]), cartsController.deleteProductInCart);
-cartsRouter.delete("/:cid", passportCall("jwt"), authorization(["admin"]), cartsController.deleteProductsInCart);
+cartsRouter.post("/:cid/product/:pid", passportCall("jwt"), authorization(["user","premium"]), cartsController.addProduct);
+cartsRouter.delete("/:cid/product/:pid", passportCall("jwt"), authorization(["user", "premium"]), cartsController.deleteProductInCart);
+cartsRouter.post("/:cid/purchase", passportCall("jwt"), authorization(["user", "premium"]), cartsController.cartPurchase);
+cartsRouter.delete("/:cid", passportCall("jwt"), authorization(["user", "premium"]), cartsController.deleteProductsInCart);
 
 export default cartsRouter;
 

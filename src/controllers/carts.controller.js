@@ -73,7 +73,7 @@ export default class CartsController {
     try {
       let { cid, pid } = req.params;
       const cart = await cartService.getCartByID(cid);
-      const product = await productService.getProduct({ _id: pid });
+      const product = await ProductServiceDb.getProduct({ _id: pid });
 
       if (product.owener === req.user.email)
         return res.status(404).send({
@@ -165,7 +165,7 @@ export default class CartsController {
         const quantity = item.quantity;
         const stock = item.product.stock;
 
-        quantity > stock ? insufficientStock.push(product) : buyProducts.push({ product, quantity }) && (await productService.updateProduct(product, { stock: stock - quantity })) && (await cartService.deleteProduct(cart, product));
+        quantity > stock ? insufficientStock.push(product) : buyProducts.push({ product, quantity }) && (await ProductServiceDb.updateProduct(product, { stock: stock - quantity })) && (await cartService.deleteProduct(cart, product));
       });
 
       const totalAmount = buyProducts.reduce((acc, item) => acc + item.quantity, 0);
@@ -180,7 +180,7 @@ export default class CartsController {
       }
 
       if (buyProducts.length > 0) {
-        const ticket = await ticketService.createTicket({
+        const ticket = await TicketServiceDb.createTicket({
           code: uuidv4(),
           amount: totalAmount,
           purchaser: req.user.email,
