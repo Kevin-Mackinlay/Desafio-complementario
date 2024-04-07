@@ -7,19 +7,15 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
+
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils/utils.js";
 import initPassport from "./passportJwt/passportJwt.js";
 import configPassport from "./config/passport.config.js";
-import errorHandler from "./middlewares/errorHandler/errorHandling.js";
 import { addLogger , logger} from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
-import usersRouter from "./routes/users.routes.js";
-import CustomError from "./customErrors/customError.js";
-import { generateUserErrorInfo } from "./customErrors/info.js";
-import typeErrors from "./customErrors/enums.js";
 import mockingRouter from "./routes/mocking.routes.js";
 import cluster from "cluster";
 import { cpus } from "os";
@@ -69,6 +65,7 @@ app.use(
 );
 
 //passport
+initPassport();
 configPassport();
 app.use(passport.initialize());
 app.use(passport.session());

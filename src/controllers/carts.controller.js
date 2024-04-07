@@ -187,7 +187,7 @@ export default class CartsController {
         });
 
         await transport.sendMail({
-          from: objectConfig.gmailUser,
+          from: objectConfig.EMAIL_USER,
           to: req.user.email,
           subject: "Thanks for your purchase",
           html: `<div>

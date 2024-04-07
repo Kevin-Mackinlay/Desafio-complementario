@@ -9,7 +9,7 @@ const transport = nodeMailer.createTransport({
   port: 587,
   auth: {
     user: objectConfig.EMAIL_USER,
-    pass: objectConfig.MAIL_PASSWORD,
+    pass: objectConfig.APP_PASSWORD,
   },
 });
 
