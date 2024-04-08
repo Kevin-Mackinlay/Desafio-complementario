@@ -7,11 +7,11 @@ import transport from "../utils/nodeMailer.js";
 export default class SessionsController {
   signup = async (req, res) => {
     try {
-      const { firstName, lastName, userName, email, birthDate, password } = req.body;
+      const { first_name, last_name, email, password, age } = req.body;
 
       //validacion si vienen los campos vacios
-      if (!firstName || !lastName || !userName || !email || !birthDate || !password) {
-        res.status(400).send({ status: "error", message: "Fill in the missing fields" });
+      if (first_name === "" || last_name === "" || email === "" || password === "" || age === "") {
+        res.status(400).send({ status: "Error", message: "Fill in the missing fields" });
       }
       //validacion si el email ya esta registrado
       if (await this.userService.getUser({ email })) {
@@ -21,13 +21,13 @@ export default class SessionsController {
       if (await userService.getUser({ userName })) {
         return res.status(400).send({ status: "Error", message: "Username is not available" });
       }
-      let Accesstoken = generateToken({ firstName, lastName, email });
-      const user = await userService.createUser({ firstName, lastName, userName, email, birthDate, password: creaHash(password) });
+      let Accesstoken = generateToken({ first_name, last_name, email});
+      const user = await userService.createUser({ first_name, last_name, email, age, password: creaHash(password) });
 
       user
         ? res.status(201).send({
             status: "success",
-            message: `The user ${user.firstName} ${user.lastName} registered successfully`,
+            message: `The user ${user.first_name} ${user.last_name} registered successfully`,
             Accesstoken,
           })
         : res.status(500).send({

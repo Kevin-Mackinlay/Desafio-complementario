@@ -11,12 +11,13 @@ async function postLogin(email, password) {
       },
       body: JSON.stringify(data),
     });
-    console.log(response);
+    console.log("Response status:", response.status); // Log response status
     const result = await response.json();
+    console.log("Result:", result); // Log response body
     return result;
   } catch (error) {
-    console.log(error.message);
-    return { success: false, message: error.text };
+    console.error("Error:", error); // Log any caught errors
+    return { success: false, message: error.message };
   }
 }
 
@@ -27,7 +28,12 @@ loginForm.addEventListener("submit", async (event) => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
+  console.log("Email:", email); // Log email value
+  console.log("Password:", password); // Log password value
+
   const response = await postLogin(email, password);
+  console.log("Login response:", response); // Log response from postLogin function
+
   if (response.success == true) {
     window.location.href = response.redirectUrl;
   } else {
