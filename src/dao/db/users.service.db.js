@@ -5,12 +5,11 @@ import CartService from "./carts.service.db.js";
 const cart = new CartService();
 
 export default class UserService {
-  async create({ firtsName, lastName, userName, email, birthDate, password }) {
+  async create({ firstName, lastName, email, password, age }) {
     try {
       return await userModel.create({
-        firtsName,
+        firstName,
         lastName,
-        userName,
         email,
         birthDate,
         password,

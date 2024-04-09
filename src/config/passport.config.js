@@ -26,7 +26,7 @@ const configPassport = () => {
 
       async function (req, username, password, done) {
         try {
-          const user = await userService.getUserByEmail(username);
+          const user = await userService.getByUser(username);
 
           if (!user) {
             req.loginSuccess = false;
@@ -57,7 +57,7 @@ const configPassport = () => {
       },
       async function (req, username, password, done) {
         try {
-          const user = await userService.getUserByEmail(username);
+          const user = await userService.getByUser(username);
           if (user) {
             req.SignupSuccess = false;
             req.message= "User not found";
@@ -66,11 +66,11 @@ const configPassport = () => {
 
           const hashedPassword = await bcrypt.hash(password, 10);
 
-          const { age, first_name, last_name } = req.body;
+          const { age, firstName, lastName } = req.body;
 
-          const cart = await cartService.createCart();
+          const cart = await cartService.create();
 
-          const newUser = await userService.createUser({ email: username, password: hashedPassword, age, first_name, last_name, cart: cart._id });
+          const newUser = await userService.create({ email: username, password: hashedPassword, age, firstName, lastName, cart: cart._id });
 
           if (!newUser) {
             req.SignupSuccess = false;
@@ -91,7 +91,7 @@ const configPassport = () => {
   });
 
   passport.deserializeUser(async function (id, done) {
-    const user = await userService.getUserById(id);
+    const user = await userService.getByUser(id);
     delete user.password;
     done(null, user);
   });

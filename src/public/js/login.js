@@ -4,7 +4,7 @@ async function postLogin(email, password) {
     password,
   };
   try {
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch("/api/sessions/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,8 +28,8 @@ loginForm.addEventListener("submit", async (event) => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  console.log("Email:", email); // Log email value
-  console.log("Password:", password); // Log password value
+  console.log("Email:", email);
+  console.log("Password:", password);
 
   const response = await postLogin(email, password);
   console.log("Login response:", response); // Log response from postLogin function

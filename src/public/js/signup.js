@@ -1,7 +1,7 @@
-async function postSignup(first_name, last_name, email, password, age) {
+async function postSignup(firstName, lastName, email, password, age) {
   const data = {
-    first_name,
-    last_name,
+    firstName,
+    lastName,
     email,
     password,
     age,

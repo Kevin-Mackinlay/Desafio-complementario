@@ -5,12 +5,14 @@ import { validPassword, creaHash } from "../utils/bcryptHash.js";
 import transport from "../utils/nodeMailer.js";
 
 export default class SessionsController {
+
+
   signup = async (req, res) => {
     try {
-      const { first_name, last_name, email, password, age } = req.body;
+      const { firstName, lastName, email, password, age } = req.body;
 
       //validacion si vienen los campos vacios
-      if (first_name === "" || last_name === "" || email === "" || password === "" || age === "") {
+      if (firstName === "" || lastName === "" || email === "" || password === "" || age === "") {
         res.status(400).send({ status: "Error", message: "Fill in the missing fields" });
       }
       //validacion si el email ya esta registrado
@@ -21,13 +23,13 @@ export default class SessionsController {
       if (await userService.getUser({ userName })) {
         return res.status(400).send({ status: "Error", message: "Username is not available" });
       }
-      let Accesstoken = generateToken({ first_name, last_name, email});
-      const user = await userService.createUser({ first_name, last_name, email, age, password: creaHash(password) });
+      let Accesstoken = generateToken({ firstName, lastName, email });
+      const user = await userService.createUser({ firstName, lastName, email, age, password: creaHash(password) });
 
       user
         ? res.status(201).send({
             status: "success",
-            message: `The user ${user.first_name} ${user.last_name} registered successfully`,
+            message: `The user ${user.firstName} ${user.lastName} registered successfully`,
             Accesstoken,
           })
         : res.status(500).send({
@@ -74,7 +76,7 @@ export default class SessionsController {
               maxAge: 60 * 60 * 1000,
               httpOnly: true,
             })
-            .send({ status: "success", message: `${user.firtsName} you have logged in successfully` })
+            .send({ status: "success", message: `${user.firstName} you have logged in successfully` })
         : res.status(404).send({ status: "Error", message: "There was an error when logging in" });
     } catch (error) {
       logger.error(error);
