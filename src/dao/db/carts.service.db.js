@@ -5,7 +5,7 @@ import { logger } from "../../utils/logger.js";
 export default class CartService {
   async create() {
     try {
-      return await cartModel.create({});
+      return await cartModel.create();
     } catch (error) {
       logger.error(error);
     }

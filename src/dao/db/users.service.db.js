@@ -5,24 +5,25 @@ import CartService from "./carts.service.db.js";
 const cart = new CartService();
 
 export default class UserService {
-  async create({ firstName, lastName, email, password, age }) {
+  async create({ firstName, lastName, email, password }) {
     try {
       return await userModel.create({
         firstName,
         lastName,
         email,
-        birthDate,
         password,
-        cart: await cart.create(),
+        cart: await cart.create()._id,
       });
     } catch (error) {
+    
       logger.error(error);
     }
   }
   async getByUser(userData) {
     try {
-      return await userModel.findOne({ ...userData });
+      return await userModel.findOne({email: userData });
     } catch (error) {
+  
       logger.error(error);
     }
   }

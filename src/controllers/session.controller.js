@@ -9,36 +9,15 @@ export default class SessionsController {
 
   signup = async (req, res) => {
     try {
-      const { firstName, lastName, email, password, age } = req.body;
+   
+    if (!req.signupSuccess) {
+			return res.status(400).json({ success: false, text: "User already exists" });
+		}
 
-      //validacion si vienen los campos vacios
-      if (firstName === "" || lastName === "" || email === "" || password === "" || age === "") {
-        res.status(400).send({ status: "Error", message: "Fill in the missing fields" });
-      }
-      //validacion si el email ya esta registrado
-      if (await this.userService.getUser({ email })) {
-        res.status(400).send({ status: "Error", message: "This email is registered" });
-      }
-      //validacion si el username ya esta registrado
-      if (await userService.getUser({ userName })) {
-        return res.status(400).send({ status: "Error", message: "Username is not available" });
-      }
-      let Accesstoken = generateToken({ firstName, lastName, email });
-      const user = await userService.createUser({ firstName, lastName, email, age, password: creaHash(password) });
-
-      user
-        ? res.status(201).send({
-            status: "success",
-            message: `The user ${user.firstName} ${user.lastName} registered successfully`,
-            Accesstoken,
-          })
-        : res.status(500).send({
-            status: "error",
-            message: "A problem occurred and the request could not be completed",
-          });
-    } catch (error) {
-      logger.error(error);
-    }
+		res.status(201).json({ success: true, message: "User created", redirectUrl: "/login" });
+	} catch (error) {
+    console.log(error);
+  };
   };
 
   login = async (req, res) => {

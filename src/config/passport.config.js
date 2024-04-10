@@ -58,6 +58,7 @@ const configPassport = () => {
       async function (req, username, password, done) {
         try {
           const user = await userService.getByUser(username);
+          console.log(user);
           if (user) {
             req.SignupSuccess = false;
             req.message= "User not found";
@@ -68,10 +69,9 @@ const configPassport = () => {
 
           const { age, firstName, lastName } = req.body;
 
-          const cart = await cartService.create();
 
-          const newUser = await userService.create({ email: username, password: hashedPassword, age, firstName, lastName, cart: cart._id });
-
+          const newUser = await userService.create({ email: username, password: hashedPassword, age, firstName, lastName});
+console.log(newUser);
           if (!newUser) {
             req.SignupSuccess = false;
             return done(null, false, { message: "internal server error" });
@@ -79,7 +79,7 @@ const configPassport = () => {
           req.SignupSuccess = true;
           return done(null, newUser);
         } catch (error) {
-          console.log(error.message);
+          console.log(error);
           return done(error);
         }
       }

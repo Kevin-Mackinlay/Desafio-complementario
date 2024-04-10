@@ -16,8 +16,10 @@ async function postSignup(firstName, lastName, email, password, age) {
     });
 
     const result = await response.json();
+   
     return result;
   } catch (error) {
+    console.log(error);
     return { success: false, message: "invalid credentials" };
   }
 }
