@@ -7,6 +7,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
@@ -31,6 +33,22 @@ const COOCKIESECRET = process.env.CODERSECRET;
 const numeroDeCPUs = cpus().length;
 console.log(numeroDeCPUs);
 
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API de productos",
+      version: "1.0.0",
+      description: "API de productos",
+    },
+    servers: ["http://localhost:8080"],
+  },
+
+  apis: [`$__dirname{(__dirname)}/docs/**/*.yml`],
+};
+
+
+// const specs = swaggerJsdoc(swaggerOptions);
 //config de app
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -75,6 +93,7 @@ app.use("/", IndexRouter);
 // app.use(errorHandler);
 
 app.use("/api/mockingproducts", mockingRouter);
+// app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 // if (cluster.isPrimary) {
 // console.log(

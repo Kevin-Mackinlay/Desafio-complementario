@@ -61,7 +61,7 @@ const configPassport = () => {
           console.log(user);
           if (user) {
             req.SignupSuccess = false;
-            req.message= "User not found";
+            req.message = "User not found";
             return done(null, false, { message: "User already exists" });
           }
 
@@ -69,9 +69,8 @@ const configPassport = () => {
 
           const { age, firstName, lastName } = req.body;
 
-
-          const newUser = await userService.create({ email: username, password: hashedPassword, age, firstName, lastName});
-console.log(newUser);
+          const newUser = await userService.create({ email: username, password: hashedPassword, age, firstName, lastName });
+          console.log(newUser);
           if (!newUser) {
             req.SignupSuccess = false;
             return done(null, false, { message: "internal server error" });

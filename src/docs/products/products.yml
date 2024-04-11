@@ -1,0 +1,58 @@
+paths:
+ /api/products/:
+    get:
+      summary : Gets all products
+      tags: 
+        - Products
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: The products were obtained successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: Internal Server Error
+    post:
+      summary: Create product
+      tags: 
+        - Products
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateProduct"  
+      responses:
+        "200":
+          description: Product created successfully 
+        "500":
+          description: Internal Server Error
+  /api/products/{pid}:
+    get:
+      summary : Search by id a product
+      tags: 
+        - Products
+      security:
+        - cookieAuth: []
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: Id of the product to request
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: The product was found successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Product"
+                

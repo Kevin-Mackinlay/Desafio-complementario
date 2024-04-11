@@ -30,7 +30,7 @@ passport.authenticate("login", (err, user, info) => {
 sessionRouter.post(
     "/signup",
     (req,res,next) => {
-        passport.authenticate("login",{session:false},(err,user,info) => {
+        passport.authenticate("signup",{session:false},(err,user,info) => {
             if(err || !user){
                 console.log(info);
                 return res.status(400).json({success:false, message:info.message});
