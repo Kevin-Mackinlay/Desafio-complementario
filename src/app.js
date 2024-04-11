@@ -7,7 +7,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
-import swaggerJsDoc from "swagger-jsdoc";
+import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 
 import IndexRouter from "./routes/index.routes.js";
@@ -48,7 +48,7 @@ const swaggerOptions = {
 };
 
 
-// const specs = swaggerJsdoc(swaggerOptions);
+const specs = swaggerJsdoc(swaggerOptions);
 //config de app
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -93,7 +93,7 @@ app.use("/", IndexRouter);
 // app.use(errorHandler);
 
 app.use("/api/mockingproducts", mockingRouter);
-// app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+ app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 // if (cluster.isPrimary) {
 // console.log(
