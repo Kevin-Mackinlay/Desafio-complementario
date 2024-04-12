@@ -10,12 +10,12 @@ import  TicketsRepository  from "../repositories/ticket.repository.js";
 import  ContactRepository  from "../repositories/contact.repository.js";
 
 
-const userService = new UsersRepository(UserServiceDb);
-const cartService = new CartsRepository(CartServiceDb);
-const productService = new ProductsRepository(ProductServiceDb);
-const ticketService = new TicketsRepository(TicketServiceDb);
+export const userService = new UsersRepository(UserServiceDb);
+export const cartService = new CartsRepository(CartServiceDb);
+export const productService = new ProductsRepository(ProductServiceDb);
+export const ticketService = new TicketsRepository(TicketServiceDb);
 // const contactService = new ContactRepository(ContactServiceDb);
 
 
 
-export default {userService, cartService, productService, ticketService};
+// export default {userService, cartService, productService, ticketService};
