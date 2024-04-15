@@ -35,6 +35,7 @@ const configPassport = () => {
           const passwordMatches = await bcrypt.compare(password, user.password);
           if (!passwordMatches) {
             req.loginSuccess = false;
+           
             return done(null, false, { message: "Password incorrect" });
           }
           req.loginSuccess = true;
