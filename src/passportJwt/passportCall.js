@@ -36,7 +36,7 @@ import passport from "passport";
 
 
 
-    export const passportCallUrl = (strategy) => {
+    const passportCallUrl = (strategy) => {
         return async (req, res, next) => {
           passport.authenticate(strategy, function (err, user, info) {
             if (err) return next(err);
@@ -48,7 +48,7 @@ import passport from "passport";
           
     }
 
-export default {passportCall, passportCallUrl}
+export {passportCall, passportCallUrl}
 
 
 

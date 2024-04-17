@@ -1,11 +1,11 @@
 import { Router } from "express";
-import passportCallModule from "../passportJwt/passportCall.js";
+// import passportCall from "../passportJwt/passportCall.js";
 import ViewsController from "../controllers/views.controller.js";
 import authorization from "../passportJwt/authorization.js";
 
 
-const passportCall = passportCallModule.passportCall;
-const passportCallUrl = passportCallModule.passportCallUrl;
+// const passportCall = passportCallModule.passportCall;
+// const passportCallUrl = passportCallModule.passportCallUrl;
 const viewsController = new ViewsController();
 const viewsRouter = Router();
 
