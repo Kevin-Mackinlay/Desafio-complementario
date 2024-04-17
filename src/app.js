@@ -1,5 +1,4 @@
 import express from "express";
-import nodemailer from "nodemailer";
 import passport from "passport";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
@@ -15,7 +14,6 @@ import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils/utils.js";
 import initPassport from "./passportJwt/passportJwt.js";
-import configPassport from "./config/passport.config.js";
 import { addLogger , logger} from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
@@ -72,7 +70,7 @@ app.use(
 
 //passport
 initPassport();
-configPassport();
+
 app.use(passport.initialize());
 app.use(passport.session());
 

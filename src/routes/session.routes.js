@@ -14,21 +14,16 @@ sessionRouter.post(
     (req, res, next) => {
 
 passport.authenticate("login", (err, user, info) => {
-   if (err) {
-     // Log the error and return a generic error message
-     console.error(err);
-     return res.status(500).json({ success: false, message: "Internal server error" });
-   }
-   if (!user) {
-     // Check if info exists and has a message; otherwise, provide a default message
-     const message = info && info.message ? info.message : "Authentication failed without further information.";
-     return res.status(400).json({ success: false, message });
-   }
+    if (err || !user) {
+      console.log(info);
+      return res.status(400).json({ success: false, message: info.message });
+    }
     next();
-})(req, res, next);
-    },
-    sessionsController.login
+  })(req, res, next);
+},
+sessionsController.login
 );
+
 
 
 

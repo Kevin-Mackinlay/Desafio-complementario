@@ -19,6 +19,32 @@ export const generateInfoProductError = (product) => {
     * code         : Need to be number, received: ${product.code}`;
 };
 
+
+
+export const generateAuthErrorInfo = (user, errorType) => {
+  let errorMessage = "";
+  switch (errorType) {
+    case typeErrors.INVALID_TYPES_ERROR:
+      errorMessage = `One or more products have invalid types:
+        List of required types:
+        * email: string ${typeof user.email}
+        * cartId: string ${typeof user.cartId}
+      `;
+      break;
+    case typeErrors.DATABASE_ERROR:
+      errorMessage = "Error al acceder a la base de datos";
+      break;
+    case typeErrors.ROUTING_ERROR:
+    default:
+      errorMessage = "Error en la ruta";
+      break;
+    case typeErrors.AUTH_ERROR:
+      errorMessage = "Error de autenticación";
+      break;
+  }
+  return errorMessage;
+};
+
 //propertie deberia de contener un array de propiedades que no son validas y su tipo de dato
 // export const genericInvalidErrorInfo = (message, properties) => {
 //   let temporalMessage = message;

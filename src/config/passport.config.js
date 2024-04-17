@@ -1,9 +1,13 @@
 import passport from "passport";
-import passportLocal from "passport-local";
+import jwt from "passport-jwt";
+import local from "passport-local";
+// import config from "../config/objectConfig.js";
+import { creaHash } from "../utils/bcryptHash.js";
 // import GitHubStrategy from "passport-github2";
 // import userService from "../dao/models/user.model.js";
+import CustomError from "../customErrors/enums.js"
+import { generateAuthErrorInfo } from "../customErrors/info.js";
 import * as dotenv from "dotenv";
-import bcrypt from "bcrypt";
 import UserService from "../dao/db/users.service.db.js";
 import CartService from "../dao/db/carts.service.db.js";
 
@@ -12,139 +16,144 @@ dotenv.config();
 // const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 // const GITHUB_CALLBACK_URL = process.env.GITHUB_CALLBACK_URL;
 const userService = new UserService();
-const cartService = new CartService();
 
-const configPassport = () => {
+const LocalStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+
+const ADMIN_ID = config.admin.EMAIL;
+const JWT_SECRET = config.jwt.SECRET;
+const ADMIN_PASSWORD = config.admin.PASSWORD;
+
+
+/**
+ * Inicializa la estrategia de autenticación JWT.
+ */
+const initializeJwtStrategy = () => {
   passport.use(
-    "login",
-    new passportLocal.Strategy(
+    "jwt",
+    new JWTStrategy(
       {
-        usernameField: "email",
-        passwordField: "password",
-        passReqToCallback: true,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: JWT_SECRET,
       },
-
-      async function (req, username, password, done) {
+      async (jwt_payload, done) => {
         try {
-          const user = await userService.getByUser(username);
-
+          const user = await userService.getOneUser(jwt_payload.user.username);
           if (!user) {
-            req.loginSuccess = false;
-            return done(null, false, { message: "User not found" });
+            const error = new CustomError({
+              name: "Error de autenticación",
+              cause: generateAuthErrorInfo(user, typeErrors.AUTH_ERROR),
+              message: "Usuario inexistente",
+              code: typeErrors.AUTH_ERROR,
+            });
+            return done(error);
+          } else {
+            return done(null, jwt_payload);
           }
-          const passwordMatches = await bcrypt.compare(password, user.password);
-          if (!passwordMatches) {
-            req.loginSuccess = false;
-            console.log("Password does not match for user:", username);
-            return done(null, false, { message: "Password incorrect" });
-          }
-          req.loginSuccess = true;
-          return done(null, user);
         } catch (error) {
-          console.log(error.message);
-          return done(error);
+          done(error);
         }
       }
     )
   );
-
-  passport.use(
-    "signup",
-    new passportLocal.Strategy(
-      {
-        usernameField: "email",
-        passwordField: "password",
-        passReqToCallback: true,
-      },
-      async function (req, username, password, done) {
-        try {
-          const user = await userService.getByUser(username);
-          console.log(user);
-          if (user) {
-            req.SignupSuccess = false;
-            req.message = "User not found";
-            return done(null, false, { message: "User already exists" });
-          }
-
-          const hashedPassword = await bcrypt.hash(password, 10);
-
-          const { age, firstName, lastName } = req.body;
-
-          const newUser = await userService.create({ email: username, password: hashedPassword, age, firstName, lastName });
-          console.log(newUser);
-          if (!newUser) {
-            req.SignupSuccess = false;
-            return done(null, false, { message: "internal server error" });
-          }
-          req.SignupSuccess = true;
-          return done(null, newUser);
-        } catch (error) {
-          console.log(error);
-          return done(error);
-        }
-      }
-    )
-  );
-
-  passport.serializeUser(function (user, done) {
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(async function (id, done) {
-    const user = await userService.getByUser(id);
-    delete user.password;
-    done(null, user);
-  });
 };
 
-export default configPassport;
+/**
+ * Inicializa la estrategia de registro de usuarios.
+ */
+const initializeRegisterStrategy = () => {
+  passport.use(
+    "register",
+    new LocalStrategy(
+      {
+        session: false,
+        passReqToCallback: true,
+        usernameField: "email",
+      },
+      async (req, email, password, done) => {
+        const { first_name, last_name } = req.body;
+        const role =
+          email === ADMIN_ID || password === ADMIN_PASSWORD ? "admin" : "user";
+        try {
+          const user = await userService.getOneUser(email);
+          if (user.lenght > 0) {
+            const error = new CustomError({
+              name: "Error de autenticación",
+              cause: generateAuthErrorInfo(user, typeErrors.AUTH_ERROR),
+              message: "El usuario ya existe",
+              code: typeErrors.AUTH_ERROR,
+            });
+            return done(error);
+          } else {
+            const newUser = {
+              first_name,
+              last_name,
+              email,
+              password: creaHash(password),
+              role,
+            };
+            const result = await usersService.signupUser(newUser);
+            return done(null, result);
+          }
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+};
 
-// const initializePassport = () => {
-//   passport.use(
-//     "github",
-//     new GitHubStrategy(
-//       {
-//         clientID: GITHUB_CLIENT_ID,
-//         clientSecret: GITHUB_CLIENT_SECRET,
-//         callbackURL: GITHUB_CALLBACK_URL,
-//       },
-//       async (accessToken, refreshToken, profile, done) => {
-//         try {
-//             console.log(profile);
-//           let user = await userService.findOne({
-//             email: profile?.emails[0]?.value,
-//           });
-//           if (!user) {
-//             const newUser = {
-//               first_name: names[0],
-//               last_name: names[1],
-//               email: profile.emails? profile.email[0]?.value: `${names[0]}${names[1]}@generic.com`,
-//               age: 20,
-//               password: Math.random().toString(36).substring(7),
-//             };
-//             let result = await userService.create(newUser);
-//             done(null, result);
-//           } else {
-//             done(null, user);
-//           }
-//         } catch (err) {
-//           done(err, null);
-//         }
-//       }
-//     )
-//   );
-//   passport.serializeUser((user, done) => {
-//     done(null, user._id);
-//   });
+/**
+ * Serializa y deserializa usuarios.
+ */
+passport.serializeUser((user, done) => {
+  done(null, user[0].email);
+});
 
-//   passport.deserializeUser(async (id, done) => {
-//     try {
-//       let user = await userService.findById(id);
-//       done(null, user);
-//     } catch (err) {
-//       done(err, null);
-//     }
-//   });
-// };
+passport.deserializeUser(async (id, done) => {
+  const user = await usersService.getOneUser(id);
+  done(null, user);
+});
 
-// export default initializePassport;
+/**
+ * Configura passport para loguear usuarios con GitHub.
+ */
+const initializeGithubStrategy = () => {
+  passport.use(
+    "github",
+    new GitHubStrategy(
+      {
+        session: false,
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const user = await usersService.getOneUser(profile?.emails[0]?.value);
+          if (user) {
+            return done(null, user);
+          } else {
+            const newUser = {
+              first_name: profile.displayName.split(" ")[0],
+              last_name: profile.displayName.split(" ")[1],
+              email: profile?.emails[0]?.value,
+              password: "123",
+            };
+            const userNew = await usersService.signupUser(newUser);
+            return done(null, userNew);
+          }
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+};
+
+export {
+  initializeJwtStrategy,
+  initializeRegisterStrategy,
+  initializeGithubStrategy,
+};

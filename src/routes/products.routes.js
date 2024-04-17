@@ -1,5 +1,5 @@
 import express from "express";
-import {passportCall}  from "../passportJwt/passportCall.js";
+import passportCall from "../passportJwt/passportCall.js";
 import ProductsController from "../controllers/products.controller.js";
 import authorization from "../passportJwt/authorization.js";
 

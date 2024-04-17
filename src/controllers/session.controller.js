@@ -22,37 +22,79 @@ export default class SessionsController {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        return res.status(400).send({ status: "error", message: "Fill in the missing fields" });
+        const result = [username, password];
+      req.logger.error(
+        `Error de tipo de dato: Error de inicio de sesión ${new Date().toLocaleString()}`
+      );
+      CustomError.createError({
+        name: "Error de tipo de dato",
+        cause: generateSessionErrorInfo(result, EErrors.INVALID_TYPES_ERROR),
+        message: "Error de inicio de sesión",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    } else{
+      const result = await userService.getUser( email );
+      if ( 
+        result.length === 0 ||
+        !validPassword( result[0].password, password )
+      ){
+        req.logger.error(
+          `Error de base de datos: Usuario no encontrado ${new Date().toLocaleString()}`
+        );
+        CustomError.createError({
+          name: "Error de base de datos",
+          cause: generateSessionErrorInfo(result, EErrors.NOT_FOUND_ERROR),
+          message: "Usuario no encontrado",
+          code: EErrors.NOT_FOUND_ERROR,
+        });
+
+      }else {
+        const myToken = generateToken({
+          firstName: result[0].firstName,
+          email,
+          password,
+          role: result[0].role,
+        });
+        
+        req.logger.info(
+          `Inicio de sesión exitoso ${new Date().toLocaleString()}`
+        );
+       res.json({ message: "Inicio de sesión exitoso" });
       }
-
-      const user = await userService.getUser({ email });
-      if (!user) {
-        return res.status(400).send({ status: "error", message: "This email is not registered" });
-      }
-
-      if (!(await bcrypt.compare(password, user.password))) {
-        return res.status(400).send({ status: "error", message: "Incorrect password" });
-      }
-
-      if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-        await userService.updateUser({ _id: user._id }, { role: "admin" });
-      }
-
-      let accessToken = generateToken(user);
-      await userService.updateUser({ _id: user._id }, { lastConnection: new Date() });
-
-      res
-        .status(200)
-        .cookie("CoderCookieToken", accessToken, {
-          maxAge: 60 * 60 * 1000, // 1 hour
-          httpOnly: true,
-        })
-        .send({ status: "success", message: `${user.firstName}, you have logged in successfully` });
+    }
     } catch (error) {
-      logger.error(error);
-      res.status(500).send({ status: "error", message: "Internal server error" });
+      next(error);
     }
   };
+
+  //     const user = await userService.getUser({ email });
+  //     if (!user) {
+  //       return res.status(400).send({ status: "error", message: "This email is not registered" });
+  //     }
+
+  //     if (!(await bcrypt.compare(password, user.password))) {
+  //       return res.status(400).send({ status: "error", message: "Incorrect password" });
+  //     }
+
+  //     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+  //       await userService.updateUser({ _id: user._id }, { role: "admin" });
+  //     }
+
+  //     let accessToken = generateToken(user);
+  //     await userService.updateUser({ _id: user._id }, { lastConnection: new Date() });
+
+  //     res
+  //       .status(200)
+  //       .cookie("CoderCookieToken", accessToken, {
+  //         maxAge: 60 * 60 * 1000, // 1 hour
+  //         httpOnly: true,
+  //       })
+  //       .send({ status: "success", message: `${user.firstName}, you have logged in successfully` });
+  //   } catch (error) {
+  //     logger.error(error);
+  //     res.status(500).send({ status: "error", message: "Internal server error" });
+  //   }
+  // };
 
   // login = async (req, res) => {
   //   try {
