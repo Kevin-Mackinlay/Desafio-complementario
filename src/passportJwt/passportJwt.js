@@ -1,12 +1,10 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 
-import dotenv from "dotenv"; // Import dotenv for loading environment variables
 import { userService } from "../services/services.js";
 import { creaHash, validPassword } from "../utils/bcryptHash.js";
 
-// Load environment variables from .env file
-dotenv.config();
+
 
 const initializePassport = () => {
   passport.use(
@@ -52,13 +50,13 @@ const initializePassport = () => {
 
 
 
-  const cookieExtractor = (req) => {
-    let token = null;
-    if (req && req.cookies) {
-      token = req.cookies["jwt"];
-    }
-    return token;
-  };
+  // const cookieExtractor = (req) => {
+  //   let token = null;
+  //   if (req && req.cookies) {
+  //     token = req.cookies["config.jw"];
+  //   }
+  //   return token;
+  // };
 }
 
 export default initializePassport;
