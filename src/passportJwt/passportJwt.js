@@ -1,41 +1,64 @@
 import passport from "passport";
-import jwt from "passport-jwt";
+import { Strategy as LocalStrategy } from "passport-local";
+
 import dotenv from "dotenv"; // Import dotenv for loading environment variables
+import { userService } from "../services/services.js";
+import { creaHash, validPassword } from "../utils/bcryptHash.js";
 
 // Load environment variables from .env file
 dotenv.config();
 
-const JwtStrategy = jwt.Strategy;
-const ExtractJwt = jwt.ExtractJwt;
-
-// Define a function to extract JWT token from cookie
-const cookieExtract = (req) => {
-  let token = null;
-  if (req && req.cookies) {
-    token = req.cookies["CoderCookieToken"];
-  }
-  return token;
-};
-
-// Initialize Passport with JWT strategy using environment variable for secret key
-const initPassport = () => {
+const initializePassport = () => {
   passport.use(
-    "jwt",
-    new JwtStrategy(
-      {
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtract]),
-        secretOrKey: process.env.JWT_PRIVATE_KEY, // Use environment variable for secret key
-      },
-      async (jwt_payload, done) => {
-        try {
-          return done(null, jwt_payload);
-        } catch (error) {
-          done(error);
+    "signup",
+    new LocalStrategy({ usernameField: "email", session: false, passReqToCallback: true }, async (req, email, password, done) => {
+      try {
+        const { firstName, lastName } = req.body;
+        if (!firstName || !lastName || !email || !password) {
+          return done(null, false, { message: "Missing fields" });
         }
+        console.log(user);
+        const exists = await userService.getUser({ email });
+        if (exists) {
+          return done(null, false, { message: "User already exists" });
+        }
+        const hashedPassword = creaHash(password);
+        const newUser = await userService.createUser({ firstName, lastName, email, password: hashedPassword });
+        return done(null, newUser);
+      } catch (error) {
+        return done(error);
       }
-    )
+    })
   );
-};
 
-// Export the Passport initialization function
-export default initPassport;
+  passport.use(
+    "login",
+    new LocalStrategy({ usernameField: "email", session: false }, async (email, password, done) => {
+      try {
+        const user = await userService.getUser({ email });
+        if (!user) {
+          return done(null, false, { message: "User not found" });
+        }
+        const passwordValidation = await validPassword(password, user.password);
+        if (!passwordValidation) {
+          return done(null, false, { message: "Password incorrect" });
+        }
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    })
+  );
+
+
+
+  const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.cookies) {
+      token = req.cookies["jwt"];
+    }
+    return token;
+  };
+}
+
+export default initializePassport;

@@ -71,6 +71,7 @@ app.use(
 //passport
 initPassport();
 
+
 app.use(passport.initialize());
 app.use(passport.session());
 
