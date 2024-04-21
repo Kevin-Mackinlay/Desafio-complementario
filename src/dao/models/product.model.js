@@ -10,7 +10,11 @@ const ProductSchema = new mongoose.Schema({
   stock: { type: Number, default: 1 },
   code: { type: String, required: true, max: 10, unique: true },
   category: { type: String, required: true, max: 20 },
-});
+},
+{ timestamps: true }
+
+
+);
 
 ProductSchema.plugin(paginate);
 const ProductModel = mongoose.model("Product", ProductSchema);

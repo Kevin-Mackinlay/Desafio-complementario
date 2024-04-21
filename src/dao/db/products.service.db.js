@@ -1,4 +1,4 @@
-import  productModel  from "../../dao/models/product.model.js";
+import productModel from "../../dao/models/product.model.js";
 import { logger } from "../../utils/logger.js";
 
 export default class ProductsService {
@@ -10,17 +10,10 @@ export default class ProductsService {
     }
   }
 
-  async get(page, sort) {
+  async get(filter) {
     try {
-      let sortOpt = {};
-
-      if (sort === "asc") {
-        sortOpt = { price: 1 };
-      } else if (sort === "des") {
-        sortOpt = { price: -1 };
-      }
-
-      return await productModel.paginate({}, { limit: 6, page: page, lean: true, sort: sortOpt });
+      console.log(filter);
+      return await productModel.paginate({}, filter.options);
     } catch (error) {
       logger.error(error);
     }

@@ -11,9 +11,9 @@ async function postLogin(email, password) {
       },
       body: JSON.stringify(data),
     });
-    console.log("Response status:", response.status); // Log response status
+
     const result = await response.json();
-    console.log("Result:", result); // Log response body
+
     return result;
   } catch (error) {
     console.error("Error:", error); // Log any caught errors

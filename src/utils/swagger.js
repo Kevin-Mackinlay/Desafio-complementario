@@ -1,4 +1,4 @@
-
+import { __dirname } from "./utils.js";
 
 const swaggerOptions = {
   definition: {
@@ -8,7 +8,7 @@ const swaggerOptions = {
       description: "Documentation of the following api's",
     },
   },
-  apis: [`$__dirname{(__dirname)}/docs/**/*.yml`],
+  apis: [`${__dirname}/../docs/**/*.yml`],
 };
 
 export default swaggerOptions;

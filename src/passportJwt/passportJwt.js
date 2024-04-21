@@ -1,10 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-
 import { userService } from "../services/services.js";
 import { creaHash, validPassword } from "../utils/bcryptHash.js";
-
-
 
 const initializePassport = () => {
   passport.use(
@@ -13,18 +10,36 @@ const initializePassport = () => {
       try {
         const { firstName, lastName } = req.body;
         if (!firstName || !lastName || !email || !password) {
+          req.signupSuccess = false;
           return done(null, false, { message: "Missing fields" });
         }
-        console.log(user);
+
         const exists = await userService.getUser({ email });
+
         if (exists) {
+          req.signupSuccess = false;
           return done(null, false, { message: "User already exists" });
         }
+
         const hashedPassword = creaHash(password);
-        const newUser = await userService.createUser({ firstName, lastName, email, password: hashedPassword });
-        return done(null, newUser);
+
+        const newUser = await userService.createUser({
+          firstName,
+          lastName,
+          email,
+          password: hashedPassword,
+        });
+
+        // if (!newUser) {
+        // 	req.signupSuccess = false;
+        // 	return done(null, false, { message: "Error creating user" });
+        // }
+
+        req.signupSuccess = true;
+        return done(null, newUser, { message: "User created" });
       } catch (error) {
-        return done(error);
+        req.signupSuccess = false;
+        return done(error, false, { message: "Error creating user" });
       }
     })
   );
@@ -35,20 +50,23 @@ const initializePassport = () => {
       try {
         const user = await userService.getUser({ email });
         if (!user) {
+          console.log(1);
           return done(null, false, { message: "User not found" });
         }
-        const passwordValidation = await validPassword(password, user.password);
+
+        const passwordValidation = validPassword(password, user.password);
         if (!passwordValidation) {
+          console.log(2);
           return done(null, false, { message: "Password incorrect" });
         }
+
         return done(null, user);
       } catch (error) {
+        console.log(error);
         return done(error);
       }
     })
   );
-
-
 
   // const cookieExtractor = (req) => {
   //   let token = null;
@@ -57,6 +75,7 @@ const initializePassport = () => {
   //   }
   //   return token;
   // };
-}
+};
 
 export default initializePassport;
+ 

@@ -1,3 +1,4 @@
+
 /* Reset CSS */
 * {
   margin: 0;
@@ -54,6 +55,43 @@ nav ul {
   font-weight: bold;
   color: #fff; /* Set text color to white */
 }
+
+/* Product Card Styles */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centering items in the container */
+  width: 100%; /* Ensures the container takes full width */
+  padding: 20px;
+}
+
+.product-card {
+  flex: 0 0 32%; /* Adjusts to fit 3 items per row */
+  margin: 1%; /* Small margin for spacing */
+  background-color: #fff; /* White background for cards */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow */
+  overflow: hidden; /* Hides anything that overflows the container */
+}
+
+.product-card__image img {
+  width: 100%;
+  height: auto;
+}
+
+.product-card__info {
+  padding: 10px;
+  color: #333;
+  text-align: left;
+}
+
+.product-card__info h4,
+.product-card__info p {
+  margin-bottom: 10px;
+}
+
+/* Other styles remain unchanged */
+
 
 
 .login-container {

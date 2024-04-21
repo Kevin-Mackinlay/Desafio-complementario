@@ -7,6 +7,7 @@ const cart = new CartService();
 export default class UserService {
   async create({ firstName, lastName, email, password }) {
     try {
+      console.log(email);
       return await userModel.create({
         firstName,
         lastName,
@@ -15,15 +16,14 @@ export default class UserService {
         cart: await cart.create()._id,
       });
     } catch (error) {
-    
+      console.log(error);
       logger.error(error);
     }
   }
   async getByUser(userData) {
     try {
-      return await userModel.findOne({email: userData });
+      return await userModel.findOne(userData).lean();
     } catch (error) {
-  
       logger.error(error);
     }
   }

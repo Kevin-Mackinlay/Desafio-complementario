@@ -47,52 +47,125 @@ button:hover {
 }
 
 /* CSS for product cards */
+/* General Styles for the container */
 .product-list {
   display: flex;
-  flex-direction: row !important;
   flex-wrap: wrap;
-  gap: 20px; /* Adjust as needed */
+  justify-content: space-around; /* Espaciado uniforme */
+}
+
+/* Styles for individual product cards */
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 12px;
+  list-style: none;
+}
+
+/* Global Styles */
+html {
+  height: 100%;
+  width: 100%;
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #f2f2f2; /* Light gray background */
+}
+
+a {
+  text-decoration: none;
+  color: #333; /* Dark gray text color */
+}
+
+a:hover {
+  color: #ffa60b; /* Gold hover color */
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  height: 15rem; /* Adjusted height */
+  width: 100%;
+  padding: 0 3rem;
+  background-color:#b3b1b1; /* Dark background color */
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  font-weight: bold;
+  color: #fff; /* Set text color to white */
+}
+
+/* Product Card Styles */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centering items in the container */
+  width: 100%; /* Ensures the container takes full width */
+  padding: 20px;
 }
 
 .product-card {
-  width: 300px; /* Adjust card width as needed */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 0 0 32%; /* Adjusts to fit 3 items per row */
+  margin: 1%; /* Small margin for spacing */
+  background-color: #fff; /* White background for cards */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow */
+  overflow: hidden; /* Hides anything that overflows the container */
 }
-
 .product-card__image img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 5px;
+  width: 100%;  /* La imagen llena el ancho del contenedor */
+  max-height: 200px;  /* Altura máxima para las imágenes */
+  object-fit: cover;  /* Asegura que la imagen cubra el espacio asignado sin distorsionarse */
+  display: block;
 }
 
-.product-card__info h4 {
-  margin-top: 0;
-  font-size: 18px;
+.product-card__info {
+  padding: 10px;
   color: #333;
+  text-align: left;
 }
 
+.product-card__info h4,
 .product-card__info p {
-  margin: 5px 0;
-  color: #666;
+  margin-bottom: 10px;
 }
 
+/* Other styles remain unchanged */
+
+
+
+/* Styles specific to price */
 .price {
   font-weight: bold;
-  color: #27ae60; /* Adjust color as needed */
+  color: #27ae60; /* Verde para destacar el precio */
 }
 
 .stock {
   font-style: italic;
 }
 
+/* Styles for code and ID, less prominent */
 .code,
 .id {
   font-size: 14px;
-  color: #888;
+  color: #bbb;
 }
 
 /* Pagination button styling */
@@ -108,6 +181,48 @@ button:hover {
 
 .pagination-button:hover {
   background-color: #2980b9;
+}
+
+/* Form styles preserved from your original CSS */
+div[style="display: flex;"] {
+  display: flex;
+  justify-content: space-between;
+}
+
+form {
+  flex: 0 0 45%;
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #444;
+  font-weight: bold;
+}
+
+input[type="text"], textarea {
+  width: calc(100% - 16px);
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 /* Navbar styles */

@@ -1,11 +1,10 @@
-async function postSignup(firstName, lastName,age, email, password ) {
+async function postSignup(firstName, lastName, age, email, password) {
   const data = {
     firstName,
     lastName,
     age,
     email,
-    password
-  
+    password,
   };
   try {
     const response = await fetch("/api/sessions/signup", {
@@ -17,7 +16,7 @@ async function postSignup(firstName, lastName,age, email, password ) {
     });
 
     const result = await response.json();
-   
+    console.log(result);
     return result;
   } catch (error) {
     console.log(error);
@@ -34,7 +33,6 @@ signupForm.addEventListener("submit", async (event) => {
   const age = document.getElementById("age").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
- 
 
   const response = await postSignup(first_name, last_name, age, email, password);
   if (response.success == true) {
