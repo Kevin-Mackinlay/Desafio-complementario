@@ -5,7 +5,7 @@ import {faker} from "@faker-js/faker";
 
 const mockingRouter = Router();
 
-mockingRouter.get("/mockingproducts", (req, res) => {
+mockingRouter.get("/", (req, res) => {
   let products = [];
   let product = {
     _id: faker.database.mongodbObjectId(),
@@ -27,12 +27,12 @@ mockingRouter.get("/mockingproducts", (req, res) => {
 mockingRouter.get("/mockingusers", (req, res) => {
   let user = {
     _id: faker.database.mongodbObjectId(),
-    firtsName: faker.person.firstName(),
+    firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
     userName: faker.internet.displayName(),
     password: faker.internet.password(),
-    birthDate: faker.date.birthdate(),
+    birthDate: faker.date.birthDate(),
   };
   res.send({ status: "success", user: user });
 });
