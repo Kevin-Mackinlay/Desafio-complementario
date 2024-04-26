@@ -19,5 +19,7 @@ IndexRouter.use("/signup", ViewsRouter);
 IndexRouter.use("/api/sessions", SessionsRouter);
 IndexRouter.use("/api/tickets", TicketRouter);
 IndexRouter.use("/api/mockingproducts", mockingRouter);
+IndexRouter.use("/api/mockingusers", mockingRouter);
+
 
 export default IndexRouter;

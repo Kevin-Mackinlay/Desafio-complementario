@@ -45,12 +45,6 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", "src/views");
 app.set("view engine", "handlebars");
 
-//middlewares para el manejo de datos
-app.use(cookieParser(COOCKIESECRET));
-app.use(addLogger);
-app.use(errorHandler);
-// app.use(logger);
-
 app.use(
   session({
     store: MongoStore.create({
@@ -77,6 +71,12 @@ app.use("/", IndexRouter);
 // app.use("/api/mockingproducts", mockingRouter);
 app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
+
+//middlewares para el manejo de datos
+app.use(cookieParser(COOCKIESECRET));
+app.use(addLogger);
+app.use(errorHandler);
+// app.use(logger);
 
 
 
