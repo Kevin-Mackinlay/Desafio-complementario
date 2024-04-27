@@ -1,9 +1,12 @@
-import chai from "chai";
+
+
+import * as chai from "chai";
+
 import chaiHttp from "chai-http";
-import server from "../app"; // Import your Express application
+import {server} from "../src/app.js"; // Import your Express application
 import sinon from "sinon";
 import passport from "passport";
-import { CartController } from "../controllers/carts.controller.js";
+import  CartsController  from "../src/controllers/carts.controller.js";
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -15,7 +18,7 @@ describe("Cart Routes", function () {
   let cartsController;
 
   beforeEach(() => {
-    cartsController = new CartController();
+    cartsController = new CartsController();
     sinon.restore(); // Restore all mocks to their original modules
   });
 

@@ -1,9 +1,9 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
-import server from "../app"; // Import your Express application
+import server from "../src/app.js"; // Import your Express application
 import sinon from "sinon";
 import passport from "passport";
-import { ProductsController } from "../controllers/products.controller.js";
+import { ProductsController } from "../src/controllers/products.controller.js";
 
 const expect = chai.expect;
 chai.use(chaiHttp);
