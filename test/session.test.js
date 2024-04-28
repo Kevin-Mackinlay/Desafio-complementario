@@ -1,8 +1,11 @@
 import supertest from "supertest";
 import {expect} from "chai";
+import { app } from "../src/app.js";
 
 
-const requester = supertest("http://localhost:8080");
+
+
+const requester = supertest(app);
 
 describe("Testing proyecto final", () => {
   describe("testing session", () => {
@@ -37,7 +40,7 @@ describe("Login", () => {
 
 describe("GET /", () => {
   it("this endpoint should return all the users", async () => {
-    const response = await requester.get("/api/users");
+    const response = await requester.get("/api/users/getAllUsers");
     expect(response.status).to.equal(200);
     expect(response.body).to.be.an("array");
   });
