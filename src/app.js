@@ -124,6 +124,7 @@ io.on("connection", (socket) => {
   console.log("Se conecto un nuevo ususario");
 });
 
+export {server, app};
 
 startMongoConnection()
   .then(() => {
