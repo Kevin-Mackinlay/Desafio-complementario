@@ -9,6 +9,7 @@ const sessionsController = new sessionController();
 sessionRouter.post(
   "/login",
   (req, res, next) => {
+    console.log("received login request:", req.body);
     passport.authenticate("login", (err, user, info) => {
       if (err || !user) {
         return res.status(400).json({ success: false, message: info.message });
@@ -22,6 +23,7 @@ sessionRouter.post(
 sessionRouter.post(
   "/signup",
   (req, res, next) => {
+    console.log("received signup request:", req.body);
     passport.authenticate("signup", { session: false }, (err, user, info) => {
       if (err || !user) {
         return res.status(400).json({ success: false, message: info.message });
@@ -49,6 +51,14 @@ sessionRouter.get("/googlecallback", passport.authenticate("google"), (req, res)
 
 sessionRouter.get("/private", passport.authenticate("login", { session: false }), sessionsController.private);
 sessionRouter.post("/logout", sessionsController.logout);
-sessionRouter.get("/current", authorization(["user", "premium", "admin"]), sessionsController.infoCurrent);
+sessionRouter.get(
+  "/current",
+  (req, res, next) => {
+    console.log("received current request");
+    next();
+  },
+  authorization(["user", "premium", "admin"]),
+  sessionsController.infoCurrent
+);
 
 export default sessionRouter;
