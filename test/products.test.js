@@ -1,8 +1,7 @@
 import supertest from "supertest";
 import { expect } from "chai";
 
-
-const request = supertest("http://localhost:8080");
+const requester = supertest("http://localhost:8080");
 
 describe("testing de productos", () => {
   it("2+2 = 4", () => {
@@ -11,7 +10,7 @@ describe("testing de productos", () => {
   });
 
   it("El endpoint GET /api/products debería devolver todos los productos", async () => {
-    const result = await request.get("/api/products").send();
+    const result = await requester.get("/api/products").send();
     const { _body, statusCode, ok } = result;
     console.log(_body);
     expect(ok).to.be.true;

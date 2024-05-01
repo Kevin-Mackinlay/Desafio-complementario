@@ -1,15 +1,16 @@
 import express from "express";
-import {passportCall} from "../passportJwt/passportCall.js";
+import passport from "passport";
 import ProductsController from "../controllers/products.controller.js";
-import authorization from "../passportJwt/authorization.js";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
+import { productService } from "../services/services.js";
 
 const productsRouter = express.Router();
-const productsController = new ProductsController();
+const productsController = new ProductsController(productService);
 
-productsRouter.get("/", passportCall("jwt") , productsController.getProducts);
-productsRouter.get("/:pid", passportCall("jwt"), productsController.getProductById);
-productsRouter.post("/",passportCall("jwt"), authorization(["admin"]), productsController.createProduct);
-productsRouter.put("/:pid",passportCall("jwt"), authorization(["admin"]), productsController.updateProduct);
-productsRouter.delete("/:pid",passportCall("jwt"),  authorization(["admin"]), productsController.deleteProduct);
+productsRouter.get("/", productsController.getProducts);
+productsRouter.get("/:pid", productsController.getProductById);
+productsRouter.post("/", productsController.createProduct);
+productsRouter.put("/:pid", productsController.updateProduct);
+productsRouter.delete("/:pid", productsController.deleteProduct);
 
 export default productsRouter;

@@ -1,11 +1,10 @@
 import dotenv from "dotenv";
 import MongoSingleton from "../utils/singleton.js";
 
-
 const MODE = process.env.NODE_ENV || "dev";
-dotenv.config({ path: MODE === "dev" ? "./.env.dev" : "./.env.prod" }); // Load the .env file according to the environment
+dotenv.config(); // Load the .env file according to the environment
 
-console.log("PERSISTENCE" ,process.env.PERSISTENCE);
+console.log("PERSISTENCE", process.env.PERSISTENCE);
 
 const config = {
   persistence: process.env.PERSISTENCE || "mongodb",
@@ -18,12 +17,11 @@ const config = {
     try {
       return await MongoSingleton.getInstance();
     } catch (error) {
-       console.error("Error connecting to the database:", error.message);
+      console.error("Error connecting to the database:", error.message);
       // Optionally rethrow the error to handle it elsewhere
       throw error;
     }
   },
-}
-
+};
 
 export default config;

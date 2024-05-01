@@ -16,27 +16,21 @@ describe("POST /", () => {
     });
     const response = await request.post("/api/carts/createCart").send(cart);
     expect(response._body.status).to.be.equal("success");
-  }
-  );
-}
-);
+  });
+});
 
 describe("GET /", () => {
   it("this endpoint should return all the carts", async () => {
     const response = await request.get("/api/carts");
     expect(response.status).to.equal(200);
     expect(response.body).to.be.an("array");
-  }
-  );
-}
-);
+  });
+});
 
 describe("GET /:id", () => {
   it("this endpoint should return a cart by id", async () => {
     const response = await request.get("/api/carts/1");
     expect(response.status).to.equal(200);
     expect(response.body).to.be.an("object");
-  }
-  );
-}
-);  // Path: Tercera-preEntrega-PF/test/products.test.js
+  });
+}); // Path: Tercera-preEntrega-PF/test/products.test.js

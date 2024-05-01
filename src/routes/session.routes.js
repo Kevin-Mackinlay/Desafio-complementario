@@ -1,13 +1,14 @@
 import { Router } from "express";
 import passport from "passport";
 import sessionController from "../controllers/session.controller.js";
-import authorization from "../passportJwt/authorization.js";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 const sessionRouter = Router();
 const sessionsController = new sessionController();
 
 sessionRouter.post(
   "/login",
+  isAuthenticated(["guest"]),
   (req, res, next) => {
     console.log("received login request:", req.body);
     passport.authenticate("login", (err, user, info) => {
@@ -26,7 +27,7 @@ sessionRouter.post(
     console.log("received signup request:", req.body);
     passport.authenticate("signup", { session: false }, (err, user, info) => {
       if (err || !user) {
-        return res.status(400).json({ success: false, message: info.message });
+        return res.status(400).json({ success: false, message: info });
       }
       next();
     })(req, res, next);
@@ -57,7 +58,6 @@ sessionRouter.get(
     console.log("received current request");
     next();
   },
-  authorization(["user", "premium", "admin"]),
   sessionsController.infoCurrent
 );
 

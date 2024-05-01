@@ -9,12 +9,12 @@ import handlebars from "express-handlebars";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 import swaggerOptions from "./utils/swagger.js";
-import errorHandler from "./middlewares/errorHandler/errorHandling.js"
+import errorHandler from "./middlewares/errorHandler/errorHandling.js";
 
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
 import { __dirname } from "../src/utils/utils.js";
-import initPassport from "./passportJwt/passportJwt.js";
+import { initializePassport } from "./config/passport.config.js";
 import { addLogger, logger } from "./utils/logger.js";
 import compression from "express-compression";
 import cors from "cors";
@@ -59,11 +59,12 @@ app.use(
 );
 
 //passport
-initPassport();
+initializePassport();
 
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(addLogger);
 //rutas
 app.use("/", IndexRouter);
 // app.use(error
@@ -71,20 +72,14 @@ app.use("/", IndexRouter);
 // app.use("/api/mockingproducts", mockingRouter);
 app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-
 //middlewares para el manejo de datos
 app.use(cookieParser(COOCKIESECRET));
-app.use(addLogger);
 app.use(errorHandler);
 // app.use(logger);
-
-
 
 // app.get("/", (req, res) => {
 //   throw new Error("Algo falló!");
 // });
-
-
 
 app.get("/ejemploBrotli", (req, res) => {
   let ejemploString = "Hola soy un string de ejemplo";
@@ -111,7 +106,6 @@ app.get("/operacioncompleja", (req, res) => {
   res.json({ suma });
 });
 
-
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
@@ -124,7 +118,7 @@ io.on("connection", (socket) => {
   console.log("Se conecto un nuevo ususario");
 });
 
-export {server, app};
+export { server, app };
 
 startMongoConnection()
   .then(() => {
@@ -135,3 +129,4 @@ startMongoConnection()
 async function startMongoConnection() {
   await mongoose.connect(DB_URL);
 }
+
