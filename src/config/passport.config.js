@@ -3,7 +3,9 @@ import GitHubStrategy from "passport-github2";
 import LocalStrategy from "passport-local";
 import { userService } from "../services/services.js";
 import { creaHash, validPassword } from "../utils/bcryptHash.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 
 const initializePassport = () => {
   passport.use(
@@ -31,11 +33,6 @@ const initializePassport = () => {
           email,
           password: hashedPassword,
         });
-
-        // if (!newUser) {
-        // 	req.signupSuccess = false;
-        // 	return done(null, false, { message: "Error creating user" });
-        // }
 
         req.signupSuccess = true;
         return done(null, newUser, { message: "User created" });
@@ -71,11 +68,15 @@ const initializePassport = () => {
       }
     })
   );
- console.log("GITHUB_CLIENT_ID:", process.env.GITHUB_CLIENT_ID);
- console.log("GITHUB_CLIENT_SECRET:", process.env.GITHUB_CLIENT_SECRET);
+
+  console.log("GITHUB_CLIENT_ID:", process.env.GITHUB_CLIENT_ID);
+  console.log("GITHUB_CLIENT_SECRET:", process.env.GITHUB_CLIENT_SECRET);
+
+
+
   passport.use(
     "github",
-    
+
     new GitHubStrategy(
       {
         session: false,
