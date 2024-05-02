@@ -77,7 +77,7 @@ export default class ProductsController {
 
       // Assuming `create` expects a product object
       const newProduct = await this.productsService.addProduct(product);
-
+      console.log(newProduct);
       if (!newProduct) {
         res.status(400).json({
           success: false,

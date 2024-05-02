@@ -26,6 +26,7 @@ export default class ProductsRepository {
     try {
       return await this.dao.addProduct(product);
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };
