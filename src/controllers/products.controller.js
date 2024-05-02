@@ -70,47 +70,82 @@ export default class ProductsController {
       req.logger.error(error);
     }
   };
-
   createProduct = async (req, res) => {
     try {
-      const { title, description, price, thumbnails, stock } = req.body;
-      const code = uuidv4();
-      const owner = req.user.email;
+      const { product } = req.body;
+      console.log(req.body);
 
-      //validacion si los campos estan vacios
-      if (!title || !description || !price || !thumbnails || !stock) {
-        throw CustomError.createError({
-          name: "Error creating product",
-          cause: generateInfoProductError({ title, description, price, thumbnails, stock }),
-          message: "Error trying to create a product",
-          code: typeErrors.INVALID_TYPE_ERROR,
+      // Assuming `create` expects a product object
+      const newProduct = await this.productsService.createProduct(product);
+
+      if (!newProduct) {
+        res.status(400).json({
+          success: false,
+          message: "Could not add the product",
         });
+        return;
       }
 
-      //validacion si el code del producto ya existe
-      if (await this.productsService.getProduct({ code })) {
-        CustomError.createError({
-          name: "Error creating product",
-          cause: generateInfoProductError({ title, description, price, thumbnails, stock }),
-          message: "Existing code error",
-          code: typeErrors.INVALID_TYPE_ERROR,
-        });
-      }
-      let result = await this.productsService.createProduct({
-        title,
-        description,
-        price,
-        thumbnails,
-        stock,
-        code,
-        owner,
+      const products = await this.productsService.getProducts();
+      res.status(200).json({
+        success: true,
+        products,
       });
-      result ? res.status(200).send({ status: "A product has been created successfully", payload: result }) : res.status(404).send({ status: "Error", error: "Something went wrong" });
     } catch (error) {
-      next(error);
-      req.logger.error(error);
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
   };
+
+  // createProduct = async (req, res, next) => {
+  //   try {
+  //     const { title, description, price, thumbnails, stock } = req.body;
+  //     const code = uuidv4();
+  //     const owner = req.user.email;
+
+  //     // Validation for empty fields
+  //     if (!title || !description || !price || !thumbnails || !stock) {
+  //       throw CustomError.createError({
+  //         name: "Error creating product",
+  //         cause: generateInfoProductError({ title, description, price, thumbnails, stock }),
+  //         message: "Error trying to create a product",
+  //         code: typeErrors.INVALID_TYPE_ERROR,
+  //       });
+  //     }
+
+  //     // Validation if product code already exists
+  //     if (await this.productsService.getProduct({ code })) {
+  //       CustomError.createError({
+  //         name: "Error creating product",
+  //         cause: generateInfoProductError({ title, description, price, thumbnails, stock }),
+  //         message: "Existing code error",
+  //         code: typeErrors.INVALID_TYPE_ERROR,
+  //       });
+  //     }
+
+  //     let result = await this.productsService.createProduct({
+  //       title,
+  //       description,
+  //       price,
+  //       thumbnails,
+  //       stock,
+  //       code,
+  //       owner,
+  //     });
+
+  //     if (result) {
+  //       res.status(200).send({ status: "A product has been created successfully", payload: result });
+  //     } else {
+  //       res.status(404).send({ status: "Error", error: "Something went wrong" });
+  //     }
+  //   } catch (error) {
+  //     next(error); // Now 'next' is defined in the function parameters
+  //     req.logger.error(error);
+  //   }
+  // };
 
   updateProduct = async (req, res) => {
     try {

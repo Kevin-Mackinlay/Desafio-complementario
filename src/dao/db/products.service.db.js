@@ -2,9 +2,9 @@ import productModel from "../../dao/models/product.model.js";
 import { logger } from "../../utils/logger.js";
 
 export default class ProductsService {
-  async create(newProduct) {
+  async createProduct(newProduct) {
     try {
-      return await productModel.create(newProduct);
+      return await productModel.createProduct(newProduct);
     } catch (error) {
       logger.error(error);
     }
