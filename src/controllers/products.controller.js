@@ -72,7 +72,7 @@ export default class ProductsController {
   };
   addProduct = async (req, res) => {
     try {
-      const { product } = req.body;
+      const product = req.body;
       console.log(req.body);
 
       // Assuming `create` expects a product object
@@ -99,53 +99,6 @@ export default class ProductsController {
       });
     }
   };
-
-  // createProduct = async (req, res, next) => {
-  //   try {
-  //     const { title, description, price, thumbnails, stock } = req.body;
-  //     const code = uuidv4();
-  //     const owner = req.user.email;
-
-  //     // Validation for empty fields
-  //     if (!title || !description || !price || !thumbnails || !stock) {
-  //       throw CustomError.createError({
-  //         name: "Error creating product",
-  //         cause: generateInfoProductError({ title, description, price, thumbnails, stock }),
-  //         message: "Error trying to create a product",
-  //         code: typeErrors.INVALID_TYPE_ERROR,
-  //       });
-  //     }
-
-  //     // Validation if product code already exists
-  //     if (await this.productsService.getProduct({ code })) {
-  //       CustomError.createError({
-  //         name: "Error creating product",
-  //         cause: generateInfoProductError({ title, description, price, thumbnails, stock }),
-  //         message: "Existing code error",
-  //         code: typeErrors.INVALID_TYPE_ERROR,
-  //       });
-  //     }
-
-  //     let result = await this.productsService.createProduct({
-  //       title,
-  //       description,
-  //       price,
-  //       thumbnails,
-  //       stock,
-  //       code,
-  //       owner,
-  //     });
-
-  //     if (result) {
-  //       res.status(200).send({ status: "A product has been created successfully", payload: result });
-  //     } else {
-  //       res.status(404).send({ status: "Error", error: "Something went wrong" });
-  //     }
-  //   } catch (error) {
-  //     next(error); // Now 'next' is defined in the function parameters
-  //     req.logger.error(error);
-  //   }
-  // };
 
   updateProduct = async (req, res) => {
     try {

@@ -8,6 +8,7 @@ export default class ProductsService {
     try {
       return await productModel.create(Product);
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   }
@@ -15,8 +16,9 @@ export default class ProductsService {
   async get(filter) {
     try {
       console.log(filter);
-      return await productModel.paginate({}, filter.options);
+    return await productModel.paginate({}, filter?.options);
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   }

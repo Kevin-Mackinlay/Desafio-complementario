@@ -35,12 +35,10 @@ describe("Testing proyecto final", () => {
       expect(cookie.value).to.be.ok.and.eql("coderCookie");
     }).timeout(5000);
 
-    // it("El endpoint GET /api/sessions/current debería devolver la información del usuario logueado", async () => {
-    // 	const response = await requester
-    // 		.get("/api/sessions/current")
-    // 		.set("Cookie", [`${cookie.name}=${cookie.value}`]);
-    // 	expect(response.body.payload.email).to.be.eql(newUser.email);
-    // 	console.log(response);
-    // }).timeout(5000);
+    it("El endpoint GET /api/sessions/logout debería cerrar la sesión del usuario", async () => {
+      const response = await requester.get("/api/sessions/logout").set("Cookie", `${cookie.name}=${cookie.value}`);
+      expect(response.status).to.equal(200);
+      console.log(response);
+    }).timeout(5000);
   });
 });
