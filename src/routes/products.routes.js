@@ -9,7 +9,7 @@ const productsController = new ProductsController(productService);
 
 productsRouter.get("/", productsController.getProducts);
 productsRouter.get("/:pid", productsController.getProductById);
-productsRouter.post("/", productsController.createProduct);
+productsRouter.post("/", productsController.addProduct);
 productsRouter.put("/:pid", productsController.updateProduct);
 productsRouter.delete("/:pid", productsController.deleteProduct);
 

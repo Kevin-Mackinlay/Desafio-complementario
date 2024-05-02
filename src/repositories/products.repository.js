@@ -1,3 +1,6 @@
+import {logger} from "../utils/logger.js";
+
+
 export default class ProductsRepository {
   constructor(dao) {
     this.dao = dao;
@@ -19,9 +22,9 @@ export default class ProductsRepository {
     }
   };
 
-  addProduct = async (title, description, price, thumbnails, code, stock, owener) => {
+  addProduct = async (product) => {
     try {
-      return await this.dao.create({ title, description, price, thumbnails, code, stock, owener });
+      return await this.dao.addProduct(product);
     } catch (error) {
       logger.error(error);
     }

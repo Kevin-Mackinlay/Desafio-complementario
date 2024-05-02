@@ -70,13 +70,13 @@ export default class ProductsController {
       req.logger.error(error);
     }
   };
-  createProduct = async (req, res) => {
+  addProduct = async (req, res) => {
     try {
       const { product } = req.body;
       console.log(req.body);
 
       // Assuming `create` expects a product object
-      const newProduct = await this.productsService.createProduct(product);
+      const newProduct = await this.productsService.addProduct(product);
 
       if (!newProduct) {
         res.status(400).json({
