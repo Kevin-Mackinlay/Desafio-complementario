@@ -1,6 +1,7 @@
 import CustomError from "../customErrors/customError.js";
 import { generateInfoProductError } from "../customErrors/info.js";
 import typeErrors from "../customErrors/enums.js";
+import {productService}  from "../services/services.js ";
 
 export default class ProductsController {
   constructor(ProductsService) {
@@ -73,33 +74,66 @@ export default class ProductsController {
   };
   addProduct = async (req, res) => {
     try {
-      const product = req.body;
+      const { title, description, thumbnail, category, price, stock, code } = req.body;
       console.log(req.body);
 
-      // Assuming `create` expects a product object
-      const newProduct = await this.productsService.addProduct(product);
-      console.log(newProduct);
-      if (!newProduct) {
-        res.status(400).json({
-          success: false,
-          message: "Could not add the product",
+      if (!title || !description || !category || !thumbnail || !price || !stock || !code) {
+        throw CustomError.createError({
+          name: "Product creation error",
+          cause: generateInfoProductError({ title, description, price, thumbnail, code, stock, category }),
+          message: "Error trying to create a product",
+          code: typeErrors.INVALID_TYPES_ERROR,
         });
-        return;
       }
 
-      const products = await this.productsService.getProducts();
-      res.status(200).json({
-        success: true,
-        products,
-      });
+      const newProduct = {
+        title,
+        description,
+        thumbnail,
+        category,
+        price,
+        stock,
+        code,
+      }; // Agregar el producto y registrar el resultado
+      const result = await productService.addProduct(newProduct);
+      req.logger.info(`Producto agregado: ${newProduct.title}`);
+
+      res.status(201).send({ status: "Sucess: Producto agregado", payload: result });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+      req.logger.error(`Error al agregar el producto: ${error.message}`);
+      // Enviar respuesta de error
+      res.status(400).send({ error: "Error al agregar el producto", details: error.message });
     }
-  };
+  }
+
+
+
+
+
+  //     // Assuming `create` expects a product object
+  //     const newProduct = await this.productsService.addProduct(product);
+  //     console.log(newProduct);
+  //     if (!newProduct) {
+  //       res.status(400).json({
+  //         success: false,
+  //         message: "Could not add the product",
+  //       });
+  //       return;
+  //     }
+
+  //     const products = await this.productsService.getProducts();
+  //     res.status(200).json({
+  //       success: true,
+  //       products,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(500).json({
+  //       success: false,
+  //       message: error.message,
+  //     });
+  //   }
+  // };
 
   updateProduct = async (req, res) => {
     try {
