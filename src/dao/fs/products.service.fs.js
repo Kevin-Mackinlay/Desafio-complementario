@@ -63,6 +63,7 @@ export default class ProductsService {
       }
       return product;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

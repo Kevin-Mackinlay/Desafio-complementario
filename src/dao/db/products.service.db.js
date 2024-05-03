@@ -23,7 +23,7 @@ export default class ProductsService {
     }
   }
 
-  async getBy(data) {
+  async getProductById(data) {
     try {
       return await productModel.findOne({ ...data });
     } catch (error) {
