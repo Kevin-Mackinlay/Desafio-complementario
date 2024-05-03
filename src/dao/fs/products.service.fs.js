@@ -54,7 +54,7 @@ export default class ProductsService {
 
   async getProductById(id) {
     try {
-      const products = await this.getProducts();
+      const products = await this.getProductById();
 
       const product = products.find((product) => product.id == id);
 

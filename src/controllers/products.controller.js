@@ -53,7 +53,7 @@ export default class ProductsController {
       const { pid } = req.params;
 
       const product = await this.productsService.getProductById(pid);
-
+      console.log(pid, product);
       if (!product) {
         res.status(404).json({
           success: false,
@@ -67,6 +67,7 @@ export default class ProductsController {
         data: product,
       });
     } catch (error) {
+      console.log(error);
       req.logger.error(error);
     }
   };

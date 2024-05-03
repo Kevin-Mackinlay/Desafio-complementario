@@ -14,9 +14,9 @@ export default class ProductsRepository {
     }
   };
 
-  getProduct = async (product) => {
+  getProductById = async (product) => {
     try {
-      return await this.dao.getBy(product);
+      return await this.dao.getProductById(product);
     } catch (error) {
       logger.error(error);
     }
