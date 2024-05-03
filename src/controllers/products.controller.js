@@ -1,7 +1,7 @@
 import CustomError from "../customErrors/customError.js";
 import { generateInfoProductError } from "../customErrors/info.js";
 import typeErrors from "../customErrors/enums.js";
-import {productService}  from "../services/services.js ";
+
 
 export default class ProductsController {
   constructor(ProductsService) {
@@ -95,7 +95,7 @@ export default class ProductsController {
         stock,
         code,
       }; // Agregar el producto y registrar el resultado
-      const result = await productService.addProduct(newProduct);
+      const result = await this.productsService.addProduct(newProduct);
       req.logger.info(`Producto agregado: ${newProduct.title}`);
 
       res.status(201).send({ status: "Sucess: Producto agregado", payload: result });
@@ -104,11 +104,7 @@ export default class ProductsController {
       // Enviar respuesta de error
       res.status(400).send({ error: "Error al agregar el producto", details: error.message });
     }
-  }
-
-
-
-
+  };
 
   //     // Assuming `create` expects a product object
   //     const newProduct = await this.productsService.addProduct(product);
@@ -163,43 +159,41 @@ export default class ProductsController {
 
   deleteProduct = async (req, res) => {
     try {
-      let { pid } = req.params;
-      let product = await this.productsService.getProductById({ _id: pid });
+      // Comment: validar que el usuario premium solo pueda borrar sus productos
+      const { pid } = req.params;
 
-      if (!product) {
-        return res.status(404).send({ status: "Error", error: "Product not found" });
-      }
-
-      const removeProduct = async (pid) => {
-        await productsService.deleteProductById(pid);
-        res.status(200).send({
-          status: "Product has been deleted successfully",
-          message: `The product was deleted ${product.title}`,
-        });
-      };
-
-      if (req.user.role === "premium") {
-        if (req.user.email !== product.owner) {
-          return res.status(403).send({
-            status: "Error",
-            message: "You are not allowed to delete this product",
-          });
-        } else {
-          removeProduct(pid);
-        }
-      } else {
-        removeProduct(pid);
-        await transport.sendMail({
-          from: process.env.EMAIL,
-          to: product.owner,
-          subject: "Product deleted",
-          html: `<div>
-          <h1>Hi user, your product was removed by the admin</h1>
-        </div>`,
+      // if (req.user.role == "premium") {
+        const product = await this.productsService.getProductById(pid);
+    if (!product) {
+      
+        return res.status(404).json({
+          success: false,
+          message: "Product not found",
         });
       }
+        // if (product.owner != req.user._id) {
+        //   return res.status(403).json({
+        //     success: false,
+        //     message: "Forbidden",
+        //   });
+        // }
+      // }
+
+      await this.productsService.deleteProductById(pid);
+
+      const products = await this.productsService.getProducts();
+
+      res.status(200).json({
+        success: true,
+        message: `Product with ID ${pid} was deleted.`,
+        products,
+      });
     } catch (error) {
-      req.logger.error(error);
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 }

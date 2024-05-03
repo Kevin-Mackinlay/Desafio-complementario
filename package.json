@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node --watch src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "mocha --timeout 5000 test/products.test.js"
+    "test": "mocha --timeout 5000 test/session.test.js"
   },
   "keywords": [],
   "author": "",

@@ -7,7 +7,7 @@ const newUser = {
   firstName: "prueba11",
   lastName: "test",
   age: 25,
-  email: "pepe5@gmail.com",
+  email: "pepe11@gmail.com",
   password: "123456",
 };
 
@@ -35,10 +35,12 @@ describe("Testing proyecto final", () => {
       expect(cookie.value).to.be.ok.and.eql("coderCookie");
     }).timeout(5000);
 
-    it("El endpoint GET /api/sessions/logout debería cerrar la sesión del usuario", async () => {
-      const response = await requester.get("/api/sessions/logout").set("Cookie", `${cookie.name}=${cookie.value}`);
-      expect(response.status).to.equal(200);
+    it("El endpoint POST /api/sessions/logout debería cerrar la sesión del usuario", async () => {
+      const response = await requester.post("/api/sessions/logout")
       console.log(response);
+      expect(response.status).to.equal(302);
+      
     }).timeout(5000);
   });
 });
+

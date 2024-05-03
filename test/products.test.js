@@ -6,12 +6,12 @@ const requester = supertest("http://localhost:8080");
 
 describe("Product API Endpoints", () => {
    const mockProduct = {
-     name: "Producto de prueba",
+     title: "Producto de prueba",
      description: "Descripción de prueba",
      price: 1000,
      stock: 10,
      thumbnail: "no hay",
-     code: "1234",
+     code: "123554",
      category: "test",
      status: true,
      owner: "admin",
@@ -33,7 +33,7 @@ it("El endpoint POST /api/products debería crear un nuevo producto", async () =
 
   // test para retornar un producto por id
   it("El endpoint GET /api/products/:id debería devolver un producto por id", async () => {
-    const productId = "65b2d4ae2440be292ec978cb";
+    const productId = "65b2d4132440be292ec978c6";
     const result = await requester.get(`/api/products/${productId}`).send();
     const { _body, statusCode, ok } = result;
 
@@ -41,14 +41,15 @@ it("El endpoint POST /api/products debería crear un nuevo producto", async () =
     expect(statusCode).to.be.equal(200);
   });
 
-  // it("El endpoint delete /api/products/:id debería eliminar un producto por id", async () => {
-  //   const productId = "65b2d4ae2440be292ec978cb";
-  //   const result = await requester.delete(`/api/products/${productId}`).send();
-  //   const { _body, statusCode, ok } = result;
-  //   console.log(_body);
-  //   expect(ok).to.be.true;
-  //   expect(statusCode).to.be.equal(200);
-  // });
+  it("El endpoint delete /api/products/:id debería eliminar un producto por id", async () => {
+    const productId = "6633d5794860dbee723e3b4d";
+    const result = await requester.delete(`/api/products/${productId}`).send();
+    const { _body, statusCode, ok } = result;
+
+    expect(ok).to.be.true;
+    expect(statusCode).to.be.equal(200);
+  }
+  );
 
 });
 

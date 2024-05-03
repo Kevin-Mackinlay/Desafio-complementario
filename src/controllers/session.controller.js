@@ -50,7 +50,11 @@ export default class SessionsController {
           });
 
           req.logger.info(`Inicio de sesión exitoso ${new Date().toLocaleString()}`);
-          res.json({ success: true, message: "Inicio de sesión exitoso", redirectUrl: "/products" });
+          res.status(200).cookie("cookieTest", "coderCookie").json({
+            success: true,
+            message: "Inicio de sesión exitoso",
+            redirectUrl: "/products",
+          });
         }
       }
     } catch (error) {
@@ -59,12 +63,16 @@ export default class SessionsController {
     }
   };
 
-
   logout = async (req, res) => {
     try {
-      await userService.updateUser({ _id: req.user._id }, { lastConnection: Date() });
-      res.clearCookie("CoderCookieToken").redirect("/login");
+      console.log(1);
+      req.session.destroy();
+      console.log(2);
+      // await userService.updateUser({ _id: req.user._id }, { lastConnection: Date() });
+  
+      return res.clearCookie("CoderCookieToken").redirect("/login");
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };

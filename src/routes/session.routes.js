@@ -1,10 +1,10 @@
 import { Router } from "express";
 import passport from "passport";
-import sessionController from "../controllers/session.controller.js";
+import SessionController from "../controllers/session.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 const sessionRouter = Router();
-const sessionsController = new sessionController();
+const sessionsController = new SessionController();
 
 sessionRouter.post(
   "/login",
@@ -51,7 +51,14 @@ sessionRouter.get("/googlecallback", passport.authenticate("google"), (req, res)
 });
 
 sessionRouter.get("/private", passport.authenticate("login", { session: false }), sessionsController.private);
-sessionRouter.post("/logout", sessionsController.logout);
+sessionRouter.post(
+  "/logout",
+  (req, res, next) => {
+    console.log("middle");
+    next();
+  },
+  sessionsController.logout
+);
 sessionRouter.get(
   "/current",
   (req, res, next) => {

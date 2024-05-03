@@ -31,8 +31,12 @@ export default class UsersRepository {
 
   updateUser = async (uid, updateData) => {
     try {
-      return await this.dao.update(uid, updateData);
+      console.log(1);
+      const res = await this.dao.update(uid, updateData);
+      
+      return res;
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };

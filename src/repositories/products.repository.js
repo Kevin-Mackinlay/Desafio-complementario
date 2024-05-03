@@ -39,7 +39,7 @@ export default class ProductsRepository {
     }
   };
 
-  deleteProduct = async (pid) => {
+  deleteProductById = async (pid) => {
     try {
       return await this.dao.delete(pid);
     } catch (error) {
