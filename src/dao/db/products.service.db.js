@@ -23,9 +23,9 @@ export default class ProductsService {
     }
   }
 
-  async getProductById(data) {
+  async getProductById(id) {
     try {
-      return await productModel.findOne({ ...data });
+      return await productModel.findById( id);
     } catch (error) {
       logger.error(error);
     }
