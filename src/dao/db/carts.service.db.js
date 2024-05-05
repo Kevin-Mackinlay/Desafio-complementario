@@ -1,5 +1,5 @@
-import cartModel  from "../../dao/models/cart.model.js";
-import  productModel  from "../../dao/models/product.model.js";
+import cartModel from "../../dao/models/cart.model.js";
+import productModel from "../../dao/models/product.model.js";
 import { logger } from "../../utils/logger.js";
 
 export default class CartService {
@@ -11,17 +11,19 @@ export default class CartService {
     }
   }
 
-  async get() {
+  async getCarts() {
     try {
+      console.log(1);
       return await cartModel.find();
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   }
 
-  async getCart(id) {
+  async getCartById(id) {
     try {
-      return await cartModel.findOne({ _id: id }).lean();
+      return await cartModel.findById({ _id: id }).lean();
     } catch (error) {
       logger.error(error);
     }

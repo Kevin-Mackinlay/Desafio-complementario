@@ -5,44 +5,30 @@ import { v4 as uuidv4 } from 'uuid';
 import { ProductServiceDb, TicketServiceDb } from "../dao/factory.js";
 
 export default class CartsController {
-  constructor(CartsService) {
-    this.cartsService = CartsService;
+  constructor(CartService) {
+    this.cartService = CartService;
   }
   createCart = async (req, res) => {
     try {
-      await this.cartsService.createCart({});
-
-      res.status(200).json({
-        success: true,
-        message: "New empty cart successfully created",
-      });
-    } catch (error) {
-      if (error instanceof CustomError) {
-        const errorMessages = {
-          [typeErrors.DATABASE_ERROR]: { statusCode: 500, message: "Database Error" },
-          [typeErrors.INVALID_CART]: {
-            statusCode: 400,
-            message: genericInvalidErrorInfo("Invalid cart data", [{ name: "userId", type: "string", value: req.body.userId }]),
-          },
-        };
-
-        const { statusCode, message } = errorMessages[error.code] || { statusCode: 500, message: error.message };
-        res.status(statusCode).json({ success: false, message });
-      } else {
-        res.status(500).json({ success: false, message: error.message });
+   const result = await this.cartService.createCart();
+   result ? res.status(200).json({status:"the cart was created successfully",payload : result})
+    : res.status(404).json({status:"Error", message:"The cart was not created"})
       }
+    catch (error) {
+      logger.error(error);
     }
   };
 
   getCarts = async (req, res) => {
     try {
-      const carts = await this.cartsService.getCarts();
-      console.log(error);
+      const carts = await this.cartService.getCarts();
+      console.log(carts);
       res.status(200).json({
         success: true,
         data: carts,
       });
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };
@@ -50,7 +36,7 @@ export default class CartsController {
   getCartById = async (req, res) => {
     try {
       const { cid } = req.params;
-      const cart = await this.cartsService.getCartById(cid);
+      const cart = await this.cartService.getCartById(cid);
 
       if (!cart) {
         res.status(404).json({
