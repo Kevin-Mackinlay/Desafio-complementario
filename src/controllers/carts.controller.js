@@ -1,7 +1,7 @@
-import {logger}  from "../utils/logger.js";
-import objectConfig from "../config/objectConfig.js"
+import { logger } from "../utils/logger.js";
+import objectConfig from "../config/objectConfig.js";
 import transport from "../utils/nodeMailer.js";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { ProductServiceDb, TicketServiceDb } from "../dao/factory.js";
 
 export default class CartsController {
@@ -10,25 +10,24 @@ export default class CartsController {
   }
   createCart = async (req, res) => {
     try {
-   const result = await this.cartService.createCart();
-   result ? res.status(200).json({status:"the cart was created successfully",payload : result})
-    : res.status(404).json({status:"Error", message:"The cart was not created"})
-      }
-    catch (error) {
+      const result = await this.cartService.createCart();
+      result ? res.status(200).json({ status: "the cart was created successfully", payload: result }) : res.status(404).json({ status: "Error", message: "The cart was not created" });
+    } catch (error) {
       logger.error(error);
     }
   };
 
   getCarts = async (req, res) => {
     try {
+      console.log(1);
       const carts = await this.cartService.getCarts();
-      console.log(carts);
+      console.log(2);
       res.status(200).json({
         success: true,
         data: carts,
       });
     } catch (error) {
-      console.log(error);
+      console.log(3);
       logger.error(error);
     }
   };
