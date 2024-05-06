@@ -7,7 +7,7 @@ export default class CartsRepository {
 
   getCarts = async () => {
     try {
-      return await this.dao.get();
+      return await this.dao.getCarts();
     } catch (error) {
       logger.error(error);
     }
@@ -15,7 +15,7 @@ export default class CartsRepository {
 
   getCartByID = async (cid) => {
     try {
-      return await this.dao.getCart(cid);
+      return await this.dao.getCartById(cid);
     } catch (error) {
       logger.error(error);
     }
