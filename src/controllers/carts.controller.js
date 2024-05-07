@@ -10,24 +10,25 @@ export default class CartsController {
   }
   createCart = async (req, res) => {
     try {
+      console.log(1);
       const result = await this.cartService.createCart();
+      console.log(2);
       result ? res.status(200).json({ status: "the cart was created successfully", payload: result }) : res.status(404).json({ status: "Error", message: "The cart was not created" });
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };
 
   getCarts = async (req, res) => {
     try {
-      console.log(1);
       const carts = await this.cartService.getCarts();
-      console.log(2);
+
       res.status(200).json({
         success: true,
         data: carts,
       });
     } catch (error) {
-      console.log(3);
       logger.error(error);
     }
   };
@@ -60,7 +61,7 @@ export default class CartsController {
       const cart = await cartService.getCartByID(cid);
       const product = await ProductServiceDb.getProduct({ _id: pid });
 
-      if (product.owener === req.user.email)
+      if (product.owner === req.user.email)
         return res.status(404).send({
           status: "Error",
           message: "You can't add your products to your cart",

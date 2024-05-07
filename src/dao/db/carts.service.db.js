@@ -7,6 +7,7 @@ export default class CartService {
     try {
       return await cartModel.create();
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   }

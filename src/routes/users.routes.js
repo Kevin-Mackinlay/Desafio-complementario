@@ -11,5 +11,8 @@ usersRouter.get("/:uid", authorization(["admin"], usersController.getById));
 usersRouter.post("/", authorization(["admin"], usersController.createUser));
 usersRouter.put("/:uid", authorization(["admin"], usersController.updateOldUser));
 usersRouter.delete("/:uid", authorization(["admin"], usersController.deleteByUser));
+//userRouter.post("/:uid/documents", authorization(["user", "premium"]), uploader.any(), usersController.uploadDocuments);
+//usersRouter.put("/premium/:uid", authorization(["user", "premium"]), usersController.changeOfRole);
+
 
 export default usersRouter;
