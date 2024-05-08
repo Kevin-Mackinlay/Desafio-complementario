@@ -24,7 +24,7 @@ describe("Cart Controller", () => {
 
   it("should fetch a cart by ID successfully", async () => {
     const cartId = "663adbb1b79d103f6a117763";
-    const response = await requester.get(`/api/carts/${cartId}`).send();
+    const response = await requester.get(`/api/carts/${cartId}`);
     console.log(response.body);
     expect(response.status).to.equal(200);
     expect(response.body.success).to.be.true;

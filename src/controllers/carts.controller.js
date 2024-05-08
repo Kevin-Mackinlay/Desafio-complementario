@@ -4,7 +4,6 @@ import transport from "../utils/nodeMailer.js";
 import { v4 as uuidv4 } from "uuid";
 import { ProductServiceDb, TicketServiceDb } from "../dao/factory.js";
 
-
 export default class CartsController {
   constructor(CartService) {
     this.cartService = CartService;
@@ -36,11 +35,14 @@ export default class CartsController {
 
   getCartById = async (req, res) => {
     try {
+      console.log(1);
       const { cid } = req.params;
       const cart = await this.cartService.getCartById(cid);
-
+      console.log(2);
       if (!cart) {
+        console.log(3);
         res.status(404).json({
+          
           success: false,
           message: "Cart not found",
         });
@@ -52,6 +54,7 @@ export default class CartsController {
         data: cart,
       });
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };

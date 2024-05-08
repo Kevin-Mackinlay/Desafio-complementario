@@ -22,10 +22,11 @@ export default class CartService {
     }
   }
 
-  async getCartById(id) {
+  async getCartById(cid) {
     try {
-      return await cartModel.findById({ _id: id }).lean();
+      return await cartModel.findById({ _id: cid }).lean();
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   }

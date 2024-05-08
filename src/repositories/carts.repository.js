@@ -13,12 +13,14 @@ export default class CartsRepository {
     }
   };
 
-  getCartByID = async (cid) => {
+  getCartById = async (cid) => {
     try {
       return await this.dao.getCartById(cid);
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
+
   };
 
   createCart = async () => {
