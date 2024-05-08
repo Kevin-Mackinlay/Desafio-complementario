@@ -3,9 +3,9 @@ import productModel from "../../dao/models/product.model.js";
 import { logger } from "../../utils/logger.js";
 
 export default class CartService {
-  async create() {
+  async createCart() {
     try {
-      return await cartModel.create();
+      return await cartModel.create({});
     } catch (error) {
       console.log(error);
       logger.error(error);

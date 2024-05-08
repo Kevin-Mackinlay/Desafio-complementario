@@ -4,6 +4,7 @@ import transport from "../utils/nodeMailer.js";
 import { v4 as uuidv4 } from "uuid";
 import { ProductServiceDb, TicketServiceDb } from "../dao/factory.js";
 
+
 export default class CartsController {
   constructor(CartService) {
     this.cartService = CartService;
@@ -12,7 +13,7 @@ export default class CartsController {
     try {
       console.log(1);
       const result = await this.cartService.createCart();
-      console.log(2);
+      console.log(result);
       result ? res.status(200).json({ status: "the cart was created successfully", payload: result }) : res.status(404).json({ status: "Error", message: "The cart was not created" });
     } catch (error) {
       console.log(error);

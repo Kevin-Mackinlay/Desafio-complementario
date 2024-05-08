@@ -23,8 +23,9 @@ export default class CartsRepository {
 
   createCart = async () => {
     try {
-      return await this.dao.create();
+      return await this.dao.createCart();
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };
