@@ -128,4 +128,20 @@ export default class ViewsController {
     });
   }
   };
+
+  newPassword = async (req, res) => {
+    try{
+    res.render("newPassword", {
+      title: "New Password",
+      style: "css/newPassword.css",
+    });
+  }
+  catch(error){
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+  };
 }
