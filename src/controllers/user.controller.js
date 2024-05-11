@@ -7,11 +7,15 @@ import { userService, cartService } from "../services/services.js";
 export default class UsersController {
   getUsers = async (req, res) => {
     try {
-     
       const users = await userService.getUsers();
       req.logger.info(`Usuarios obtenidos: ${users.length}`);
-      res.status(200).send({ status: ' success', users:users})
+      res.status(200).send({ status: " success", users: users });
 
+      // res.render("usersPanel", {
+      //   title: "UsersPanel",
+      //   style: "usersPanel.css",
+      //   users
+      // });
     } catch (error) {
       console.log(error);
       logger.error(error);
