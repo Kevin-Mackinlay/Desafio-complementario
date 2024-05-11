@@ -114,34 +114,65 @@ export default class ViewsController {
   };
 
   RecoverPassword = async (req, res) => {
-    try{
-    res.render("recoverPassword", {
-      title: "Recover Password",
-      style: "css/recoverPassword.css",
-    });
-  }
-  catch(error){
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+    try {
+      res.render("recoverPassword", {
+        title: "Recover Password",
+        style: "css/recoverPassword.css",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
 
   newPassword = async (req, res) => {
-    try{
-    res.render("newPassword", {
-      title: "New Password",
-      style: "css/newPassword.css",
-    });
-  }
-  catch(error){
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+    try {
+      res.render("newPassword", {
+        title: "New Password",
+        style: "css/newPassword.css",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  renderCartView = async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const user = await this.userService.getUser(userId);
+      const cartId = user.car[0]._id;
+      const cart = await this.cartService.getCartById(cartId);
+
+      if (!cart) {
+        return res.status(404).send({ error: "Cart not found" });
+      }
+
+      const productsInCart = cart.products;
+
+      const cartDetail = [];
+      let totalPrice = 0;
+
+      for (let product of productsInCart) {
+        const productDetail = await this.productService.getProductById(product.productID);
+        productDetail = await productDetail.toObject(); // Convert to plain object
+        productDetail.quantity = product.quantity;
+        cartDetail.push(productDetail);
+        totalPrice += productDetail.price * product.quantity;
+      }
+      res.render("cart", { cart, cartDetail, totalPrice });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
 }

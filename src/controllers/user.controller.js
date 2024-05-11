@@ -38,29 +38,25 @@ export default class UsersController {
 
   uploadDocuments = async (req, res) => {
     try {
-      const { uid } = req.params;
-      const user = await userService.getUser({ _id: uid });
-      const files = req.files;
-
-      if (files) {
-        files.forEach(async (file) => {
-          await userService.updateUser(
-            { _id: uid },
-            {
-              $addToSet: {
-                documents: {
-                  name: file.filename,
-                  reference: file.destination,
-                  docType: file.fieldname,
-                },
-              },
-            }
-          );
-        });
-        return res.status(201).send({ status: "success", message: `${user.firstName} the ${files.map((file) => file.fieldname)} files were uploaded correctly` });
-      } else {
-        return res.status(400).send({ status: "error", message: "error trying to upload files" });
+      //obtenemos al usuario por su id
+      const user = await userService.getUser(req.params.uid);
+      //si el usuario no existe, devolvemos un error
+      if (!user) {
+        return res.status(404).send("User not found");
       }
+      if (!req.files) {
+        return res.status(400).send({ status: "error", error: "No files were uploaded" });
+      }
+      let documents = req.files;
+      // añadimos los documentos al usuario
+      documents.forEach((doc) => {
+        user.documents.push({
+          name: doc.originalname,
+          reference: doc.path,
+        });
+      });
+      // guardamos el usuario actualizado en la base de datos
+      await userService.updateUser(req.params.uid, user);
     } catch (error) {
       logger.error(error);
     }
@@ -213,6 +209,57 @@ export default class UsersController {
     } catch (error) {
       req.logger.error(`Error deleting users: ${error}`);
       res.status(500).json({ message: "Error deleting users" });
+    }
+  };
+
+  premiumUser = async (req, res) => {
+    // Extraemos el uid del usuario desde los parámetros de la petición
+    const { uid } = req.params;
+    req.logger.info(`User ${uid} is now a premium user`);
+
+    //obtenemos el usuario por su id
+    const user = await userService.getUser(uid);
+
+    if (req.user.role === "admin") {
+      switch (user.role) {
+        case "user":
+          user.role = "premium";
+          break;
+        case "premium":
+          user.role = "user";
+          break;
+      }
+      //actualizamos el usuario en la base de datos
+      const updatedUser = await userService.updateUser(uid, user);
+      req.logger.info(`User new rol: ${user.role}`);
+      // enviamos respuesta con estado 200 y el usuario actualizado
+      res.status(200).send({ status: "success", user: user });
+      return;
+    }
+
+    // Definimos los documentos requeridos para ser usuario premium
+    const REQUIRED_DOCUMENTS = ["identification", "address_proof", "account_statement"];
+
+    // Verificamos si el usuario tiene todos los documentos requeridos
+    if (REQUIRED_DOCUMENTS.every((doc) => user.documents.map((document) => document.name.split(".")[0]).includes(doc))) {
+      // Si el usuario tiene todos los documentos, cambiamos su rol
+      switch (user.role) {
+        case "user":
+          user.role = "premium";
+          break;
+        case "premium":
+          user.role = "user";
+          break;
+      }
+      // Actualizamos el usuario en la base de datos
+      const updateUser = await userService.updateUserById(uid, user);
+      req.logger.info(`Usuario actualizado a rol: ${user.role}`);
+      // Enviamos una respuesta con estado 200 y el usuario actualizado
+      res.status(200).send({ status: "success", user: user });
+    } else {
+      // Si el usuario no tiene todos los documentos, enviamos un error
+      req.logger.error("Faltan documentos requeridos");
+      res.status(400).send("Faltan documentos requeridos");
     }
   };
 }
