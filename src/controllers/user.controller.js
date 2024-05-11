@@ -1,8 +1,10 @@
 import { logger } from "../utils/logger.js";
-import transport from "../utils/nodeMailer.js";
 import ContactDto from "../DTO/contact.dto.js";
 import config from "../config/objectConfig.js";
 import { userService, cartService } from "../services/services.js";
+import transport from "../utils/nodemailer.js";
+
+const { nodeMailer } = transport;
 
 export default class UsersController {
   getUsers = async (req, res) => {
@@ -12,11 +14,11 @@ export default class UsersController {
       req.logger.info(`Usuarios obtenidos: ${users.length}`);
       res.status(200).send({ status: " success", users: userDtos });
 
-      res.render("usersPanel", {
-        title: "UsersPanel",
-        style: "usersPanel.css",
-        users
-      });
+      // res.render("usersPanel", {
+      //   title: "UsersPanel",
+      //   style: "usersPanel.css",
+      //   users
+      // });
     } catch (error) {
       console.log(error);
       logger.error(error);
@@ -85,7 +87,7 @@ export default class UsersController {
 
       result
         ? res.status(200).send({
-            status: `the user ${user.firtsName} ${user.lastName} is updated correctly`,
+            status: `the user ${user.firstName} ${user.lastName} is updated correctly`,
             payload: result,
           })
         : res.status(410).send({
@@ -118,39 +120,76 @@ export default class UsersController {
   deleteByUser = async (req, res) => {
     try {
       let { uid } = req.params;
-      let user = await userService.getUser({ _id: uid });
 
-      if (user) {
-        await userService.deleteUser({ _id: uid });
-        // await cartService.deleteCart({ _id: user.cart._id });
+      const userToDelete = await userService.getUser(uid);
 
-        res.status(200).send({ status: "success", payload: user });
+      //configuramos nodemailer
+      const transport = nodeMailer.createTransport({
+        service: "gmail",
+        port: 587,
+        auth: {
+          user: objectConfig.EMAIL_USER,
+          pass: objectConfig.APP_PASSWORD,
+        },
+      });
+
+      // enviamos el email
+      if (userToDelete.email) {
+        await transport.sendMail({
+          from: `Coder App <${process.env.EMAIL_USER}>`,
+          to: userToDelete.email,
+          subject: "Account deletion",
+          text: `Dear ${userToDelete.firstName}, your account has been deleted.`,
+        });
+        req.logger.info(`Email sent to ${userToDelete.email}`);
       } else {
-        res.status(400).send({ status: "error", message: "could not delete user" });
+        req.logger.warning(`could not send email because user ${userToDelete._id} does not have an email`);
       }
+
+      await cartService.deleteCart(userToDelete.cart[0]._id);
+      req.logger.info(`Cart deleted for user ${userToDelete._id}`);
+
+      await userService.deleteUser(uid);
+      res.json({ message: "User deleted successfully" });
     } catch (error) {
-      console.log(error);
-      logger.error(error);
+      req.logger.error(`Error deleting user: ${error}`);
+      res.status(500).json({ message: "Error deleting user" });
     }
   };
+
+  // let user = await userService.getUser({ _id: uid });
+
+  // if (user) {
+  //   await userService.deleteUser({ _id: uid });
+  //   // await cartService.deleteCart({ _id: user.cart._id });
+
+  //   res.status(200).send({ status: "success", payload: user });
+  // } else {
+  //   res.status(400).send({ status: "error", message: "could not delete user" });
+  // }
+  //   } catch (error) {
+  //     console.log(error);
+  //     logger.error(error);
+  //   }
+  // };
 
   deleteUsers = async (req, res) => {
     try {
       const twoDaysAgo = moment().subtract(2, "days").toDate();
       req.logger.info(`Deleting users created before ${twoDaysAgo}`);
-      const usersToDelete = await userService.getUsers({ last_connnection: { $lt: twoDaysAgo } });
+      const usersToDelete = await userService.getUsers({ last_connection: { $lt: twoDaysAgo } });
       req.logger.info(`Users to delete: ${usersToDelete.length}`);
 
       //configuramos nodemailer
-      const transport = nodemailer.createTransport({
+
+      const transport = nodeMailer.createTransport({
         service: "gmail",
         port: 587,
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASSWORD,
+          user: objectConfig.EMAIL_USER,
+          pass: objectConfig.APP_PASSWORD,
         },
       });
-
       for (const user of usersToDelete) {
         if (user.email) {
           await transport.sendMail({

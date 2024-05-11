@@ -95,11 +95,17 @@ nav ul {
 
 
 .login-container {
+  
   background-color: #c4c3c3;
-  padding: 20px;
+  padding: 40px; /* Increased padding */
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  width: 80%; /* Adjusted width */
+  max-width: 500px; /* Maximum width */
+  margin: auto; /* Center the container horizontally if it's not already centered */
+
+
 }
 
 .login-form {

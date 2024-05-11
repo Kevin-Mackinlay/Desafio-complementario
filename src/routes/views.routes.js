@@ -17,5 +17,6 @@ viewsRouter.get("/login", viewsController.renderLogin);
 viewsRouter.get("/signup", viewsController.renderSignup);
 viewsRouter.get("/logout", viewsController.renderLogout);
 viewsRouter.get("/tickets", viewsController.renderTickets);
+viewsRouter.post("/recover-password", viewsController.RecoverPassword);
 
 export default viewsRouter;

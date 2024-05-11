@@ -112,4 +112,20 @@ export default class ViewsController {
       style: "css/tickets.css",
     });
   };
+
+  RecoverPassword = async (req, res) => {
+    try{
+    res.render("recoverPassword", {
+      title: "Recover Password",
+      style: "css/recoverPassword.css",
+    });
+  }
+  catch(error){
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+  };
 }
