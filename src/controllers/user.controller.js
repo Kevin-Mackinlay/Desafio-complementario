@@ -8,14 +8,15 @@ export default class UsersController {
   getUsers = async (req, res) => {
     try {
       const users = await userService.getUsers();
+      const userDtos = users.map((user) => new ContactDto(user));
       req.logger.info(`Usuarios obtenidos: ${users.length}`);
-      res.status(200).send({ status: " success", users: users });
+      res.status(200).send({ status: " success", users: userDtos });
 
-      // res.render("usersPanel", {
-      //   title: "UsersPanel",
-      //   style: "usersPanel.css",
-      //   users
-      // });
+      res.render("usersPanel", {
+        title: "UsersPanel",
+        style: "usersPanel.css",
+        users
+      });
     } catch (error) {
       console.log(error);
       logger.error(error);
@@ -114,21 +115,65 @@ export default class UsersController {
     }
   };
 
-  deleteByUser = async (id) => {
+  deleteByUser = async (req, res) => {
     try {
       let { uid } = req.params;
       let user = await userService.getUser({ _id: uid });
 
       if (user) {
         await userService.deleteUser({ _id: uid });
-        await cartService.deleteCart({ _id: user.cart._id });
+        // await cartService.deleteCart({ _id: user.cart._id });
 
         res.status(200).send({ status: "success", payload: user });
       } else {
         res.status(400).send({ status: "error", message: "could not delete user" });
       }
     } catch (error) {
+      console.log(error);
       logger.error(error);
+    }
+  };
+
+  deleteUsers = async (req, res) => {
+    try {
+      const twoDaysAgo = moment().subtract(2, "days").toDate();
+      req.logger.info(`Deleting users created before ${twoDaysAgo}`);
+      const usersToDelete = await userService.getUsers({ last_connnection: { $lt: twoDaysAgo } });
+      req.logger.info(`Users to delete: ${usersToDelete.length}`);
+
+      //configuramos nodemailer
+      const transport = nodemailer.createTransport({
+        service: "gmail",
+        port: 587,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+
+      for (const user of usersToDelete) {
+        if (user.email) {
+          await transport.sendMail({
+            from: `Coder App <${process.env.EMAIL_USER}>`,
+            to: user.email,
+            subject: "Account deletion",
+            text: `Dear ${user.firstName}, your account has been deleted due to inactivity.`,
+          });
+          req.logger.info(`Email sent to ${user.email}`);
+        } else {
+          req.logger.warning(`could not send email because user ${user._id} does not have an email`);
+        }
+
+        await cartService.deleteCart(user.cart[0]._id);
+        req.logger.info(`Cart deleted for user ${user._id}`);
+      }
+
+      await userService.deleteUsers({ _id: { $in: usersToDelete.map((user) => user._id) } });
+      req.logger.info(`Users deleted: ${usersToDelete.length}`);
+      res.json({ message: "Users deleted successfully" });
+    } catch (error) {
+      req.logger.error(`Error deleting users: ${error}`);
+      res.status(500).json({ message: "Error deleting users" });
     }
   };
 }

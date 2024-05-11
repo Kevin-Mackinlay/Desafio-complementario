@@ -130,8 +130,8 @@ nav ul {
   overflow: hidden; /* Hides anything that overflows the container */
 }
 .product-card__image img {
-  width: 100%;  /* La imagen llena el ancho del contenedor */
-  max-height: 200px;  /* Altura máxima para las imágenes */
+  width: 80%;  /* La imagen llena el ancho del contenedor */
+  max-height: 150px;  /* Altura máxima para las imágenes */
   object-fit: cover;  /* Asegura que la imagen cubra el espacio asignado sin distorsionarse */
   display: block;
 }

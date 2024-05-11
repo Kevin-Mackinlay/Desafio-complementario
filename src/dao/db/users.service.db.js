@@ -51,4 +51,13 @@ export default class UserService {
       logger.error(error);
     }
   }
+
+  deleteUsers = async (filter) => {
+    try {
+      return await userModel.deleteMany(filter);
+    } catch (error) {
+      console.log(error);
+      logger.error(error);
+    }
+  }
 }
