@@ -35,6 +35,13 @@ sessionRouter.post(
   sessionsController.signup
 );
 
+sessionRouter.post("/recover-password", (req, res)=>{
+  console.log("Route /recover-password accessed");
+ sessionsController.recoverPassword(req, res);
+}
+);
+
+
 sessionRouter.get("/google", (req, res, next) => {
   passport.authenticate("google", { scope: ["profile email"] }, (err, user, info) => {
     if (err || !user) {

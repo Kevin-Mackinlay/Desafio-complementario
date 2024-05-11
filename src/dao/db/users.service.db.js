@@ -1,19 +1,17 @@
 import userModel from "../../dao/models/user.model.js";
 import { logger } from "../../utils/logger.js";
-import CartService from "./carts.service.db.js";
 
-const cart = new CartService();
 
 export default class UserService {
-  async create({ firstName, lastName, email, password }) {
+  async create({ firstName, lastName, email, birthDate, password }) {
     try {
       console.log(email);
       return await userModel.create({
         firstName,
         lastName,
         email,
+        birthDate,
         password,
-        cart: await cart.create()._id,
       });
     } catch (error) {
       console.log(error);
@@ -28,13 +26,15 @@ export default class UserService {
     }
   }
 
-  async get() {
+  getUsers = async (filter) => {
     try {
-      return await userModel.find();
+      const users = await userModel.find(filter).lean();
+      return users;
     } catch (error) {
-      logger.error(error);
+      console.log(error);
+      throw error;
     }
-  }
+  };
 
   async update(id, updateBody) {
     try {

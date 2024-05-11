@@ -20,20 +20,17 @@ export default class UsersRepository {
       logger.error(error);
     }
   };
-
-  getUsers = async () => {
-    try {
-      return await this.dao.get();
-    } catch (error) {
-      logger.error(error);
-    }
+  
+  getUsers = async (filter) => {
+    const users = await this.dao.getUsers(filter);
+    return users;
   };
 
   updateUser = async (uid, updateData) => {
     try {
       console.log(1);
       const res = await this.dao.update(uid, updateData);
-      
+
       return res;
     } catch (error) {
       console.log(error);

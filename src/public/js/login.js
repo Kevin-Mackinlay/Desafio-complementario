@@ -40,3 +40,4 @@ loginForm.addEventListener("submit", async (event) => {
     alert(response.message);
   }
 });
+

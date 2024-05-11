@@ -1,25 +1,19 @@
-import services from "../services/services.js";
 import { logger } from "../utils/logger.js";
 import transport from "../utils/nodeMailer.js";
-import contactDTO from "../DTOs/contact.dto.js";
+import ContactDto from "../DTO/contact.dto.js";
 import config from "../config/objectConfig.js";
-const { userService, cartService } = services;
+import { userService, cartService } from "../services/services.js";
 
 export default class UsersController {
-  getAllUsers = async (req, res) => {
+  getUsers = async (req, res) => {
     try {
-      const usersDb = await userService.getUsers();
-      const users = usersDb.map((user) => new contactDTO(user));
+     
+      const users = await userService.getUsers();
+      req.logger.info(`Usuarios obtenidos: ${users.length}`);
+      res.status(200).send({ status: ' success', users:users})
 
-      res.render("usersPanel", {
-        title: "Users Panel",
-        style: "usersPanel.css",
-        users,
-      });
-      // users
-      // ? res.status(200).send({ status:"information was successfully extracted from the database", payload: users })
-      // : res.status(500).send({ status:"Error", message: "No user data found" })
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };

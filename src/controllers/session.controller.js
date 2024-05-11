@@ -63,13 +63,42 @@ export default class SessionsController {
     }
   };
 
+  recoverPassword = async (req, res) => {
+    try {
+      const { email } = req.body;
+      if (email === "") return res.status(428).send({ status: "Error", message: "Email is required" });
+      const user = await userService.getUser({ email });
+      if (!user) return res.status(404).send({ status: "Error", message: "User not found" });
+
+      if (user) {
+        const urlToken = generateTokenUrl(user);
+        await transport.sendMail({
+          from: process.env.EMAIL_USER,
+          to: user.email,
+          subject: "Recover Password",
+          html: `<div>
+                                <h1>
+                                    Go to this link to change the password
+                                </h1>
+                                <a href="http://localhost:8080/login/change-of-password"> Change of password </a>
+                          </div>`,
+        });
+        res.cookie("CoderCookieToken", urlToken, { maxAge: 60 * 60 * 100, httpOnly: true });
+        return res.status(200).send({ status: "Success", message: "Email was sent to veryfy your identity" });
+      }
+    } catch (error) {
+      console.log(error);
+      logger.error(error);
+    }
+  };
+
   logout = async (req, res) => {
     try {
       console.log(1);
       req.session.destroy();
       console.log(2);
       // await userService.updateUser({ _id: req.user._id }, { lastConnection: Date() });
-  
+
       return res.clearCookie("CoderCookieToken").redirect("/login");
     } catch (error) {
       console.log(error);
