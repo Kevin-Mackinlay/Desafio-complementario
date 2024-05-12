@@ -20,5 +20,5 @@ viewsRouter.get("/tickets", viewsController.renderTickets);
 viewsRouter.post("/recover-password", viewsController.RecoverPassword);
 viewsRouter.post("/newPassword", viewsController.newPassword);
 viewsRouter.get("/carts/:uid", viewsController.renderCartView);
-
+viewsRouter.get("/carts/:cid/purchase", viewsController.purchaseView);
 export default viewsRouter;

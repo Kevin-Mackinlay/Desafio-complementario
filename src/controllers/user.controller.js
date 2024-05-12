@@ -118,7 +118,7 @@ export default class UsersController {
       let { uid } = req.params;
 
       const userToDelete = await userService.getUser(uid);
-
+      console.log(1);
       //configuramos nodemailer
       const transport = nodeMailer.createTransport({
         service: "gmail",
@@ -144,10 +144,11 @@ export default class UsersController {
 
       await cartService.deleteCart(userToDelete.cart[0]._id);
       req.logger.info(`Cart deleted for user ${userToDelete._id}`);
-
+      console.log(2);
       await userService.deleteUser(uid);
       res.json({ message: "User deleted successfully" });
     } catch (error) {
+      console.log(error);
       req.logger.error(`Error deleting user: ${error}`);
       res.status(500).json({ message: "Error deleting user" });
     }

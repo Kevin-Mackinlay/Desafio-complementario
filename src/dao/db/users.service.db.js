@@ -48,6 +48,7 @@ export default class UserService {
     try {
       return await userModel.deleteOne({ _id: id });
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   }

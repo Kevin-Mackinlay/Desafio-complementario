@@ -13,14 +13,14 @@ export default class UsersRepository {
     }
   };
 
-  getUser = async (data) => {
+  getUser = async (id) => {
     try {
-      return await this.dao.getByUser(data);
+      return await this.dao.getByUser(id);
     } catch (error) {
       logger.error(error);
     }
   };
-  
+
   getUsers = async (filter) => {
     const users = await this.dao.getUsers(filter);
     return users;
@@ -42,6 +42,7 @@ export default class UsersRepository {
     try {
       return await this.dao.delete(uid);
     } catch (error) {
+      console.log(error);
       logger.error(error);
     }
   };
