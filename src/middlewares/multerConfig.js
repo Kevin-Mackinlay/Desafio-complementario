@@ -1,5 +1,5 @@
 import multer from "multer";
-import __dirname from "../../utils.js";
+import __dirname from "../utils/utils.js";
 import path from "path";
 
 //configuracion de donde se guardaran los archivos:
