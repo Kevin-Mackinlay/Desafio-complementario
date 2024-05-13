@@ -1,7 +1,7 @@
 async function postRecoverPassword(email) {
   const data = { email };
   try {
-    const response = await fetch("/api/sessions/recover-password", {
+    const response = await fetch("api/sessions/recover-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -13,9 +13,9 @@ export default class UsersRepository {
     }
   };
 
-  getUser = async (id) => {
+  getUser = async (uid) => {
     try {
-      return await this.dao.getByUser(id);
+      return await this.dao.getByUser(uid);
     } catch (error) {
       logger.error(error);
     }
@@ -41,6 +41,14 @@ export default class UsersRepository {
   deleteUser = async (uid) => {
     try {
       return await this.dao.delete(uid);
+    } catch (error) {
+      console.log(error);
+      logger.error(error);
+    }
+  };
+  deleteUsers = async (filter) => {
+    try {
+      return await this.dao.deleteUsers(filter);
     } catch (error) {
       console.log(error);
       logger.error(error);

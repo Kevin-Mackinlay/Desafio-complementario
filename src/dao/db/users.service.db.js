@@ -44,7 +44,7 @@ export default class UserService {
     }
   }
 
-  async delete(id) {
+  async deleteUser(id) {
     try {
       return await userModel.deleteOne({ _id: id });
     } catch (error) {

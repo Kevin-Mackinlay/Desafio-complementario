@@ -4,7 +4,7 @@ import config from "../config/objectConfig.js";
 import { userService, cartService } from "../services/services.js";
 import transport from "../utils/nodemailer.js";
 
-const { nodeMailer } = transport;
+// const { nodeMailer } = transport;
 
 export default class UsersController {
   getUsers = async (req, res) => {
@@ -49,7 +49,7 @@ export default class UsersController {
       }
       let documents = req.files;
       // añadimos los documentos al usuario
-      documents.forEach((doc) => {
+      documents.forEach(doc => {
         user.documents.push({
           name: doc.originalname,
           reference: doc.path,
@@ -113,39 +113,31 @@ export default class UsersController {
     }
   };
 
-  deleteByUser = async (req, res) => {
+  deleteUser = async (req, res) => {
     try {
       let { uid } = req.params;
 
       const userToDelete = await userService.getUser(uid);
-      console.log(1);
-      //configuramos nodemailer
-      const transport = nodeMailer.createTransport({
-        service: "gmail",
-        port: 587,
-        auth: {
-          user: objectConfig.EMAIL_USER,
-          pass: objectConfig.APP_PASSWORD,
-        },
-      });
 
-      // enviamos el email
+      // Send email if user has an email address
       if (userToDelete.email) {
-        await transport.sendMail({
-          from: `Coder App <${process.env.EMAIL_USER}>`,
-          to: userToDelete.email,
-          subject: "Account deletion",
-          text: `Dear ${userToDelete.firstName}, your account has been deleted.`,
-        });
-        req.logger.info(`Email sent to ${userToDelete.email}`);
-      } else {
-        req.logger.warning(`could not send email because user ${userToDelete._id} does not have an email`);
+        try {
+          await transport.sendMail({
+            from: `Coder App <${objectConfig.EMAIL_USER}>`, // Consistent use of objectConfig
+            to: userToDelete.email,
+            subject: "Account Deletion",
+            text: `Dear ${userToDelete.firstName}, your account has been deleted.`,
+          });
+          req.logger.info(`Email sent to ${userToDelete.email}`);
+        } catch (emailError) {
+          req.logger.error(`Failed to send email: ${emailError}`);
+        }
       }
 
+      // Proceed to delete the user's cart and then the user
       await cartService.deleteCart(userToDelete.cart[0]._id);
-      req.logger.info(`Cart deleted for user ${userToDelete._id}`);
-      console.log(2);
       await userService.deleteUser(uid);
+      req.logger.info(`User deleted: ${uid}`);
       res.json({ message: "User deleted successfully" });
     } catch (error) {
       console.log(error);
@@ -177,34 +169,28 @@ export default class UsersController {
       const usersToDelete = await userService.getUsers({ last_connection: { $lt: twoDaysAgo } });
       req.logger.info(`Users to delete: ${usersToDelete.length}`);
 
-      //configuramos nodemailer
-
-      const transport = nodeMailer.createTransport({
-        service: "gmail",
-        port: 587,
-        auth: {
-          user: objectConfig.EMAIL_USER,
-          pass: objectConfig.APP_PASSWORD,
-        },
-      });
       for (const user of usersToDelete) {
         if (user.email) {
-          await transport.sendMail({
-            from: `Coder App <${process.env.EMAIL_USER}>`,
-            to: user.email,
-            subject: "Account deletion",
-            text: `Dear ${user.firstName}, your account has been deleted due to inactivity.`,
-          });
-          req.logger.info(`Email sent to ${user.email}`);
+          try {
+            await transport.sendMail({
+              from: `Coder App <${objectConfig.EMAIL_USER}>`, // Use consistent configuration source
+              to: user.email,
+              subject: "Account Deletion",
+              text: `Dear ${user.firstName}, your account has been deleted due to inactivity.`,
+            });
+            req.logger.info(`Email sent to ${user.email}`);
+          } catch (emailError) {
+            req.logger.warning(`Could not send email to ${user.email}: ${emailError}`);
+          }
         } else {
-          req.logger.warning(`could not send email because user ${user._id} does not have an email`);
+          req.logger.warning(`Could not send email because user ${user._id} does not have an email`);
         }
 
-        await cartService.deleteCart(user.cart[0]._id);
+        await cartService.deleteCart(user.cart[0]._id); // Assume each user has a cart to delete
         req.logger.info(`Cart deleted for user ${user._id}`);
       }
 
-      await userService.deleteUsers({ _id: { $in: usersToDelete.map((user) => user._id) } });
+      await userService.deleteUser({ _id: { $in: usersToDelete.map((user) => user._id) } });
       req.logger.info(`Users deleted: ${usersToDelete.length}`);
       res.json({ message: "Users deleted successfully" });
     } catch (error) {
