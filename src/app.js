@@ -13,7 +13,7 @@ import errorHandler from "./middlewares/errorHandler/errorHandling.js";
 
 import IndexRouter from "./routes/index.routes.js";
 import dotenv from "dotenv";
-import { __dirname } from "../src/utils/utils.js";
+import { __dirname } from "./utils/utils.js";
 import { initializePassport } from "./config/passport.config.js";
 import { addLogger, logger } from "./utils/logger.js";
 import compression from "express-compression";

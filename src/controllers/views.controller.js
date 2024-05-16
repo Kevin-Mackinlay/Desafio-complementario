@@ -257,14 +257,18 @@ export default class ViewsController {
   };
 
   upLoadDocument = async (req, res) => {
+      if (!req.user) {
+        return res.status(401).send({ message: "User not authenticated" });
+      }
     const userId = req.user._id;
 
+    // Invoke Multer middleware for handling file upload
     upload(req, res, (err) => {
       if (err) {
         return res.status(400).send({ message: err });
       }
 
-      if (req.file == undefined) {
+      if (!req.file) {
         return res.status(400).send({ message: "No file selected!" });
       }
 

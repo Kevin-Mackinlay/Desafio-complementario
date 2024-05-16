@@ -12,7 +12,7 @@ usersRouter.post("/", usersController.createUser);
 usersRouter.put("/:uid", usersController.updateOldUser);
 usersRouter.delete("/:uid", usersController.deleteUser);
 usersRouter.delete("/", usersController.deleteUsers);
-usersRouter.post("/:uid/documents", upload, usersController.uploadDocuments);
+usersRouter.post("/:uid/uploadDocuments" ,usersController.uploadDocuments);
 usersRouter.put("/premium/:uid", usersController.changeOfRole);
 
 export default usersRouter;

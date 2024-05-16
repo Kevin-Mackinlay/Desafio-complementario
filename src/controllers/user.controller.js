@@ -35,44 +35,43 @@ export default class UsersController {
     }
   };
 
-
- uploadDocuments = async (req, res) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      return res.status(400).send({ status: "error", error: err.message });
-    }
-
-    try {
-      // Get the user by id
-      const user = await userService.getUser(req.params.uid);
-      // If user doesn't exist, return an error
-      if (!user) {
-        return res.status(404).send("User not found");
+  uploadDocuments = async (req, res) => {
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(400).send({ status: "error", error: err.message });
       }
 
-      if (!req.files || req.files.length === 0) {
-        return res.status(400).send({ status: "error", error: "No files were uploaded" });
-      }
+      try {
+        // Get the user by id
+        const user = await userService.getUser(req.params.uid);
+        if (!user) {
+          return res.status(404).send("User not found");
+        }
 
-      let documents = req.files;
-      // Add documents to the user
-      documents.forEach(doc => {
-        user.documents.push({
-          name: doc.originalname,
-          reference: doc.path,
+        if (!req.files || req.files.length === 0) {
+          return res.status(400).send({ status: "error", error: "No files were uploaded" });
+        }
+
+        let documents = req.files;
+
+        // Add documents to the user
+        documents.forEach((doc) => {
+          user.documents.push({
+            name: doc.originalname,
+            reference: doc.path,
+          });
         });
-      });
 
-      // Save the updated user in the database
-      await userService.updateUser(req.params.uid, user);
+        // Save the updated user in the database
+        await userService.updateUser(req.params.uid, user);
 
-      res.send({ status: "success", message: "Documents uploaded successfully" });
-    } catch (error) {
-      logger.error(error);
-      res.status(500).send({ status: "error", error: "An error occurred while uploading documents" });
-    }
-  });
-}
+        res.send({ status: "success", message: "Documents uploaded successfully" });
+      } catch (error) {
+        logger.error(error);
+        res.status(500).send({ status: "error", error: "An error occurred while uploading documents" });
+      }
+    });
+  };
 
   createUser = async (req, res) => {
     try {
