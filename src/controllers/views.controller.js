@@ -255,4 +255,23 @@ export default class ViewsController {
       res.status(400).send({ error: error.message });
     }
   };
+
+  upLoadDocument = async (req, res) => {
+    const userId = req.user._id;
+
+    upload(req, res, (err) => {
+      if (err) {
+        return res.status(400).send({ message: err });
+      }
+
+      if (req.file == undefined) {
+        return res.status(400).send({ message: "No file selected!" });
+      }
+
+      res.render("multer", {
+        userId,
+        file: `uploads/${req.file.filename}`, // Path to the uploaded file
+      });
+    });
+  };
 }

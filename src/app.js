@@ -65,11 +65,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(addLogger);
+
 //rutas
 app.use("/", IndexRouter);
-// app.use(error
-
-// app.use("/api/mockingproducts", mockingRouter);
+app.use("/uploads", express.static("uploads"));
+app.use("/api/mockingproducts", mockingRouter);
 app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 //middlewares para el manejo de datos
@@ -129,4 +129,3 @@ startMongoConnection()
 async function startMongoConnection() {
   await mongoose.connect(DB_URL);
 }
-

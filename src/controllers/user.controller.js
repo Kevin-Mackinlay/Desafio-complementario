@@ -2,9 +2,8 @@ import { logger } from "../utils/logger.js";
 import ContactDto from "../DTO/contact.dto.js";
 import config from "../config/objectConfig.js";
 import { userService, cartService } from "../services/services.js";
-import transport from "../utils/nodemailer.js";
+import transport from "../utils/nodeMailer.js";
 
-// const { nodeMailer } = transport;
 
 export default class UsersController {
   getUsers = async (req, res) => {
@@ -36,31 +35,44 @@ export default class UsersController {
     }
   };
 
-  uploadDocuments = async (req, res) => {
+
+ uploadDocuments = async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).send({ status: "error", error: err.message });
+    }
+
     try {
-      //obtenemos al usuario por su id
+      // Get the user by id
       const user = await userService.getUser(req.params.uid);
-      //si el usuario no existe, devolvemos un error
+      // If user doesn't exist, return an error
       if (!user) {
         return res.status(404).send("User not found");
       }
-      if (!req.files) {
+
+      if (!req.files || req.files.length === 0) {
         return res.status(400).send({ status: "error", error: "No files were uploaded" });
       }
+
       let documents = req.files;
-      // añadimos los documentos al usuario
+      // Add documents to the user
       documents.forEach(doc => {
         user.documents.push({
           name: doc.originalname,
           reference: doc.path,
         });
       });
-      // guardamos el usuario actualizado en la base de datos
+
+      // Save the updated user in the database
       await userService.updateUser(req.params.uid, user);
+
+      res.send({ status: "success", message: "Documents uploaded successfully" });
     } catch (error) {
       logger.error(error);
+      res.status(500).send({ status: "error", error: "An error occurred while uploading documents" });
     }
-  };
+  });
+}
 
   createUser = async (req, res) => {
     try {

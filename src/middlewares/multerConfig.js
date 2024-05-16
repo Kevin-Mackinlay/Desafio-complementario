@@ -1,22 +1,36 @@
 import multer from "multer";
-import __dirname from "../utils/utils.js";
 import path from "path";
 
-//configuracion de donde se guardaran los archivos:
+// Set storage engine
 const storage = multer.diskStorage({
-  //destination hace referencia a la carpeta donde se guardara el archivo.
   destination: function (req, file, cb) {
-    let path = __dirname + "/src/public/documents"; // Especificamos la ruta; Por defecto, guarda en 'documents'
-    if (file.fieldname === "profile") path = __dirname + "/src/public/profiles";
-    if (file.fieldname === "product") path = __dirname + "/src/public/products";
-    cb(null, path);
+    cb(null, "uploads/"); // Directory to save the uploaded files
   },
-  //filename hace referencia al nombre final que tendra el archivo
   filename: function (req, file, cb) {
-    console.log(file);
-    cb(null, `${Date.now()}-${file.originalname.replace(/\s/g, "")}`); //elimina los espacios en blanco
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
   },
 });
 
-const upload = multer({ storage });
+// Check file type
+function checkFileType(file, cb) {
+  const filetypes = /jpeg|jpg|png|gif|pdf|doc|docx/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype);
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Error: Invalid file type!");
+  }
+}
+
+// Init upload for multiple files
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 }, // Limit file size to 1MB
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).array("documents", 10); // Handle up to 10 files under the field name "documents"
+
 export default upload;
