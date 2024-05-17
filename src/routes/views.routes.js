@@ -18,7 +18,7 @@ viewsRouter.get("/login", viewsController.renderLogin);
 viewsRouter.get("/signup", viewsController.renderSignup);
 viewsRouter.get("/logout", viewsController.renderLogout);
 viewsRouter.get("/tickets", viewsController.renderTickets);
-viewsRouter.get("/recover-password", viewsController.RecoverPassword);
+viewsRouter.get("/recover-password", viewsController.recoverPassword);
 viewsRouter.get("/newPassword", viewsController.newPassword);
 viewsRouter.get("/carts/:uid", viewsController.renderCartView);
 viewsRouter.get("/carts/:cid/purchase", viewsController.purchaseView);
