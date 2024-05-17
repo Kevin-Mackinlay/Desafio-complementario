@@ -1,67 +1,9 @@
-/* Apply styles to the container of the forms */
-div[style="display: flex;"] {
-  display: flex;
-  justify-content: space-between;
-}
-
-/* Style for the individual forms */
-form {
-  flex: 0 0 45%; /* Adjust the width of the forms */
-  margin-right: 20px; /* Added margin for better separation */
-  font-family: Arial, sans-serif; /* Change font for the forms */
-}
-
-/* Styles for form labels */
-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #444;
-  font-weight: bold;
-}
-
-/* Style for form inputs */
-input[type="text"],
-textarea {
-  width: calc(100% - 16px); /* Adjust the width of the input elements */
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: Arial, sans-serif; /* Change font for input elements */
-}
-
-/* Style for form buttons */
-button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: Arial, sans-serif; /* Change font for buttons */
-}
-
-/* Change button color on hover */
-button:hover {
-  background-color: #0056b3;
-}
-
-/* CSS for product cards */
-/* General Styles for the container */
-.product-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around; /* Espaciado uniforme */
-}
-
-/* Styles for individual product cards */
-/* Reset CSS */
+/* General Reset CSS */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Didact Gothic", sans-serif;
-  font-size: 12px;
+  font-family: "Arial", sans-serif; /* Uniform font */
   list-style: none;
 }
 
@@ -69,7 +11,7 @@ button:hover {
 html {
   height: 100%;
   width: 100%;
-  font-size: 62.5%;
+  font-size: 14px; /* Increased font size for better readability */
   scroll-behavior: smooth;
 }
 
@@ -99,10 +41,10 @@ header {
   align-items: center;
   position: sticky;
   top: 0;
-  height: 15rem; /* Adjusted height */
+  height: 15rem;
   width: 100%;
   padding: 0 3rem;
-  background-color:#b3b1b1; /* Dark background color */
+  background-color: #b3b1b1; /* Dark background color */
 }
 
 nav ul {
@@ -116,28 +58,28 @@ nav ul {
 .product-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Centering items in the container */
-  width: 100%; /* Ensures the container takes full width */
+  justify-content: center;
+  width: 100%;
   padding: 20px;
 }
 
 .product-card {
-  flex: 0 0 32%; /* Adjusts to fit 3 items per row */
-  margin: 1%; /* Small margin for spacing */
-  background-color: #fff; /* White background for cards */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow */
-  overflow: hidden; /* Hides anything that overflows the container */
+  flex: 0 0 32%;
+  margin: 10px; /* Increased margin for spacing */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Enhanced shadow for depth */
+  overflow: hidden;
 }
+
 .product-card__image img {
-  width: 80%;  /* La imagen llena el ancho del contenedor */
-  max-height: 150px;  /* Altura máxima para las imágenes */
-  object-fit: cover;  /* Asegura que la imagen cubra el espacio asignado sin distorsionarse */
-  display: block;
+  width: 100%;  /* Image fills the width of the container */
+  height: auto; /* Auto height for proper aspect ratio */
+  object-fit: cover;
 }
 
 .product-card__info {
-  padding: 10px;
+  padding: 15px; /* Increased padding for a roomier feel */
   color: #333;
   text-align: left;
 }
@@ -147,91 +89,37 @@ nav ul {
   margin-bottom: 10px;
 }
 
-/* Other styles remain unchanged */
-
-
-
-/* Styles specific to price */
 .price {
   font-weight: bold;
-  color: #27ae60; /* Verde para destacar el precio */
+  color: #27ae60; /* Green to highlight price */
 }
 
 .stock {
   font-style: italic;
+  color: red; /* Alert for low stock */
 }
 
-/* Styles for code and ID, less prominent */
-.code,
-.id {
-  font-size: 14px;
-  color: #bbb;
-}
-
-/* Pagination button styling */
+/* Button Styles */
+button,
 .pagination-button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   background-color: #3498db;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+button:hover,
 .pagination-button:hover {
   background-color: #2980b9;
+  transform: translateY(-2px); /* Subtle lift effect */
 }
 
-/* Form styles preserved from your original CSS */
-div[style="display: flex;"] {
-  display: flex;
-  justify-content: space-between;
-}
-
-form {
-  flex: 0 0 45%;
-  margin-right: 20px;
-  font-family: Arial, sans-serif;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #444;
-  font-weight: bold;
-}
-
-input[type="text"], textarea {
-  width: calc(100% - 16px);
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: Arial, sans-serif;
-}
-
-button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: Arial, sans-serif;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-/* Navbar styles */
-nav {
-  color: #fff; /* Set text color to white */
-}
-
-nav ul {
-  display: flex;
-  gap: 2rem;
-  font-weight: bold;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-card {
+    flex: 0 0 48%; /* Adjusts for fewer items per row on smaller screens */
+  }
 }
