@@ -1,24 +1,29 @@
+import messageModel from "../models/message.model.js";
 
-export default class ChatService {
-  constructor(repo) {
-    this.repo= repo;
-  }git 
+
+export default class messageManager {
+  constructor() {
+ 
+  }
 
   async createMessage(message) {
     try {
-      const newMessage = await this.repo.create(message);
-      return newMessage;
+      return await messageModel.create(message);
+    
     } catch (error) {
-      throw error;
+     console.error('Message not created', error.message);
+     return error;
     }
   }
 
   async getMessages(message) {
     try {
-      const newMessage = await this.repo.get(message);
-      return newMessage;
+      const messages = await messageModel.find();
+      return messages;
     } catch (error) {
-      throw error;
+     
+      console.error('Messages not found', error.message);
+      return error;
     }
   }
 }

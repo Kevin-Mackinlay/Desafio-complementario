@@ -100,10 +100,8 @@ export default class ViewsController {
   };
 
   renderChat = async (req, res) => {
-    const messages = await this.chatService.getMessages();
     res.render("chat", {
       title: "Chat",
-      messages: messages,
       style: "css/chat.css",
     });
   };
@@ -116,9 +114,9 @@ export default class ViewsController {
     });
   };
 
-  RecoverPassword = async (req, res) => {
+  recoverPassword = async (req, res) => {
     try {
-      res.render("recoverPassword", {
+      res.render("recoverPass", {
         title: "Recover Password",
         style: "css/recoverPassword.css",
       });
