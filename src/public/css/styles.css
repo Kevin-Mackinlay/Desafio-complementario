@@ -168,45 +168,6 @@ h1{
     padding: 20px;
 }
 
-.product-card {
-    width: 30%;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin: 10px;
-    padding: 20px;
-    text-align: center;
-}
-
-.product-image {
-    max-width: 100%;
-    height: auto;
-}
-
-.product-info h3 {
-    color: #333;
-}
-
-.product-price {
-    color: #007BFF;
-    font-weight: bold;
-}
-
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 10px;
-    text-decoration: none;
-    color: white;
-    background-color: #007BFF;
-    border-radius: 5px;
-}
-
-.btn-primary {
-    background-color: #007BFF;
-}
-
-.btn-secondary {
-    background-color: #555;
-}
 
 .about-us {
     text-align: center;
@@ -218,11 +179,14 @@ footer {
     color: white;
     text-align: center;
     padding: 20px 10px;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .footer-content {
     margin: 0 auto;
-    max-width: 1200px;
+    width: 100%; /* Adjust or remove max-width if not needed */
+    box-sizing: border-box; /* Include padding and border in the width */
 }
 
 footer p {

@@ -5,22 +5,24 @@
         <img src="{{this.thumbnail}}" alt="{{this.name}}" />
       </div>
       <div class="product-card__info">
-        <h4 id="title">{{this.title}}</h4>
+        <h4>{{this.title}}</h4>
         <p class="description">{{this.description}}</p>
-        <p class="price">Price: {{this.price}}</p> <!-- Asegúrate de que 'price' es el campo correcto en tus datos -->
-        <p class="stock">Available: {{this.stock}}</p> <!-- Asegúrate de que 'stock' es el campo correcto en tus datos -->
-        {{!-- <p class="code">Product Code: {{this.code}}</p> --}}
-        {{!-- <p class="id">ID: {{this._id}}</p> --}}
-        <button class="addProductToCart" id="{{this._id}}">Agregar al carrito</button>
+        <div class="product-meta">
+          <span class="price">Price: ${{this.price}}</span>
+          <span class="stock">Available: {{this.stock}}</span>
+        </div>
+        <button class="addProductToCart" id="{{this._id}}">Add to Cart</button>
       </div>
     </div>
   {{/each}}
-  {{#if data.hasPrevPage}}
-    <a href="/products?page={{data.prevPage}}"><button class="pagination-button">Previous</button></a>
-  {{/if}}
-  {{#if data.hasNextPage}}
-    <a href="/products?page={{data.nextPage}}"><button class="pagination-button">Next</button></a>
-  {{/if}}
+  <div class="pagination">
+    {{#if data.hasPrevPage}}
+      <a href="/products?page={{data.prevPage}}"><button class="pagination-button">Previous</button></a>
+    {{/if}}
+    {{#if data.hasNextPage}}
+      <a href="/products?page={{data.nextPage}}"><button class="pagination-button">Next</button></a>
+    {{/if}}
+  </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/products.js"></script>

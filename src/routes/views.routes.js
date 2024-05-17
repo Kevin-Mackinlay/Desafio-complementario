@@ -23,4 +23,6 @@ viewsRouter.get("/newPassword", viewsController.newPassword);
 viewsRouter.get("/carts/:uid", viewsController.renderCartView);
 viewsRouter.get("/carts/:cid/purchase", viewsController.purchaseView);
 viewsRouter.get('/uploadDocuments', isAuthenticated, viewsController.upLoadDocument )
+viewsRouter.get('/purchase', isAuthenticated, viewsController.purchaseView)
+
 export default viewsRouter;

@@ -91,7 +91,7 @@ export default class ViewsController {
   };
 
   renderRealTime = async (req, res) => {
-    const products = await this.productsService.getProducts();
+    const products = await this.productService.getProducts();
     res.render("realtime", {
       title: "Productos en tiempo real",
       products: products,
@@ -146,6 +146,10 @@ export default class ViewsController {
 
   renderCartView = async (req, res) => {
     try {
+      res.render("carts", {
+        title: "Cart",
+        style: "css/cart.css",
+      });
       const userId = req.user._id;
       const user = await this.userService.getUser(userId);
       const cartId = user.car[0]._id;
@@ -219,7 +223,7 @@ export default class ViewsController {
       }
 
       //Eliminamos los productos que se procesaron correctamente del carrito, e insertamos el array de productos no procesados
-      const notPurchasedProductsInCart = await this.cartService.insertArrayOfPorducts(cartId, purchaseError);
+      const notPurchasedProductsInCart = await this.cartService.insertArrayOfProducts(cartId, purchaseError);
 
       // solo creamos el ticket si hay productos en purchaseComplete
       if (purchaseComplete.length > 0) {
@@ -270,7 +274,7 @@ export default class ViewsController {
         return res.status(400).send({ message: "No file selected!" });
       }
 
-      res.render("multer", {
+      res.render("uploadDocuments", {
         userId,
         file: `uploads/${req.file.filename}`, // Path to the uploaded file
       });
