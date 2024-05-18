@@ -21,6 +21,9 @@ IndexRouter.use("/api/tickets", TicketRouter);
 IndexRouter.use("/api/mockingproducts", mockingRouter);
 IndexRouter.use("/api/mockingusers", mockingRouter);
 IndexRouter.use("/api/users", usersRouter);
+IndexRouter.use("/api/recoverPassword", ViewsRouter);
+IndexRouter.use("/api/newPassword", ViewsRouter);
+
 
 
 

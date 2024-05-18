@@ -1,22 +1,25 @@
-<div class="cartContainer">
-    <div class="cartHeader">
-        <h1>Carrito de compras</h1>
-    </div >
-    <div class="cartContent" >
-<div class="cartContentHeader">
-    <div class="cartContentHeader__item">
-        <h3>Producto</h3>
+  <div id="cartDetails">
+        {{#if cartDetail}}
+            {{#each cartDetail}}
+                <div>
+                    <p>Product: {{this.name}} - Quantity: {{this.quantity}} - Price: ${{this.price}}</p>
+                    <button onclick="deleteProductFromCart('{{../cart._id}}', '{{this._id}}')">Remove Product</button>
+                </div>
+            {{/each}}
+            <h2>Total Price: ${{totalPrice}}</h2>
+        {{else}}
+            <p>Your cart is empty.</p>
+        {{/if}}
+    </div>
 
-    </div>
-   
-{{#each products}}
-    <div class="cartContentHeader__item">
-        
-        <h3>{{this.product.title}}</h3>
-    </div>
-    <div class="cartContentHeader__item">
-        <h3>{{this.product.price}}</h3>
-    </div>
-{{/each}}
+    <!-- Add Product Form -->
+    <form id="addProductForm">
+        <label for="productId">Product ID:</label>
+        <input type="text" id="productId" name="productId" required>
+        <button type="submit">Add Product</button>
+    </form>
 
-</div>
+    <!-- Purchase Cart Button -->
+    <button id="purchaseCart">Purchase Cart</button>
+
+    <script src="/path/to/cart.js"></script> <!-- Link to your cart.js script -->

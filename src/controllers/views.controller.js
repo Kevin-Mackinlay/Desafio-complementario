@@ -116,7 +116,7 @@ export default class ViewsController {
 
   recoverPassword = async (req, res) => {
     try {
-      res.render("recoverPass", {
+      res.render("recoverPassword", {
         title: "Recover Password",
         style: "css/recoverPassword.css",
       });
@@ -146,34 +146,43 @@ export default class ViewsController {
 
   renderCartView = async (req, res) => {
     try {
-      res.render("carts", {
-        title: "Cart",
-        style: "css/cart.css",
-      });
-      const userId = req.user._id;
-      const user = await this.userService.getUser(userId);
-      const cartId = user.car[0]._id;
-      const cart = await this.cartService.getCartById(cartId);
+      const userId = req.user._id; // Ensuring req.user is populated by isAuthenticated middleware
 
-      if (!cart) {
-        return res.status(404).send({ error: "Cart not found" });
+      // Fetch user to get cart information, assuming that the user object contains a cart
+      const user = await this.userService.getUserById(userId); // Ensure this method exists and works correctly
+
+      if (!user || !user.cart || user.cart.length === 0) {
+        return res.status(404).json({ error: "No cart found for this user." });
       }
 
-      const productsInCart = cart.products;
+      const cartId = user.cart[0]._id;
+      const cart = await this.cartService.getCartById(cartId);
+      if (!cart) {
+        return res.status(404).json({ error: "Cart not found" });
+      }
 
+      // Assume that cart has an array of product IDs
+      const productsInCart = cart.products;
       const cartDetail = [];
       let totalPrice = 0;
 
       for (let product of productsInCart) {
-        const productDetail = await this.productService.getProductById(product.productID);
-        productDetail = await productDetail.toObject(); // Convert to plain object
+        let productDetail = await this.productService.getProductById(product.productID);
+        productDetail = productDetail.toObject(); // Convert Mongoose document to plain object, if needed
         productDetail.quantity = product.quantity;
         cartDetail.push(productDetail);
         totalPrice += productDetail.price * product.quantity;
       }
-      res.render("cart", { cart, cartDetail, totalPrice });
+
+      // Render cart view with details
+      res.render("carts", {
+        title: "Your Cart",
+        style: "css/cart.css",
+        cartDetail,
+        totalPrice,
+      });
     } catch (error) {
-      console.log(error);
+      console.error("Error rendering cart:", error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -259,9 +268,9 @@ export default class ViewsController {
   };
 
   upLoadDocument = async (req, res) => {
-      if (!req.user) {
-        return res.status(401).send({ message: "User not authenticated" });
-      }
+    if (!req.user) {
+      return res.status(401).send({ message: "User not authenticated" });
+    }
     const userId = req.user._id;
 
     // Invoke Multer middleware for handling file upload

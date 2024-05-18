@@ -35,8 +35,8 @@ sessionRouter.post(
   sessionsController.signup
 );
 
-sessionRouter.post("/recover-password", (req, res)=>{
-  console.log("Route /recover-password accessed");
+sessionRouter.post("/recoverPassword", (req, res)=>{
+  console.log("Route /recoverPassword accessed");
  sessionsController.recoverPassword(req, res);
 }
 );

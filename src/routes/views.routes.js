@@ -18,9 +18,9 @@ viewsRouter.get("/login", viewsController.renderLogin);
 viewsRouter.get("/signup", viewsController.renderSignup);
 viewsRouter.get("/logout", viewsController.renderLogout);
 viewsRouter.get("/tickets", viewsController.renderTickets);
-viewsRouter.get("/recover-password", viewsController.recoverPassword);
+viewsRouter.get("/recoverPassword", viewsController.recoverPassword);
 viewsRouter.get("/newPassword", viewsController.newPassword);
-viewsRouter.get("/carts/:uid", viewsController.renderCartView);
+viewsRouter.get("/cart/:uid", isAuthenticated (['user']), viewsController.renderCartView);
 viewsRouter.get("/carts/:cid/purchase", viewsController.purchaseView);
 viewsRouter.get('/uploadDocuments', isAuthenticated, viewsController.upLoadDocument )
 viewsRouter.get('/purchase', isAuthenticated, viewsController.purchaseView)
