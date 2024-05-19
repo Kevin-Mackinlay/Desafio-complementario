@@ -20,7 +20,7 @@ export default class UserService {
   }
   async getByUser(userData) {
     try {
-      return await userModel.findOne(userData).lean();
+      return await userModel.findOne(userData);
     } catch (error) {
       logger.error(error);
     }
@@ -60,5 +60,39 @@ export default class UserService {
       console.log(error);
       logger.error(error);
     }
-  }
+  };
+
+  getUserByResetToken = async (email, Token) => {
+    try {
+      return await userModel.findOne({
+        email: email,
+        resetPasswordToken: Token,
+        resetPasswordExpires: { $gt: Date.now() }, // Check if token is still valid
+      });
+    } catch (error) {
+      console.log("Error getting user by reset token", error.message);
+      logger.error(error);
+    }
+  };
+
+  updateUserPassword = async (id, password) => {
+    try {
+      const salt = await bcrypt.genSalt(10); // Generate a salt
+      const hashedPassword = await bcrypt.hash(password, salt); // Hash the password
+
+      return await userModel.updateOne(
+        { _id: id },
+        {
+          $set: {
+            password: hashedPassword,
+            resetPasswordToken: undefined, //clears the reset token
+            resetPasswordExpires: undefined, // clears the expiration time
+          },
+        }
+      );
+    } catch (error) {
+      console.log("Error updating user password", error.message);
+      logger.error(error);
+    }
+  };
 }
