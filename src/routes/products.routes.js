@@ -1,7 +1,5 @@
 import express from "express";
-import passport from "passport";
 import ProductsController from "../controllers/products.controller.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
 import { productService } from "../services/services.js";
 
 const productsRouter = express.Router();
