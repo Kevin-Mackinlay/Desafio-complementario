@@ -96,6 +96,11 @@ class UserServiceDb {
       const token = crypto.randomBytes(20).toString("hex");
       const expires = Date.now() + 86400000; // 24 hours
 
+      // Log the date and time when the token will expire
+      const expirationDate = new Date(expires);
+      console.log("Token expires at (UTC):", expirationDate.toUTCString());
+      console.log("Token expires at (Local):", expirationDate.toString());
+
       await userModel.updateOne(
         { email: email },
         {

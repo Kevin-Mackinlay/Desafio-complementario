@@ -1,13 +1,20 @@
 import { Router } from "express";
 // import passportCall from "../passportJwt/passportCall.js";
 import ViewsController from "../controllers/views.controller.js";
-import { productService, cartService } from "../services/services.js";
+import { productService, ticketService, userService, cartService} from "../services/services.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 // const passportCall = passportCallModule.passportCall;
 // const passportCallUrl = passportCallModule.passportCallUrl;
 
-const viewsController = new ViewsController(cartService, productService);
+console.log("ProductService initialized:", productService);
+console.log("TicketService initialized:", ticketService);
+console.log("UserService initialized:", userService);
+console.log("CartService initialized:", cartService);
+
+
+const viewsController = new ViewsController( productService, ticketService, userService, cartService);
+
 const viewsRouter = Router();
 
 viewsRouter.get("/products", viewsController.renderProducts);

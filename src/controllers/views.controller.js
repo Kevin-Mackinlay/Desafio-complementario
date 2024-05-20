@@ -1,5 +1,6 @@
 export default class ViewsController {
   constructor(chatService, productService, ticketService, userService, cartService) {
+    if (!userService) throw new Error("UserService must be provided");
     this.chatService = chatService;
     this.productService = productService;
     this.ticketService = ticketService;
@@ -131,6 +132,30 @@ export default class ViewsController {
 
   newPassword = async (req, res) => {
     try {
+      console.log("UserService available:", this.userService);
+      if (!this.userService || typeof this.userService.findOne !== "function") {
+        throw new Error("UserService is not initialized correctly");
+      }
+
+      const { token, email } = req.query;
+
+      // Fetch user based on email, token, and check if token hasn't expired
+      const user = await this.userService.findOne({
+        email: email,
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: new Date() }, // Checking if the token is still valid
+      });
+
+      // Additional logging to understand the state
+      if (user) {
+        console.log("User found, token is valid:", user);
+        // Proceed with password reset logic here...
+      } else {
+        console.log("No user found, or token is invalid or expired.");
+        res.status(400).json({ success: false, message: "Invalid or expired token" });
+        return;
+      }
+
       res.render("newPassword", {
         title: "New Password",
         style: "css/newPassword.css",
