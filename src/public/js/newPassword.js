@@ -1,50 +1,47 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("newpassword-form"); // Make sure this matches the form ID exactly
+document.getElementById("newpassword-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
+  const code = document.getElementById("code").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm_password").value;
+  const token = document.getElementById("token").value;
+  const email = document.getElementById("email").value;
 
-      const code = document.getElementById("code").value;
-      const newPassword = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirm_password").value;
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
 
-      // Additional logic to verify passwords match
-      if (newPassword !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-      }
+  console.log("Email:", email); // Log the email
+  console.log("Token:", token); // Log the token
+  console.log("Code:", code); // Log the code (should be the reset token from form)
+  console.log("New Password:", password); // Log the new password
 
-      // Create data object to send to server
-      const data = {
-        token: code,
-        newPassword: newPassword,
-      };
+  const data = {
+    token: code || token, // Use form code or URL token if form code is not provided
+    email: email,
+    newPassword: password,
+  };
 
-      // Send data to server using fetch API
-      fetch("/api/sessions/newPassword", {
-        // Adjust the URL as necessary
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            alert("Password updated successfully.");
-            window.location.href = "/login"; // Redirect to login page or wherever appropriate
-          } else {
-            alert("Failed to update password: " + data.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error updating password:", error);
-          alert("Failed to update password. Please try again.");
-        });
+  try {
+    const response = await fetch("/api/sessions/newPassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     });
-  } else {
-    console.error("Form not found. Check the ID and element existence in the HTML.");
+
+    const result = await response.json();
+    console.log("New password response:", result);
+    if (result.success) {
+      alert("Password updated successfully");
+      window.location.href = "/login";
+    } else {
+      alert(result.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred while updating the password. Please try again.");
   }
 });

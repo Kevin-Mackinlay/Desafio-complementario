@@ -63,7 +63,6 @@ export default class SessionsController {
       next(error);
     }
   };
-
   recoverPassword = async (req, res) => {
     const { email } = req.body;
     try {
@@ -76,9 +75,8 @@ export default class SessionsController {
       }
 
       // Generate a reset token - this part is up to your implementation
-
       const resetToken = user.generateResetToken();
-      await user.save(); // Save the user with the token
+      await userService.updateUser(user._id, { resetPasswordToken: resetToken });
 
       // Send email with reset link
       const resetUrl = `http://localhost:8080/login/newPassword?token=${resetToken}&email=${email}`;
@@ -98,55 +96,53 @@ export default class SessionsController {
         success: true,
         message: "Recovery email sent successfully, please check your inbox.",
       });
-
-      // if (email === "") return res.status(428).send({ status: "Error", message: "Email is required" });
-      // const user = await userService.getUser({ email });
-      // if (!user) return res.status(404).send({ status: "Error", message: "User not found" });
-
-      // if (user) {
-      //   const urlToken = generateTokenUrl(user);
-      //   await transport.sendMail({
-      //     from: process.env.EMAIL_USER,
-      //     to: user.email,
-      //     subject: "Recover Password",
-      //     html: `<div>
-      //                           <h1>
-      //                               Go to this link to change the password
-      //                           </h1>
-      //                           <a href="http://localhost:8080/login/change-of-password"> Change of password </a>
-      //                     </div>`,
-      //   });
-      //   res.cookie("CoderCookieToken", urlToken, { maxAge: 60 * 60 * 100, httpOnly: true });
-      //   return res.status(200).send({ status: "Success", message: "Email was sent to veryfy your identity" });
-      // }
     } catch (error) {
-      console.error("Password recovery error:", error);
-      logger.error(error);
+      logger.error("Password recovery error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
     }
   };
 
   newPassword = async (req, res) => {
-    const { token, email, newPassword } = req.body; // Assume these are passed in the body
+    const { token, email, newPassword } = req.body;
+    console.log("Request body:", req.body); // Log the entire request body
+    console.log("Token:", token); // Log the token
+    console.log("Email:", email); // Log the email
+    console.log("New Password:", newPassword); // Log the new password
 
     try {
-      // Find user by email and token, ensure token hasn't expired
       const user = await userService.getUserByResetToken(email, token);
+      console.log("User found:", user); // Log the user found by token
+
+      //check if user is null
       if (!user || user.resetPasswordExpires < Date.now()) {
+        console.log("User not found or invalid token");
         return res.status(400).json({
           success: false,
           message: "Invalid or expired token",
         });
       }
 
-      // Hash new password
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      // Log the resetPasswordExpires value
+      const currentTime = new Date();
+      console.log("Current time:", currentTime);
+      console.log("User resetPasswordExpires:", user.resetPasswordExpires);
 
-      // Update user with new password and remove/reset the reset token fields
-      const updateResult = await userService.updateUserPassword(user._id, hashedPassword);
-      if (!updateResult) {
-        throw new Error("Failed to update password");
+      // Check if token is expired
+      if (user.resetPasswordExpires < currentTime) {
+        console.log("Token expired");
+        return res.status(400).json({
+          success: false,
+          message: "Invalid or expired token",
+        });
       }
 
+      //if everything is fine, update the password
+      await userService.updateUserPassword(user._id, newPassword);
+      console.log("Password updated successfully");
+      
       res.status(200).json({
         success: true,
         message: "Password updated successfully",
@@ -162,15 +158,11 @@ export default class SessionsController {
 
   logout = async (req, res) => {
     try {
-      console.log(1);
       req.session.destroy();
-      console.log(2);
-      // await userService.updateUser({ _id: req.user._id }, { lastConnection: Date() });
-
       return res.clearCookie("CoderCookieToken").redirect("/login");
     } catch (error) {
-      console.log(error);
       logger.error(error);
+      res.status(500).json({ success: false, message: "Internal server error" });
     }
   };
 
@@ -179,9 +171,14 @@ export default class SessionsController {
       const { email } = req.user;
       const contact = await contactService.getContact({ email });
 
-      contact ? res.status(200).send({ status: "success", toInfo: contact }) : res.status(404).send({ status: "Error", message: "Your information does not exist" });
+      if (contact) {
+        res.status(200).send({ status: "success", toInfo: contact });
+      } else {
+        res.status(404).send({ status: "Error", message: "Your information does not exist" });
+      }
     } catch (error) {
       logger.error(error);
+      res.status(500).json({ success: false, message: "Internal server error" });
     }
   };
 
