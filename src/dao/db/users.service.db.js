@@ -94,14 +94,16 @@ class UserServiceDb {
   setPasswordResetToken = async (email) => {
     try {
       const token = crypto.randomBytes(20).toString("hex");
-      const expires = Date.now() + 86400000; // 24 hours
+      const expires = new Date(Date.now() + 86400000); // 24 hours
 
       // Log the date and time when the token will expire
       const expirationDate = new Date(expires);
+      console.log("Setting token for:", email);
+      console.log("Generated token:", token);
       console.log("Token expires at (UTC):", expirationDate.toUTCString());
       console.log("Token expires at (Local):", expirationDate.toString());
 
-      await userModel.updateOne(
+      const result = await userModel.updateOne(
         { email: email },
         {
           $set: {
@@ -111,6 +113,7 @@ class UserServiceDb {
         }
       );
 
+      console.log("Update result:", result);
       return token;
     } catch (error) {
       console.log("Error setting reset token", error.message);
@@ -120,5 +123,3 @@ class UserServiceDb {
 }
 
 export default UserServiceDb;
-
-

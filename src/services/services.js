@@ -9,6 +9,10 @@ import  UsersRepository  from "../repositories/users.repository.js";
 import  TicketsRepository  from "../repositories/ticket.repository.js";
 import  ContactRepository  from "../repositories/contact.repository.js";
 
+console.log("UserServiceDb instance:", UserServiceDb);
+console.log("ProductServiceDb instance:", ProductServiceDb);
+console.log("CartServiceDb instance:", CartServiceDb);
+console.log("TicketServiceDb instance:", TicketServiceDb);
 
 export const userService = new UsersRepository(UserServiceDb);
 export const cartService = new CartsRepository(CartServiceDb);

@@ -20,7 +20,7 @@ document.getElementById("newpassword-form").addEventListener("submit", async (e)
   const data = {
     token: code || token, // Use form code or URL token if form code is not provided
     email: email,
-    newPassword: password,
+    newPassword: newPassword,
   };
 
   try {

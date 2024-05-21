@@ -3,18 +3,19 @@ import { userService } from "../services/services.js";
 import { generateToken, generateTokenUrl } from "../utils/jsonWebToken.js";
 // import { validPassword, creaHash } from "../utils/bcryptHash.js";
 import transport from "../utils/nodeMailer.js";
-import bcrypt from "bcrypt";
+import { validPassword } from "../utils/bcryptHash.js";
 
 export default class SessionsController {
   signup = async (req, res) => {
     try {
+      console.log("Signup request received:", req.body); // Add this log
       if (!req.signupSuccess) {
         return res.status(400).json({ success: false, message: "User already exists" });
       }
 
       res.status(201).json({ success: true, message: "User created", redirectUrl: "/login" });
     } catch (error) {
-      console.log(error);
+      console.log("Error during signup:", error); // Add this log
     }
   };
 
@@ -142,7 +143,7 @@ export default class SessionsController {
       //if everything is fine, update the password
       await userService.updateUserPassword(user._id, newPassword);
       console.log("Password updated successfully");
-      
+
       res.status(200).json({
         success: true,
         message: "Password updated successfully",

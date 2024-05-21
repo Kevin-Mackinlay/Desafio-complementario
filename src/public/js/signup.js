@@ -16,11 +16,11 @@ async function postSignup(firstName, lastName, age, email, password) {
     });
 
     const result = await response.json();
-    console.log(result);
+    console.log("Response from server:", result); // Add this log
     return result;
   } catch (error) {
-    console.log(error);
-    return { success: false, message: "invalid credentials" };
+    console.log("Error during signup:", error); // Add this log
+    return { success: false, message: "Invalid credentials" };
   }
 }
 
@@ -35,6 +35,7 @@ signupForm.addEventListener("submit", async (event) => {
   const password = document.getElementById("password").value;
 
   const response = await postSignup(first_name, last_name, age, email, password);
+  console.log("Response after form submission:", response); // Add this log
   if (response.success == true) {
     window.location.href = response.redirectUrl;
   } else {

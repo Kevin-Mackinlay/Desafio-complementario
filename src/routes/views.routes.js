@@ -7,10 +7,10 @@ import isAuthenticated from "../middlewares/isAuthenticated.js";
 // const passportCall = passportCallModule.passportCall;
 // const passportCallUrl = passportCallModule.passportCallUrl;
 
-console.log("ProductService initialized:", productService);
-console.log("TicketService initialized:", ticketService);
-console.log("UserService initialized:", userService);
-console.log("CartService initialized:", cartService);
+console.log("ProductService:", productService);
+console.log("TicketService:", ticketService);
+console.log("UserService :", userService);
+console.log("CartService :", cartService);
 
 
 const viewsController = new ViewsController( productService, ticketService, userService, cartService);

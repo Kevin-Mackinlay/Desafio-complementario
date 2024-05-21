@@ -1,7 +1,9 @@
 export default class ViewsController {
-  constructor(chatService, productService, ticketService, userService, cartService) {
-    if (!userService) throw new Error("UserService must be provided");
-    this.chatService = chatService;
+  constructor(productService, ticketService, userService, cartService) {
+    console.log("Received UserService in constructor:", userService); // Add this log
+    if (!userService || typeof userService.findOne !== "function") {
+      throw new Error("UserService must be provided and must have a findOne method");
+    }
     this.productService = productService;
     this.ticketService = ticketService;
     this.userService = userService;
@@ -132,8 +134,8 @@ export default class ViewsController {
 
   newPassword = async (req, res) => {
     try {
-      console.log("UserService available:", this.userService);
       if (!this.userService || typeof this.userService.findOne !== "function") {
+        console.error("UserService is incorrectly initialized:", this.userService);
         throw new Error("UserService is not initialized correctly");
       }
 
