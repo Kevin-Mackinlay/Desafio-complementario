@@ -42,7 +42,7 @@ header {
   align-items: center;
   position: sticky;
   top: 0;
-  height: 15rem; /* Adjusted height */
+  height: 10rem; /* Original height */
   width: 100%;
   padding: 0 3rem;
   background-color: #b3b1b1; /* Dark background color */
@@ -53,6 +53,21 @@ nav ul {
   gap: 2rem;
   font-weight: bold;
   color: #fff; /* Set text color to white */
+}
+
+/* Hero Section Styles */
+.hero {
+  text-align: center;
+  padding: 50px 20px;
+  background: #f4f4f4;
+}
+
+.hero img {
+  max-width: 100%; /* Make sure the image is responsive */
+  height: auto; /* Maintain aspect ratio */
+  margin: 20px auto; /* Center the image horizontally and add margin */
+  display: block; /* Display the image as a block element */
+  border-radius: 10px; /* Optional: Add some rounded corners */
 }
 
 /* Product Card Styles */
@@ -89,8 +104,7 @@ nav ul {
   margin-bottom: 10px;
 }
 
-/* Other styles remain unchanged */
-
+/* Login Styles */
 .login-container {
   background-color: #c4c3c3;
   padding: 40px; /* Increased padding */
@@ -149,12 +163,6 @@ h1 {
   font-size: large;
 }
 
-.hero {
-  text-align: center;
-  padding: 50px 20px;
-  background: #f4f4f4;
-}
-
 .featured-products .product-grid {
   display: flex;
   flex-wrap: wrap;
@@ -167,6 +175,7 @@ h1 {
   padding: 40px 20px;
   background: #fff;
 }
+
 footer {
   background-color: #333;
   color: white;

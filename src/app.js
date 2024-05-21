@@ -22,6 +22,7 @@ import mockingRouter from "./routes/mocking.routes.js";
 import cluster from "cluster";
 import { cpus } from "os";
 
+
 dotenv.config();
 
 const app = express();
@@ -57,6 +58,17 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+
+
+// Middleware to log request URLs
+app.use((req, res, next) => {
+  console.log(`Request URL: ${req.url}`);
+  next();
+});
+
+
+
 
 //passport
 initializePassport();

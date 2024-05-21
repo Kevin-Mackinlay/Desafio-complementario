@@ -1,24 +1,10 @@
 <section class="hero">
     <h1>Welcome to Our Mobile Store!</h1>
     <p>Explore our wide range of mobile devices and accessories.</p>
+    <img src="/assets/home.jpg" alt="Mobile Store" class="hero-image">
 </section>
 
-<section class="featured-products">
-    <h2>Featured Phones</h2>
-    <div class="product-grid">
-        {{#each featuredProducts}}
-        <div class="product-card">
-            <img src="{{this.image}}" alt="{{this.name}}" class="product-image">
-            <div class="product-info">
-                <h3>{{this.name}}</h3>
-                <p>{{this.description}}</p>
-                <p class="product-price">$ {{this.price}}</p>
-                <a href="/products/{{this.id}}" class="btn btn-primary">View Details</a>
-            </div>
-        </div>
-        {{/each}}
-    </div>
-</section>
+
 
 <section class="about-us">
     <h2>About Us</h2>
