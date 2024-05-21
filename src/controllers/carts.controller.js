@@ -2,7 +2,8 @@ import { logger } from "../utils/logger.js";
 import objectConfig from "../config/objectConfig.js";
 import transport from "../utils/nodeMailer.js";
 import { v4 as uuidv4 } from "uuid";
-import { ProductServiceDb, TicketServiceDb } from "../dao/factory.js";
+import ProductServiceDb from "../dao/db/products.service.db.js";
+import TicketService from "../dao/db/ticket.service.db.js";
 
 export default class CartsController {
   constructor(CartService) {
@@ -58,49 +59,48 @@ export default class CartsController {
       logger.error(error);
     }
   };
+addProduct = async (req, res) => {
+  try {
+    let { cid, pid } = req.params;
+    const cart = await this.cartService.getCartByID(cid);
+    const product = await ProductServiceDb.getProduct({ _id: pid });
 
-  addProduct = async (req, res) => {
-    try {
-      let { cid, pid } = req.params;
-      const cart = await cartService.getCartByID(cid);
-      const product = await ProductServiceDb.getProduct({ _id: pid });
+    if (!product)
+      return res.status(404).send({
+        status: "Error",
+        message: "The product does not exist",
+      });
 
-      if (product.owner === req.user.email)
-        return res.status(404).send({
-          status: "Error",
-          message: "You can't add your products to your cart",
-        });
+    if (!cart)
+      return res.status(404).send({
+        status: "Error",
+        message: "The cart does not exist",
+      });
 
-      if (!product)
-        return res.status(404).send({
-          status: "Error",
-          message: "The product does not exist",
-        });
+    if (product.stock < 1)
+      return res.status(404).send({
+        status: "Error",
+        message: "The product does not have enough stock",
+      });
 
-      if (!cart)
-        return res.status(404).send({
-          status: "Error",
-          message: "The cart does not exist",
-        });
+    if (cart && product) {
+      await this.cartService.addProductAndUpdate(cid, pid);
 
-      if (product.stock < 1)
-        return res.status(404).send({
-          status: "Error",
-          message: "The product does not have enough stock",
-        });
-
-      if (cart && product) {
-        await cartService.addProductAndUpdate(cid, pid);
-
-        res.status(200).send({
-          status: "The cart was updated successfully",
-          message: `the product ${product.title} was added to the cart`,
-        });
-      }
-    } catch (error) {
-      logger.error(error);
+      res.status(200).send({
+        status: "The cart was updated successfully",
+        message: `The product ${product.title} was added to the cart`,
+      });
     }
-  };
+  } catch (error) {
+    console.log(error);
+    logger.error(error);
+    res.status(500).send({
+      status: "Error",
+      message: "Failed to add product to cart",
+    });
+  }
+};
+
 
   deleteProductInCart = async (req, res) => {
     try {

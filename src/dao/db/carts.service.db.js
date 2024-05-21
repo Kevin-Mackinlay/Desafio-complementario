@@ -14,7 +14,7 @@ export default class CartService {
 
   async getCarts() {
     try {
-      console.log(1);
+      console.log("Fetching all carts");
       return await cartModel.find();
     } catch (error) {
       console.log(error);
@@ -24,7 +24,7 @@ export default class CartService {
 
   async getCartById(cid) {
     try {
-      return await cartModel.findById({ _id: cid }).lean();
+      return await cartModel.findById(cid).lean();
     } catch (error) {
       console.log(error);
       logger.error(error);
@@ -33,13 +33,22 @@ export default class CartService {
 
   async addAndUpdate(cid, pid) {
     try {
-      const cart = await cartModel.findById({ _id: cid });
-      const products = cart.products.find((prod) => prod.product._id == pid);
+      const cart = await cartModel.findById(cid);
+      const product = cart.products.find((prod) => prod.product._id == pid);
 
-      if (!products) {
-        return await cartModel.updateOne({ _id: cid }, { $push: { products: { product: pid, quantity: 1 } } });
+      if (!product) {
+        console.log(`Adding new product ${pid} to cart ${cid}`);
+        return await cartModel.updateOne(
+          { _id: cid },
+          { $push: { products: { product: pid, quantity: 1 } } }
+        );
       } else {
-        return await cartModel.updateOne({ _id: cid, "products.product": pid }, { $inc: { "products.$.quantity": 1 } }, { new: true, upset: true });
+        console.log(`Updating quantity of product ${pid} in cart ${cid}`);
+        return await cartModel.updateOne(
+          { _id: cid, "products.product": pid },
+          { $inc: { "products.$.quantity": 1 } },
+          { new: true, upset: true }
+        );
       }
     } catch (error) {
       logger.error(error);
@@ -49,7 +58,6 @@ export default class CartService {
   async deleteOne(cid, pid) {
     try {
       let prod = await productModel.findById(pid);
-
       return await cartModel.updateOne({ _id: cid }, { $pull: { products: { product: prod } } });
     } catch (error) {
       logger.error(error);

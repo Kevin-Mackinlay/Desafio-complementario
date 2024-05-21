@@ -1,13 +1,53 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const socket = io();
+const socket = io();
 
+document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("click", async (event) => {
     if (event.target.matches(".addProductToCart")) {
       const productId = event.target.id;
-      console.log(`Add product with ID: ${productId} to cart`);
+      const cartIdElement = document.getElementById("cartId");
 
-      // Implement add to cart functionality here
-      // For example, you could send a request to your backend to add the product to the cart
+      if (!cartIdElement) {
+        console.error("Cart ID element not found");
+        alert("Cart ID element is missing. Please try again.");
+        return;
+      }
+
+      const cartId = cartIdElement.value;
+      if (!cartId) {
+        console.error("Cart ID is empty");
+        alert("Cart ID is missing. Please try again.");
+        return;
+      }
+
+      console.log(`Add product with ID: ${productId} to cart with ID: ${cartId}`);
+
+      try {
+        const url = `/api/carts/${cartId}/product/${productId}`;
+        console.log(`Request URL: ${url}`);
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log("Server response:", result);
+        if (result.status === "Success") {
+          alert("Product added to cart successfully");
+          window.location.href = `/cart/${cartId}`;
+        } else {
+          alert(result.message);
+        }
+      } catch (error) {
+        console.error("Error adding product to cart:", error);
+        alert("Error adding product to cart");
+      }
     }
 
     if (event.target.matches("#addProductBtn")) {
@@ -77,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       card.classList.add("productCard");
       card.innerHTML = `
         <div class="cardProduct__image">
-          <img src=${product.thumbnail} alt=${product.title} />
+          <img src="${product.thumbnail}" alt="${product.title}" />
         </div>
         <div class="cardProduct__info">
           <h3>${product.title}</h3>
