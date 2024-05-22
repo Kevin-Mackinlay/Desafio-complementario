@@ -1,25 +1,19 @@
-<div id="cartDetails">
-  {{#if cartDetail}}
-    {{#each cartDetail}}
-      <div>
-        <p>Product: {{this.title}} - Quantity: {{this.quantity}} - Price: ${{this.price}}</p>
-        <button class="removeProductFromCart" data-product-id="{{this._id}}">Remove Product</button>
+{{!-- Cart View with Operations --}}
+<div class="cart">
+  {{#if products}}
+    {{#each products}}
+      <div class="cart-item">
+        <img src="{{this.productID.thumbnail}}" alt="{{this.productID.title}}">
+        <h3>{{this.productID.title}}</h3>
+        <p>Price: ${{this.productID.price}}</p>
+        <input type="number" id="quantityInput" value="{{this.quantity}}" data-productid="{{this.productID._id}}">
+        <p>Subtotal: ${{calculateSubtotal this.productID.price this.quantity}}</p>
+        <button class="delete-product" data-product-id="{{this.productID._id}}">Remove</button>
       </div>
     {{/each}}
-    <h2>Total Price: ${{totalPrice}}</h2>
+    <button id="empty-cart">Empty Cart</button>
+    <p>Total: ${{total}}</p>
   {{else}}
     <p>Your cart is empty.</p>
   {{/if}}
 </div>
-
-<!-- Add Product Form -->
-<form id="addProductForm">
-  <label for="productId">Product ID:</label>
-  <input type="text" id="productId" name="productId" required>
-  <button type="submit">Add Product</button>
-</form>
-
-<!-- Purchase Cart Button -->
-<button id="purchaseCart">Purchase Cart</button>
-
-<script src="/js/cart.js"></script>

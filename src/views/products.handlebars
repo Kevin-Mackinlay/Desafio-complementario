@@ -1,28 +1,91 @@
-<div class="product-list" id="productList">
-  <input type="hidden" id="cartId" value="{{cartId}}">
-
-  {{#each data.products}}
-    <div class="product-card">
-      <div class="product-card__image">
-        <img src="{{this.thumbnail}}" alt="{{this.name}}" />
-      </div>
-      <div class="product-card__info">
-        <h4>{{this.title}}</h4>
-        <p class="description">{{this.description}}</p>
-        <div class="product-meta">
-          <span class="price">Price: ${{this.price}}</span>
-          <span class="stock">Available: {{this.stock}}</span>
-        </div>
-        <button class="addProductToCart" id="{{this._id}}">Add to Cart</button>
-      </div>
+<div class="products">
+  {{#each products}}
+    <div class="product">
+      <img src="{{this.thumbnail}}" alt="{{this.title}}" />
+      <h3>{{this.title}}</h3>
+      <p>{{this.description}}</p>
+      <p>Price: ${{this.price}}</p>
+      <p>Available: {{this.stock}} items</p>
     </div>
+  {{else}}
+    <p>No products found.</p>
   {{/each}}
-  <div class="pagination">
-    {{#if data.hasPrevPage}}
-      <a href="/products?page={{data.prevPage}}"><button class="pagination-button">Previous</button></a>
-    {{/if}}
-    {{#if data.hasNextPage}}
-      <a href="/products?page={{data.nextPage}}"><button class="pagination-button">Next</button></a>
-    {{/if}}
-  </div>
 </div>
+<script src="js/products.js"></script>
+{{! Compare this snippet from Tercera-preEntrega-PF/src/views/login.handlebars: }}
+{{! <div class="login-container">
+ }}
+{{!   <form id="login-form" class="login-form">
+ }}
+{{!     <h2>Ingresá a tu cuenta</h2>
+ }}
+{{!     <div class="form-group">
+ }}
+{{! 
+ }}
+{{!       <label for="email">Email:</label>
+ }}
+{{!       <input type="email" id="email" name="email" required />
+ }}
+{{!     </div>
+ }}
+{{!     <div class="form-group">
+ }}
+{{! 
+ }}
+{{!       <label for="password">Contraseña:</label>
+ }}
+{{!       <input type="password" id="password" name="password" required />
+ }}
+{{!     </div>
+ }}
+{{!     <button id="login" type="submit">Ingresar</button>
+ }}
+{{!   </form>
+ }}
+{{! </div>
+ }}
+{{! <script src="js/login.js"></script> }}
+{{! Compare this snippet from Tercera-preEntrega-PF/src/views/home.handlebars: }}
+{{! <div class="home">
+ }}
+{{!   <h1>Welcome to Mobile Store</h1>
+ }}
+{{!   <p>Find the best mobile phones here.</p>
+ }}
+{{! </div>
+ }}
+{{! Compare this snippet from Tercera-preEntrega-PF/src/views/chat.handlebars: }}
+{{! <div class="chat-container">
+ }}
+{{!   <div class="chat">
+ }}
+{{!     <div class="chat-messages">
+ }}
+{{!       {{#each messages}}
+ }}
+{{!         <div class="chat-message">
+ }}
+{{!           <p>{{this.message}}</p>
+ }}
+{{!           <p>{{this.user}}</p>
+ }}
+{{!         </div>
+ }}
+{{!       {{/each}}
+ }}
+{{!     </div>
+ }}
+{{!     <form id="chat-form" class="chat-form">
+ }}
+{{!       <input type="text" id="message" name="message" required />
+ }}
+{{!       <button id="send" type="submit">Send</button>
+ }}
+{{!     </form>
+ }}
+{{!   </div>
+ }}
+{{! </div>
+ }}
+{{! <script src="js/chat.js"></

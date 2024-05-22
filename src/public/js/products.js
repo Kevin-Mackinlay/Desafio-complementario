@@ -1,22 +1,57 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // This will capture clicks on any element within the body
+  // Function to fetch all products and render them on the page
+  const fetchAndRenderProducts = async () => {
+    try {
+      const response = await fetch("/api/products"); // Adjust the endpoint as needed
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const products = await response.json();
+      renderProducts(products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      alert("Failed to fetch products");
+    }
+  };
+
+  // Function to render products on the page
+  const renderProducts = (products) => {
+    const productsContainer = document.querySelector(".products");
+    productsContainer.innerHTML = ""; // Clear existing content
+
+    products.forEach((product) => {
+      const productElement = document.createElement("div");
+      productElement.className = "product";
+      productElement.innerHTML = `
+        <img src="${product.thumbnail}" alt="${product.title}" />
+        <h3>${product.title}</h3>
+        <p>${product.description}</p>
+        <p>Price: $${product.price}</p>
+        <p>Available: ${product.stock} items</p>
+        <button class="addProductToCart" id="${product._id}">Add to Cart</button>
+      `;
+      productsContainer.appendChild(productElement);
+    });
+  };
+
+  // Fetch and render products on page load
+  fetchAndRenderProducts();
+
+  // Event listener for adding a product to the cart
   document.body.addEventListener("click", async (event) => {
-    // Check if the clicked element has the class 'addProductToCart'
     if (event.target.matches(".addProductToCart")) {
-      const productId = event.target.id; // Get product ID from button's id attribute
+      const productId = event.target.id;
       const cartIdElement = document.getElementById("cartId");
 
-      // Check if the cartIdElement exists and has a value
       if (!cartIdElement || !cartIdElement.value) {
         console.error("Cart ID element not found or is empty");
         alert("Cart ID element is missing or empty. Please try again.");
         return;
       }
 
-      const cartId = cartIdElement.value; // Get the cart ID from the hidden input
+      const cartId = cartIdElement.value;
       console.log(`Adding product ID: ${productId} to cart ID: ${cartId}`);
 
-      // API request to add the product to the cart
       try {
         const url = `/api/carts/${cartId}/product/${productId}`;
         const response = await fetch(url, {
