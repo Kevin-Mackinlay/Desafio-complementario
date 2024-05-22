@@ -21,6 +21,7 @@ import cors from "cors";
 import mockingRouter from "./routes/mocking.routes.js";
 import cluster from "cluster";
 import { cpus } from "os";
+import { v4 as uuidv4 } from "uuid";
 
 
 dotenv.config();
@@ -92,6 +93,9 @@ app.use(errorHandler);
 // app.get("/", (req, res) => {
 //   throw new Error("Algo falló!");
 // });
+
+
+
 
 app.get("/ejemploBrotli", (req, res) => {
   let ejemploString = "Hola soy un string de ejemplo";

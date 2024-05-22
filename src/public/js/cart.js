@@ -1,61 +1,85 @@
-const socket = io();
+// Obtén la referencia al botón de vaciar carrito y al ID del carrito desde el HTML
+const emptyButton = document.getElementById('empty-cart');
+const cartID = document.getElementById('cart-id').textContent;
+console.log(cartID)
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.addEventListener("click", async (event) => {
-    if (event.target.matches(".addProductToCart")) {
-      const productId = event.target.id;
-      const cartId = document.getElementById("cartId").value; // Get the cart ID from the hidden input
-      console.log(`Add product with ID: ${productId} to cart`);
 
-      try {
-        const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+// Función para vaciar el carrito
+const empty = async (event) => {
+    try {
+        // Realiza una solicitud DELETE al endpoint correspondiente
+        const response = await fetch(`/api/carts/${cartID}`, {
+            method: 'DELETE',
         });
 
-        const result = await response.json();
-        if (result.success) {
-          alert("Product added to cart successfully");
-          window.location.href = `/cart/${cartId}`;
-        } else {
-          alert(result.message);
+        // Convierte la respuesta en formato JSON
+        const data = await response.json();
+
+        // Muestra los datos en la consola
+        console.log(data);
+        // Actualiza la página sin recargar
+        location.reload();
+        
+    } catch (error) {
+        // Maneja los errores que puedan ocurrir durante la solicitud
+        console.error('Error:', error);
+    }
+};
+
+// Agrega un event listener para ejecutar la función 'empty' cuando se hace clic en el botón
+emptyButton.addEventListener('click', empty);
+
+
+//Para eliminar un producto en el carrito
+document.querySelectorAll('.delete-product').forEach(button => {
+    button.addEventListener('click', async (event) => {
+        const productId = event.target.dataset.productId;
+        const cartId = document.getElementById('cart-id').textContent;
+
+        try {
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al eliminar el producto del carrito');
+            }
+
+            // Actualiza la página o elimina el producto del DOM
+            location.reload();
+        } catch (error) {
+            console.error(error);
         }
-      } catch (error) {
-        console.error("Error adding product to cart:", error);
-      }
-    }
-
-    if (event.target.matches("#addProductBtn")) {
-      // Add product logic
-    }
-
-    if (event.target.matches("#deleteProductBtn")) {
-      // Delete product logic
-    }
-  });
-
-  function reloadList(products) {
-    const productList = document.getElementById("productList");
-    productList.innerHTML = "";
-    products.forEach((product) => {
-      const card = document.createElement("div");
-      card.classList.add("productCard");
-      card.innerHTML = `
-        <div class="cardProduct__image">
-          <img src=${product.thumbnail} alt=${product.title} />
-        </div>
-        <div class="cardProduct__info">
-          <h3>${product.title}</h3>
-          <p>${product.description}</p>
-          <p>${product.price}</p>
-          <p>${product.stock}</p>
-          <p>${product.code}</p>
-          <p>${product.id}</p>
-        </div>
-      `;
-      productList.appendChild(card);
     });
-  }
+});
+
+//Editar cantidad en el carrito
+document.addEventListener('DOMContentLoaded', (event) => {
+    const quantityInputs = document.querySelectorAll('#quantityInput');
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', (event) => {
+            console.log(`La nueva cantidad del producto es: ${event.target.value}`);
+            // Aquí puedes agregar el código para manejar la nueva cantidad
+            const newQuantity = event.target.value;
+            const productId = event.target.dataset.productid;
+            console.log('===>>',productId)
+            //const cartId = event.target.dataset.cartId;
+
+            fetch(`/api/carts/${cartID}/product/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ newQuantity }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                location.reload(); // Aquí se recarga la página
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    });
 });

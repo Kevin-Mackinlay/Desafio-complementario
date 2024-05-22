@@ -9,7 +9,7 @@ const cartsController = new CartController(cartService);
 cartsRouter.post("/",/* isAuthenticated(["admin"])*/ cartsController.createCart);
 cartsRouter.get("/",/* isAuthenticated(["admin"])*/ cartsController.getCarts);
 cartsRouter.get("/:cid", /* isAuthenticated(["admin"])*/ cartsController.getCartById);
-cartsRouter.post("/:cid/product/:pid",/* isAuthenticated(["admin"])*/ cartsController.addProduct);
+cartsRouter.post("/:cid/product/:pid",/* isAuthenticated(["admin"])*/ cartsController.addProductToCart);
 cartsRouter.delete("/:cid/product/:pid", /* isAuthenticated(["admin"])*/ cartsController.deleteProductInCart);
 cartsRouter.post("/:cid/purchase", cartsController.cartPurchase);
 cartsRouter.delete("/:cid", cartsController.deleteProductsInCart);
